@@ -1,0 +1,18 @@
+{
+    "name": "marion/agenda",
+    "authors": [
+        {
+            "name": "Marion"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Calendar\\": "Calendar",
+            "App\\": "App",
+            "Supplier\\": "Supplier",
+            "Carrier\\": "Carrier",
+            "Localization\\": "Carrier"
+        }
+    },
+    "require": {}
+}

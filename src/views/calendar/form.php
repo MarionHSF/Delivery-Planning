@@ -1,0 +1,161 @@
+<?php
+$pdo = get_pdo();
+$carriers = new Carrier\Carriers($pdo);
+$carriers = $carriers->getCarriers();
+$suppliers = new Supplier\Suppliers($pdo);
+$suppliers = $suppliers->getSuppliers();
+?>
+
+<div class="row mt-5 d-flex align-items-center">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="id_carrier">Nom du transporteur</label>
+            <select name="id_carrier" id="id_carrier" class="mx-3" required>
+                <option value="<?= isset($datas['id_carrier']) ? h($datas['id_carrier']) : ''; ?>"><?= isset($datas['id_carrier']) ? $carriers[$datas['id_carrier']-1]['name'] : '--Veuillez sélectionner un transporteur--'; ?></option>
+                <?php foreach ($carriers as $carrier): ?>
+                    <option value="<?= $carrier['id']; ?>"><?= $carrier['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <?php if (isset($errors['carrier'])) : ?>
+                <small class="form-text text-muted"><?= $errors['carrier']; ?></small>
+            <?php endif ?>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group d-flex align-items-center">
+            <label class="mr-3" for="ids_suppliers">Nom du fournisseur</label>
+            <select name="ids_suppliers[]" id="ids_suppliers" class="mx-3" required multiple size="4">
+                <option value="" disabled>--Veuillez sélectionner un fournisseur--</option>
+                <?php foreach ($suppliers as $supplier): ?>
+                    <option value="<?= $supplier['id']; ?>"
+                        <?php if(isset($datas['ids_suppliers'])){
+                            foreach ($datas['ids_suppliers'] as $id_supplier){
+                                if(isset($id_supplier['id_supplier']) && $id_supplier['id_supplier'] == $supplier['id']){
+                                    echo 'selected';
+                                }else{
+                                    if($id_supplier == $supplier['id']){
+                                       echo 'selected';
+                                    }
+                                }
+                            }
+                        } ?>
+                    ><?= $supplier['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <?php if (isset($errors['ids_suppliers'])) : ?>
+                <small class="form-text text-muted"><?= $errors['ids_suppliers']; ?></small>
+            <?php endif ?>
+        </div>
+    </div>
+</div>
+<div class="form-group mt-3">
+    <div id="divOrder">
+        <label for="order">Numéro(s) de commande <small>(Merci de saisir le ou les numéros de commandes concerné(s) <b><u>en cliquant sur le bouton '+' ci-dessous</u></b>)</small></label>
+            <?php if (!isset($datas['order'])) { ?>
+                <div class="col-sm-3 mb-2 d-flex" id="divOrder1">
+                    <input id="inputOrder1" type="text" required class="form-control" name="order[]">
+                </div>
+            <?php }else{
+                $i = 0;
+                if(gettype($datas['order']) == 'string'){
+                    foreach (explode(', ', $datas['order']) as $order){
+                        $i++; ?>
+                        <div class="col-sm-3 mb-2 d-flex" id="divOrder<?= $i ?>">
+                            <input id="inputOrder<?= $i ?>" type="text" <?= ($i == 1) ? 'required' : ''; ?> class="form-control" name="order[]" value=" <?= $order ?>">
+                            <?php if($i != 1){ ?>
+                                <a id="buttonOrder<?= $i ?>" class="btn btn-primary form remove" onclick=removeOrderInput(<?= $i ?>);>-</a>
+                            <?php   } ?>
+                        </div>
+                    <?php }
+                } elseif (gettype($datas['order']) == 'array'){
+                    foreach ($datas['order'] as $order){
+                        $i++; ?>
+                        <div class="col-sm-3 mb-2 d-flex" id="divOrder<?= $i ?>">
+                            <input id="inputOrder<?= $i ?>" type="text" <?= ($i == 1) ? 'required' : ''; ?> class="form-control" name="order[]" value=" <?= $order ?>">
+                            <?php if($i != 1){ ?>
+                                <a id="buttonOrder<?= $i ?>" class="btn btn-primary form remove" onclick=removeOrderInput(<?= $i ?>);>-</a>
+                            <?php   } ?>
+                        </div>
+                    <?php }
+                }
+            } ?>
+    </div>
+    <?php if (isset($errors['order'])) : ?>
+        <small class="form-text text-muted"><?= $errors['order']; ?></small>
+    <?php endif ?>
+    <div>
+        <a id="buttonOrder" class="btn btn-primary form" onclick=addOrderInput();>+</a>
+    </div>
+</div>
+<div class="form-group mt-3"> <?php // TODO ?>
+    <label class="text-danger">Palettes / mètres linéaires (à faire en attente infos)</label>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group  mt-3">
+            <label for="phone">Numéro de téléphone</label>
+            <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : ''; ?>">
+            <?php if (isset($errors['phone'])) : ?>
+                <small class="form-text text-muted"><?= $errors['phone']; ?></small>
+            <?php endif ?>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group  mt-3">
+            <label for="email">Email</label>
+            <input id="email" type="text" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : ''; ?>">
+            <?php if (isset($errors['email'])) : ?>
+                <small class="form-text text-muted"><?= $errors['email']; ?></small>
+            <?php endif ?>
+        </div>
+    </div>
+</div>
+<div class="form-group mt-3">
+    <label for="dangerous_substance">Matières dangereuses</label>
+    <small>(Cochez la case, si la livraison comprend des matières dangereuses)</small>
+    <input id="dangerous_substance" type="checkbox" <?= isset($datas['dangerous_substance']) && ($datas['dangerous_substance'] == 'yes') ? 'checked' : ''; ?> name="dangerous_substance">
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group  mt-3">
+            <label for="name">Titre</label>
+            <input id="name" type="text" required class="form-control" name="name" value="<?= isset($datas['name']) ? h($datas['name']) : ''; ?>">
+            <?php if (isset($errors['name'])) : ?>
+                <small class="form-text text-muted"><?= $errors['name']; ?></small>
+            <?php endif ?>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group  mt-3">
+            <label for="date">Date</label>
+            <input id="date" type="date" required class="form-control" name="date" value="<?= isset($datas['date']) ? h($datas['date']) : ''; ?>">
+            <?php if (isset($errors['date'])) : ?>
+                <small class="form-text text-muted"><?= $errors['date']; ?></small>
+            <?php endif ?>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group mt-3">
+            <label for="start">Heure de début</label>
+            <input id="start" type="time" required class="form-control" name="start" value="<?= isset($datas['start']) ? h($datas['start']) : ''; ?>">
+            <?php if (isset($errors['start'])) : ?>
+                <small class="form-text text-muted"><?= $errors['start']; ?></small>
+            <?php endif ?>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group mt-3">
+            <label for="end">Heure de fin</label>
+            <input id="end" type="time" required class="form-control" name="end" value="<?= isset($datas['end']) ? h($datas['end']) : ''; ?>">
+            <?php if (isset($errors['end'])) : ?>
+                <small class="form-text text-muted"><?= $errors['end']; ?></small>
+            <?php endif ?>
+        </div>
+    </div>
+</div>
+<div class="form-group mt-3">
+    <label for="description">Description</label>
+    <textarea name="description" id="description" required class="form-control"><?= isset($datas['description']) ? h($datas['description']) : ''; ?></textarea>
+</div>

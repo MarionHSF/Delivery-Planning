@@ -1,0 +1,40 @@
+version: '3'
+networks:
+  agenda_net:
+services:
+  app:
+    build: .
+    image: base-php:latest
+    ports:
+      - "8000:80"
+    env_file:
+      - .env
+    volumes:
+      - "data:/data"
+      - "./src:/var/www/html"
+      - "./conf/php.ini:/usr/local/etc/php/conf.d/extraconfphp.ini"
+    environment:
+      PHP_CONF_MEMORY_LIMIT: "-1"
+      PHP_CONF_DATE_TIMEZONE: "Europe/Berlin"
+      PHP_CONF_MAX_EXECUTION_TIME: 180
+      PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
+    networks:
+      - agenda_net
+  mysql:
+    image: mysql/mysql-server:8.0
+    restart: always
+    volumes:
+      - ./.artifakt/etc/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf:ro
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${ARTIFAKT_MYSQL_DATABASE_NAME:-changeme}
+      MYSQL_USER: ${ARTIFAKT_MYSQL_USER:-changeme}
+      MYSQL_PASSWORD: ${ARTIFAKT_MYSQL_PASSWORD:-s3cr3t!}
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+    ports:
+      - "3306:3306"
+    networks:
+      - agenda_net
+volumes:
+  data:
+  mysql-data:
