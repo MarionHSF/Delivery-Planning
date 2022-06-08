@@ -9,6 +9,7 @@ class Carrier
     private $name;
     private $comment;
 
+    /* Getters */
     public function getId(): int
     {
         return $this->id;
@@ -24,6 +25,7 @@ class Carrier
         return $this->comment ?? '';
     }
 
+    /* Setters */
     public function setName(string $name)
     {
         $this->name = $name;

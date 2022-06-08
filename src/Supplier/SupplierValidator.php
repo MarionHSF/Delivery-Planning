@@ -6,11 +6,11 @@ use App\Validator;
 class SupplierValidator extends Validator{
 
     /**
-     * @param array $data
+     * @param array $datas
      * @return array|bool
      */
-    public function validates(array $data) {
-        parent::validates($data);
+    public function validates(array $datas) {
+        parent::validates($datas);
         $this->validate('name', 'minLength', 1);
         return $this->errors;
     }

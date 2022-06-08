@@ -12,7 +12,8 @@
             "Supplier\\": "Supplier",
             "Carrier\\": "Carrier",
             "Localization\\": "Carrier",
-            "Translation\\": "Translation"
+            "Translation\\": "Translation",
+            "User\\": "User"
         }
     },
     "require": {}

@@ -59,5 +59,21 @@ return [
     'comment' => "Comments",
 
     'days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    'months' => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    'months' => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+
+    'adminsList' => "Administrators List",
+    'createAdminTitle' => "Add administrator account",
+    'modifyAdminTitle' => "Modify administrator account",
+    'deleteAdminTitle' => "Delete administrator account",
+    'createAdmin' => "Administrator account was well booked.",
+    'modifyAdmin' => "Administrator account was well modified.",
+    'deleteAdmin' => "Administrator account was well deleted.",
+
+    'customersList' => "Customers List",
+    'createCustomerTitle' => "Add customer account",
+    'modifyCustomerTitle' => "Modify customer account",
+    'deleteCustomerTitle' => "Delete customer account",
+    'createCustomer' => "Customer account was well booked.",
+    'modifyCustomer' => "Customer account was well modified.",
+    'deleteCustomer' => "Customer account was well deleted.",
 ];

@@ -60,7 +60,23 @@ return [
     'comment' => "Commentaires",
 
     'days' => ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
-    'months' => ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+    'months' => ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+
+    'adminsList' => "Liste des administrateurs",
+    'createAdminTitle' => "Ajouter un compte administrateur",
+    'modifyAdminTitle' => "Modifier le compte administrateur",
+    'deleteAdminTitle' => "Supprimer le compte administrateur",
+    'createAdmin' => "Le compte administrateur a bien été enregistré.",
+    'modifyAdmin' => "Le compte administrateur a bien été modifié.",
+    'deleteAdmin' => "Le administrateur a bien été supprimé.",
+
+    'customersList' => "Liste des clients",
+    'createCustomerTitle' => "Ajouter un compte client",
+    'modifyCustomerTitle' => "Modifier le compte client",
+    'deleteCustomerTitle' => "Supprimer le compte client",
+    'createCustomer' => "Le compte client a bien été enregistré.",
+    'modifyCustomer' => "Le compte client a bien été modifié.",
+    'deleteCustomer' => "Le client a bien été supprimé."
 ];
 
 

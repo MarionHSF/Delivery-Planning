@@ -73,6 +73,8 @@ require 'views/header.php';
     <a href="/views/calendar/add.php" class="calendar_button">+</a>
     <a href="/views/supplier/list.php"><?= Translation::of('suppliersList') ?></a>
     <a href="/views/carrier/list.php"><?=Translation::of('carriersList') ?></a>
+    <a href="/views/user/adminsList.php"><?=Translation::of('adminsList') ?></a>
+    <a href="/views/user/customersList.php"><?=Translation::of('customersList') ?></a>
 </div>
 
 <?php require 'views/footer.php'; ?>

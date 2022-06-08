@@ -6,7 +6,7 @@ use App\Validator;
 class EventValidator extends Validator{
 
     /**
-     * @param array $data
+     * @param array $datas
      * @return array|bool
      */
     public function validates(array $datas) {
