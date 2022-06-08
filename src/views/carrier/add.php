@@ -2,10 +2,6 @@
 require '../../functions.php';
 
 use Translation\Translation;
-if (isset($_SESSION['lang'])){
-    Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
-    Translation::forceLanguage($_SESSION['lang']);
-}
 
 $datas = [];
 $errors = [];

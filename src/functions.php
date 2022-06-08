@@ -4,6 +4,13 @@ require 'vendor/autoload.php';
 /* Storage session */
 session_start();
 
+/* Language */
+use Translation\Translation;
+Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
+if (isset($_SESSION['lang'])){
+    Translation::forceLanguage($_SESSION['lang']);
+}
+
 /* Display 404page */
 function e404(){
     require '404.php';

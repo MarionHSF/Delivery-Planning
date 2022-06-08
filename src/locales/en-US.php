@@ -28,6 +28,12 @@ return [
     'supplier' => 'Suppliers(s)',
 
     'errorsMessage' => "Please correct your errors",
+    'emptyField' => "Please fill field",
+    'errorPhone' => "Phone number is not valid",
+    'errorEmail' => "Email number is not valid",
+    "errorDate" => "Date is not valid",
+    "errorTime" => "Time is not valid",
+    "errorStartTime" => "Start time must be greater than end time",
 
     'suppliersList' => "Suppliers list",
     'createSupplierTitle' => "Add supplier",

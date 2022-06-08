@@ -1,8 +1,8 @@
 <?php
 
 use Translation\Translation;
+Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
 if (isset($_SESSION['lang'])){
-    Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
     Translation::forceLanguage($_SESSION['lang']);
 }
 

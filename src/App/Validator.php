@@ -1,6 +1,8 @@
 <?php
 namespace App;
 
+use Translation\Translation;
+
 class Validator {
 
     private $datas;
@@ -28,9 +30,9 @@ class Validator {
      * @param ...$parameters
      * @return bool
      */
-    public function validate(string $field, string $method, ...$parameters): bool{
+    public function validate(mixed $field, string $method, ...$parameters): bool{
         if(!isset($this->datas[$field])){
-            $this->errors[$field] = "le champs $field n'est pas rempli";
+            $this->errors[$field] = Translation::of('emptyField');
             return false;
         }else{
             return call_user_func([$this, $method], $field, ...$parameters);
@@ -44,9 +46,25 @@ class Validator {
      * @return bool
      */
     public function minLength(string $field, int $length): bool{
-        if (mb_strlen($field) < $length) {
-            $this->errors[$field] = "Le champs doit avoir plus de $length caractères";
-            return false;
+        if(gettype($this->datas[$field]) == "array"){
+            if(empty($this->datas[$field])){
+                $this->errors[$field] = Translation::of('emptyField');
+                return false;
+            }else{
+                if(mb_strlen($this->datas[$field][0]) < $length){
+                    $this->errors[$field] = Translation::of('emptyField');
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        }else{
+            if (mb_strlen($this->datas[$field]) < $length) {
+                $this->errors[$field] = Translation::of('emptyField');
+                return false;
+            }else{
+                return true;
+            }
         }
         return true;
     }
@@ -58,7 +76,7 @@ class Validator {
      */
     public function date (string $field): bool{
         if(\DateTime::createFromFormat('Y-m-d', $this->datas[$field]) === false) {
-            $this->errors[$field] = "La date n'est pas valide";
+            $this->errors[$field] = Translation::of('errorDate');
             return false;
         };
         return true;
@@ -71,7 +89,7 @@ class Validator {
      */
     public function time (string $field): bool{
         if(\DateTime::createFromFormat('H:i', $this->datas[$field]) === false) {
-            $this->errors[$field] = "Le temps n'est pas valide";
+            $this->errors[$field] = Translation::of('errorTime');;
             return false;
         };
         return true;
@@ -87,12 +105,12 @@ class Validator {
             $start = \DateTime::createFromFormat('H:i', $this->datas[$startField]);
             $end = \DateTime::createFromFormat('H:i', $this->datas[$endField]);
             if($start->getTimestamp() > $end->getTimestamp()){
-                $this->errors[$startField] = "L'heure de début doit être supérieure à l'heure de fin";
+                $this->errors[$startField] = Translation::of('errorStartTime');
                 return false;
             }
             return true;
         }
-        $this->errors[$startField] = "Le temps n'est pas valide";
+        $this->errors[$startField] = Translation::of('errorTime');
         return false;
     }
 
@@ -103,7 +121,7 @@ class Validator {
      */
     public function phone(string $field): bool{
         if(preg_match('/^[0-9]{10}+$/',$this->datas[$field]) == 0){
-            $this->errors[$field] = "Le numéro de téléphone n'est pas valide";
+            $this->errors[$field] = Translation::of('errorPhone');
             return false;
         };
         return true;
@@ -116,7 +134,7 @@ class Validator {
      */
     public function email(string $field): bool{
         if(!filter_var($this->datas[$field], FILTER_VALIDATE_EMAIL)){
-            $this->errors[$field] = "L'email n'est pas valide";
+            $this->errors[$field] = Translation::of('errorEmail');
             return false;
         };
         return true;

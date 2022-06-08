@@ -11,7 +11,7 @@ class SupplierValidator extends Validator{
      */
     public function validates(array $data) {
         parent::validates($data);
-        $this->validate('name', 'minLength', 3);
+        $this->validate('name', 'minLength', 1);
         return $this->errors;
     }
 

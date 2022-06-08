@@ -28,6 +28,12 @@ return [
     'supplier' => 'Fournisseurs(s)',
 
     'errorsMessage' => "Merci de corriger vos erreurs",
+    'emptyField' => "Veuillez remplir le champs",
+    'errorPhone' => "Le numéro de téléphone n'est pas valide",
+    'errorEmail' => "L'email n'est pas valide",
+    "errorDate" => "La date n'est pas valide",
+    "errorTime" => "L'heure n'est pas valide",
+    "errorStartTime" => "L'heure de début doit être supérieure à l'heure de fin",
 
     'suppliersList' => "Liste des fournisseurs",
     'createSupplierTitle' => "Ajouter un fournisseur",

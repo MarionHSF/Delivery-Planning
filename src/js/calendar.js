@@ -1,6 +1,11 @@
 function addOrderInput(){
     const divOrder = document.getElementById("divOrder");
-    let i = divOrder.lastElementChild.id.substring(8,15);
+    let i = 0;
+    if(divOrder.lastElementChild.nodeName == "P"){
+        i = divOrder.lastElementChild.previousElementSibling.id.substring(8,15);
+    }else{
+        i = divOrder.lastElementChild.id.substring(8,15);
+    }
     i++;
 
     const divOrderNumber = document.createElement("div");
