@@ -1,6 +1,8 @@
 <?php
 require '../../functions.php';
 
+use Translation\Translation;
+
 $pdo = get_pdo();
 $events = new \Calendar\Events($pdo);
 $errors = [];
@@ -45,7 +47,7 @@ render('header', ['title' => $event->getName()]);
     <form action="" method="post" class="form">
         <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
-            <button class="btn btn-primary">Modifier le rendez-vous</button>
+            <button class="btn btn-primary"><?= Translation::of('modifyAppointementTitle') ?></button>
         </div>
     </form>
 </div>

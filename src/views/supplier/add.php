@@ -1,6 +1,12 @@
 <?php
 require '../../functions.php';
 
+use Translation\Translation;
+if (isset($_SESSION['lang'])){
+    Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
+    Translation::forceLanguage($_SESSION['lang']);
+}
+
 $datas = [];
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -16,23 +22,24 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 }
 
-render('header', ['title' => 'Ajouter un fournisseur']);
+render('header', ['title' => Translation::of('createSupplierTitle')]);
+
 ?>
 
 <div class="container">
     <?php if(!empty($errors)) : ?>
         <div class="alert alert-danger">
-            Merci de corriger vos erreurs
+           <?= Translation::of('errorsMessage') ?>
         </div>
     <?php endif; ?>
-    <h1>Ajouter un fournisseur</h1>
+    <h1><?= Translation::of('createSupplierTitle') ?></h1>
     <form action="" method="post" class="form">
         <?php render('supplier/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
-            <button class="btn btn-primary">Ajouter le fournisseur</button>
+            <button class="btn btn-primary"><?= Translation::of('createSupplierTitle') ?></button>
         </div>
     </form>
-    <a class="btn btn-primary mt-3" href="/views/supplier/list.php">Retour à la liste des fournisseurs</a>
+    <a class="btn btn-primary mt-3" href="/views/supplier/list.php"><?= Translation::of('suplliersListReturn') ?></a>
 </div>
 
 <?php require '../footer.php'; ?>

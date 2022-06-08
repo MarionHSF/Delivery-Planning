@@ -1,6 +1,8 @@
 <?php
 require '../../functions.php';
 
+use Translation\Translation;
+
 $pdo = get_pdo();
 $suppliers = new \Supplier\Suppliers($pdo);
 $errors = [];
@@ -35,10 +37,10 @@ render('header', ['title' => $supplier->getName()]);
         <form action="" method="post" class="form">
             <?php render('supplier/form', ['datas' => $datas, 'errors' => $errors]); ?>
             <div class="form-group mt-3">
-                <button class="btn btn-primary">Modifier le fournisseur</button>
+                <button class="btn btn-primary"><?= Translation::of('modifySupplierTitle') ?></button>
             </div>
         </form>
-        <a  class="btn btn-primary mt-3" href="/views/supplier/list.php">Retour à la liste des fournisseurs</a>
+        <a  class="btn btn-primary mt-3" href="/views/supplier/list.php"><?= Translation::of('suplliersListReturn') ?></a>
     </div>
 
 <?php require '../footer.php'; ?>

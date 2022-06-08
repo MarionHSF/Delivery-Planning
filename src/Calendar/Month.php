@@ -1,6 +1,8 @@
 <?php
 namespace Calendar;
 
+use Translation\Translation;
+
 class Month {
 
     private $days;
@@ -37,29 +39,16 @@ class Month {
      * @return string
      */
     public function toString(): string{
-        if(!isset($_SESSION['lang'])){
-            $this->months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-        }else{
-            if($_SESSION['lang'] == "french"){
-                $this->months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-            }elseif ($_SESSION['lang'] == "english"){
-                $this->months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            }
-        };
-
+        $this->months = Translation::of('months');
         return $this->months[$this->month - 1] . ' ' . $this->year;
     }
 
+    /**
+     * Return week days in letters (ex: Monday)
+     * @return array
+     */
     public function getDays(): array{
-        if(!isset($_SESSION['lang'])){
-            $this->days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-        }else{
-            if($_SESSION['lang'] == "french"){
-                $this->days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-            }elseif ($_SESSION['lang'] == "english"){
-                $this->days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-            }
-        };
+        $this->days = Translation::of('days');
         return $this->days;
     }
 

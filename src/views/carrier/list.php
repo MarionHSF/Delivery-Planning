@@ -1,10 +1,16 @@
 <?php
 require '../../functions.php';
 
+use Translation\Translation;
+if (isset($_SESSION['lang'])){
+    Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
+    Translation::forceLanguage($_SESSION['lang']);
+}
+
 $pdo = get_pdo();
 $carriers = new Carrier\Carriers($pdo);
 $carriers = $carriers->getCarriers();
-render('header', ['title' => 'Liste des transporteurs']);
+render('header', ['title' => Translation::of('carriersList')]);
 ?>
 
     <div class="container">
@@ -12,32 +18,32 @@ render('header', ['title' => 'Liste des transporteurs']);
             <?php if(isset($_GET['creation'])): ?>
                 <div class="container">
                     <div class="alert alert-success">
-                        Le transporteur a bien été enregistré.
+                        <?= Translation::of('createCarrier') ?>
                     </div>
                 </div>
             <?php endif; ?>
             <?php if(isset($_GET['supression'])): ?>
                 <div class="container">
                     <div class="alert alert-success">
-                        Le transporteur a bien été supprimé.
+                        <?= Translation::of('deleteCarrier') ?>
                     </div>
                 </div>
             <?php endif; ?>
             <div class="d-flex flex-row align-items-center justify-content-between mx-sm-3">
-                <h1>Liste des transporteurs</h1>
+                <h1><?= Translation::of('carriersList') ?></h1>
             </div>
 
             <table class="carrier_table">
                 <?php foreach ($carriers as $carrier): ?>
                     <tr>
                         <td><?= $carrier['name']; ?></td>
-                        <td><a class="btn btn-primary mx-3" href="/views/carrier/carrier.php?id=<?= $carrier['id'];?>">Voir</a></td>
+                        <td><a class="btn btn-primary mx-3" href="/views/carrier/carrier.php?id=<?= $carrier['id'];?>"> <?= Translation::of('see') ?></a></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
         </div>
         <div>
-            <a class="btn btn-primary mt-3" href="/views/carrier/add.php">Ajouter un transporteur</a>
+            <a class="btn btn-primary mt-3" href="/views/carrier/add.php"><?=Translation::of('createCarrierTitle')  ?></a>
         </div>
     </div>
 

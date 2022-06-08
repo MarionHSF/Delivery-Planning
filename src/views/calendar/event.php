@@ -1,6 +1,8 @@
 <?php
 require '../../functions.php';
 
+use Translation\Translation;
+
 $pdo = get_pdo();
 $events = new \Calendar\Events($pdo);
 $carriers =  new \Carrier\Carriers($pdo);
@@ -21,19 +23,19 @@ render('header', ['title' => $event->getName()]);
     <div class="container">
        <h1><?= h($event->getName()); ?></h1>
         <ul>
-            <li>Date de prise du rendez-vous : <?= $event->getEntryDate()->format('d/m/Y'); ?> à <?= $event->getEntryDate()->format('H:i'); ?></li>
-            <li><?= $_carrier ?> : <?= $carrier ?></li>
-            <li>Fournisseur(s) : <?php
+            <li><?= Translation::of('entryDate') ?> : <?= $event->getEntryDate()->format('d/m/Y'); ?></li>
+            <li><?= Translation::of('carrier') ?> : <?= $carrier ?></li>
+            <li><?= Translation::of('supplier') ?> : <?php
                                     foreach ($ids_suppliers as $id_supplier) {
                                         $suppliersName[] = $suppliers->find($id_supplier['id_supplier'])->getName();
                                     }
                                     echo implode(', ',$suppliersName);
                                 ?></li>
-            <li>Numéros de commandes : <?= h($event->getOrder()); ?></li>
-            <li>Numéro de téléphone : <?= h($event->getPhone()); ?></li>
-            <li>Email : <?= h($event->getEmail()); ?></li>
-            <li>Matières dangereuses : <?= h($event->getDangerousSubstance()); ?></li>
-            <li>Date : <?= $event->getStart()->format('d/m/Y'); ?></li>
+            <li><?= Translation::of('orderNumber') ?> : <?= h($event->getOrder()); ?></li>
+            <li><?= Translation::of('phoneNumber') ?> : <?= h($event->getPhone()); ?></li>
+            <li><?= Translation::of('email') ?> : <?= h($event->getEmail()); ?></li>
+            <li><?= Translation::of('dangerousSubstance') ?> : <?= $event->getDangerousSubstance() == "yes" ? Translation::of('yes') : Translation::of('no') ?></li>
+            <li><?= Translation::of('date') ?> : <?= $event->getStart()->format('d/m/Y'); ?></li>
             <li>Heure de début : <?= $event->getStart()->format('H:i'); ?></li>
             <li>Heure de fin : <?= $event->getEnd()->format('H:i'); ?></li>
             <li>
@@ -42,8 +44,8 @@ render('header', ['title' => $event->getName()]);
             </li>
         </ul>
         <div>
-            <a class="btn btn-primary" href="/views/calendar/edit.php?id=<?= $event->getId();?>">Modifier le rendez-vous</a>
-            <a class="btn btn-primary" href="/views/calendar/delete.php?id=<?= $event->getId();?>">Supprimer le rendez-vous</a>
+            <a class="btn btn-primary" href="/views/calendar/edit.php?id=<?= $event->getId();?>"><?= Translation::of('modifyAppointementTitle') ?></a>
+            <a class="btn btn-primary" href="/views/calendar/delete.php?id=<?= $event->getId();?>"><?= Translation::of('deleteAppointementTitle') ?></a>
         </div>
     </div>
 

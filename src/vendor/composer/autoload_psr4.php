@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Translation\\' => array($baseDir . '/Translation'),
     'Supplier\\' => array($baseDir . '/Supplier'),
     'Localization\\' => array($baseDir . '/Carrier'),
     'Carrier\\' => array($baseDir . '/Carrier'),

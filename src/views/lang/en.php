@@ -1,5 +1,6 @@
 <?php
 require '../../functions.php';
 
-$_SESSION['lang'] = 'english';
+$_SESSION['lang'] = 'en-US';
 header('Location: '.$_SERVER['HTTP_REFERER']);
+

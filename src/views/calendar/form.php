@@ -1,4 +1,6 @@
 <?php
+use Translation\Translation;
+
 $pdo = get_pdo();
 $carriers = new Carrier\Carriers($pdo);
 $carriers = $carriers->getCarriers();
@@ -9,9 +11,9 @@ $suppliers = $suppliers->getSuppliers();
 <div class="row mt-5 d-flex align-items-center">
     <div class="col-sm-6">
         <div class="form-group">
-            <label for="id_carrier">Nom du transporteur</label>
+            <label for="id_carrier"><?= Translation::of('carrierName') ?></label>
             <select name="id_carrier" id="id_carrier" class="mx-3" required>
-                <option value="<?= isset($datas['id_carrier']) ? h($datas['id_carrier']) : ''; ?>"><?= isset($datas['id_carrier']) ? $carriers[$datas['id_carrier']-1]['name'] : '--Veuillez sélectionner un transporteur--'; ?></option>
+                <option value="<?= isset($datas['id_carrier']) ? h($datas['id_carrier']) : ''; ?>"><?= isset($datas['id_carrier']) ? $carriers[$datas['id_carrier']-1]['name'] : '--'.Translation::of('selectCarrier').'--'; ?></option>
                 <?php foreach ($carriers as $carrier): ?>
                     <option value="<?= $carrier['id']; ?>"><?= $carrier['name']; ?></option>
                 <?php endforeach; ?>
@@ -23,9 +25,9 @@ $suppliers = $suppliers->getSuppliers();
     </div>
     <div class="col-sm-6">
         <div class="form-group d-flex align-items-center">
-            <label class="mr-3" for="ids_suppliers">Nom du fournisseur</label>
+            <label class="mr-3" for="ids_suppliers"><?= Translation::of('supplierName') ?></label>
             <select name="ids_suppliers[]" id="ids_suppliers" class="mx-3" required multiple size="4">
-                <option value="" disabled>--Veuillez sélectionner un fournisseur--</option>
+                <option value="" disabled>--<?=Translation::of('selectSupplier') ?>--</option>
                 <?php foreach ($suppliers as $supplier): ?>
                     <option value="<?= $supplier['id']; ?>"
                         <?php if(isset($datas['ids_suppliers'])){
@@ -50,7 +52,7 @@ $suppliers = $suppliers->getSuppliers();
 </div>
 <div class="form-group mt-3">
     <div id="divOrder">
-        <label for="order">Numéro(s) de commande <small>(Merci de saisir le ou les numéros de commandes concerné(s) <b><u>en cliquant sur le bouton '+' ci-dessous</u></b>)</small></label>
+        <label for="order"><?= Translation::of('orderNumber') ?> <?=Translation::of('orderNumberSmall') ?></label>
             <?php if (!isset($datas['order'])) { ?>
                 <div class="col-sm-3 mb-2 d-flex" id="divOrder1">
                     <input id="inputOrder1" type="text" required class="form-control" name="order[]">
@@ -93,7 +95,7 @@ $suppliers = $suppliers->getSuppliers();
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group  mt-3">
-            <label for="phone">Numéro de téléphone</label>
+            <label for="phone"><?= Translation::of('phoneNumber') ?></label>
             <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : ''; ?>">
             <?php if (isset($errors['phone'])) : ?>
                 <small class="form-text text-muted"><?= $errors['phone']; ?></small>
@@ -102,7 +104,7 @@ $suppliers = $suppliers->getSuppliers();
     </div>
     <div class="col-sm-6">
         <div class="form-group  mt-3">
-            <label for="email">Email</label>
+            <label for="email"><?= Translation::of('email') ?></label>
             <input id="email" type="text" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : ''; ?>">
             <?php if (isset($errors['email'])) : ?>
                 <small class="form-text text-muted"><?= $errors['email']; ?></small>
@@ -111,8 +113,7 @@ $suppliers = $suppliers->getSuppliers();
     </div>
 </div>
 <div class="form-group mt-3">
-    <label for="dangerous_substance">Matières dangereuses</label>
-    <small>(Cochez la case, si la livraison comprend des matières dangereuses)</small>
+    <label for="dangerous_substance"><?= Translation::of('dangerousSubstance') ?> <?= Translation::of('dangerousSubstanceSmall') ?></label>
     <input id="dangerous_substance" type="checkbox" <?= isset($datas['dangerous_substance']) && ($datas['dangerous_substance'] == 'yes') ? 'checked' : ''; ?> name="dangerous_substance">
 </div>
 <div class="row">
@@ -127,7 +128,7 @@ $suppliers = $suppliers->getSuppliers();
     </div>
     <div class="col-sm-6">
         <div class="form-group  mt-3">
-            <label for="date">Date</label>
+            <label for="date"><?= Translation::of('date') ?></label>
             <input id="date" type="date" required class="form-control" name="date" value="<?= isset($datas['date']) ? h($datas['date']) : ''; ?>">
             <?php if (isset($errors['date'])) : ?>
                 <small class="form-text text-muted"><?= $errors['date']; ?></small>

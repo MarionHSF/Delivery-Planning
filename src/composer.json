@@ -11,7 +11,8 @@
             "App\\": "App",
             "Supplier\\": "Supplier",
             "Carrier\\": "Carrier",
-            "Localization\\": "Carrier"
+            "Localization\\": "Carrier",
+            "Translation\\": "Translation"
         }
     },
     "require": {}

@@ -1,17 +1,8 @@
 <?php
 require 'vendor/autoload.php';
 
-/* Select language */
+/* Storage session */
 session_start();
-if(!isset($_SESSION['lang'])){
-    require($_SERVER['DOCUMENT_ROOT'].'/lang/fr.php');
-}else{
-    if($_SESSION['lang'] == "french"){
-        require($_SERVER['DOCUMENT_ROOT'].'/lang/fr.php');
-    }elseif ($_SESSION['lang'] == "english"){
-        require($_SERVER['DOCUMENT_ROOT'].'/lang/en.php');
-    }
-}
 
 /* Display 404page */
 function e404(){

@@ -1,6 +1,8 @@
 <?php
 require 'functions.php';
 
+use Translation\Translation;
+
 $pdo = get_pdo();
 $events = new Calendar\Events($pdo);
 $month = new Calendar\Month($_GET['month'] ?? null, $_GET['year'] ?? null);
@@ -9,6 +11,7 @@ $start = $start->format('N') === '1' ? $start : $month->getStartingDay()->modify
 $weeks = $month->getWeeks();
 $end = (clone $start)->modify('+' . (6 + 7 * ($weeks - 1)) . ' days');
 $events = $events->getEventsBetweenByDay($start, $end);
+
 require 'views/header.php';
 ?>
 <div class="calendar">
@@ -18,21 +21,21 @@ require 'views/header.php';
         <?php if(isset($_GET['creation'])): ?>
             <div class="container">
                 <div class="alert alert-success">
-                   <?= $_createAppointement ?>
+                   <?= Translation::of('createAppointement') ?>
                 </div>
             </div>
         <?php endif; ?>
         <?php if(isset($_GET['modification'])): ?>
             <div class="container">
                 <div class="alert alert-success">
-                    <?= $_modifyeAppointement ?>
+                    <?= Translation::of('modifyAppointement') ?>
                 </div>
             </div>
         <?php endif; ?>
         <?php if(isset($_GET['supression'])): ?>
             <div class="container">
                 <div class="alert alert-success">
-                    <?= $_deleteAppointement ?>
+                    <?= Translation::of('deleteAppointement') ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -47,6 +50,7 @@ require 'views/header.php';
         <?php for ($i = 0; $i < $weeks; $i++): ?>
         <tr>
             <?php foreach($month->getDays() as $k => $day):
+
             $date = (clone $start)->modify("+" . ($k + $i * 7) . " days");
             $eventsForDay = $events[$date->format('Y-m-d')] ?? [];
             $isToday = date('Y-m-d') === $date->format('Y-m-d');
@@ -67,8 +71,8 @@ require 'views/header.php';
         <?php endfor; ?>
     </table>
     <a href="/views/calendar/add.php" class="calendar_button">+</a>
-    <a href="/views/supplier/list.php"><?= $_suplliersList ?></a>
-    <a href="/views/carrier/list.php"><?= $_carriersList ?></a>
+    <a href="/views/supplier/list.php"><?= Translation::of('suppliersList') ?></a>
+    <a href="/views/carrier/list.php"><?=Translation::of('carriersList') ?></a>
 </div>
 
 <?php require 'views/footer.php'; ?>

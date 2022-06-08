@@ -1,6 +1,12 @@
 <?php
 require '../../functions.php';
 
+use Translation\Translation;
+if (isset($_SESSION['lang'])){
+    Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
+    Translation::forceLanguage($_SESSION['lang']);
+}
+
 $datas = [
         'date' => $_GET['date'] ?? date('Y-m-d'),
 ];
@@ -22,20 +28,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 }
 
-render('header', ['title' => $_createAppointementTitle]);
+render('header', ['title' => Translation::of('createAppointementTitle')]);
+
 ?>
 
 <div class="container">
     <?php if(!empty($errors)) : ?>
         <div class="alert alert-danger">
-            Merci de corriger vos erreurs
+            <?= Translation::of('errorsMessage') ?>
         </div>
     <?php endif; ?>
-    <h1><?= $_createAppointementTitle ?></h1>
+    <h1><?= Translation::of('createAppointementTitle') ?></h1>
     <form action="" method="post" class="form">
         <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
-            <button class="btn btn-primary"><?= $_createAppointementTitle ?></button>
+            <button class="btn btn-primary"><?= Translation::of('createAppointementTitle') ?></button>
         </div>
     </form>
 </div>

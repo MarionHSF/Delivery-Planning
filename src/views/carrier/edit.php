@@ -1,6 +1,8 @@
 <?php
 require '../../functions.php';
 
+use Translation\Translation;
+
 $pdo = get_pdo();
 $carriers = new \Carrier\Carriers($pdo);
 $errors = [];
@@ -35,10 +37,10 @@ render('header', ['title' => $carrier->getName()]);
         <form action="" method="post" class="form">
             <?php render('carrier/form', ['datas' => $datas, 'errors' => $errors]); ?>
             <div class="form-group mt-3">
-                <button class="btn btn-primary">Modifier le transporteur</button>
+                <button class="btn btn-primary"><?= Translation::of('modifyCarrierTitle') ?></button>
             </div>
         </form>
-        <a  class="btn btn-primary mt-3" href="/views/carrier/list.php">Retour à la liste des transporteurs</a>
+        <a  class="btn btn-primary mt-3" href="/views/carrier/list.php"><?= Translation::of('carriersListReturn') ?></a>
     </div>
 
 <?php require '../footer.php'; ?>
