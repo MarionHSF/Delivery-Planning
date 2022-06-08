@@ -13,7 +13,11 @@ try{
 }
 
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
-    $suppliers->delete($supplier);
-    header('Location: /views/supplier/list.php?supression=1');
+    try{
+        $suppliers->delete($supplier);
+        header('Location: /views/supplier/list.php?supression=1');
+    }catch (\Exception $e){
+        header('Location: '.$_SERVER['HTTP_REFERER'].'&error=1');
+    }
     exit();
 }

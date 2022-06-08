@@ -42,6 +42,7 @@ return [
     'createSupplier' => "Le fournisseur a bien été enregistré.",
     'modifySupplier' => "Le fournisseur a bien été modifié.",
     'deleteSupplier' => "Le fournisseur a bien été supprimé.",
+    'errorSupplier' => "Impossible de supprimer le fournisseur car il est renseigné dans un rendez-vous",
     'suplliersListReturn' => "Retour à la liste des fournisseurs",
 
 
@@ -52,6 +53,7 @@ return [
     'createCarrier' => "Le transporteur a bien été enregistré.",
     'modifyCarrier' => "Le transporteur a bien été modifié.",
     'deleteCarrier' => "Le transporteur a bien été supprimé.",
+    'errorCarrier' => "Impossible de supprimer le transporteur car il est renseigné dans un rendez-vous",
     'carriersListReturn' => "Retour à la liste des transporteurs",
 
     'supplierName2' => "Nom du fournisseur",

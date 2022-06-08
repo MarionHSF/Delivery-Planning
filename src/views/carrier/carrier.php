@@ -24,6 +24,13 @@ render('header', ['title' => $carrier->getName()]);
                 </div>
             </div>
         <?php endif; ?>
+        <?php if(isset($_GET['error'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('errorCarrier') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <h1><?= h($carrier->getName()); ?></h1>
         <p><?= Translation::of('comment') ?> : <?= h($carrier->getComment()); ?></p>
         <div>

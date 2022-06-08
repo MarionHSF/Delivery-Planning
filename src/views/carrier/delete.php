@@ -13,7 +13,11 @@ try{
 }
 
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
-    $carriers->delete($carrier);
-    header('Location: /views/carrier/list.php?supression=1');
+    try{
+        $carriers->delete($carrier);
+        header('Location: /views/carrier/list.php?supression=1');
+    }catch (\Exception $e){
+        header('Location: '.$_SERVER['HTTP_REFERER'].'&error=1');
+    }
     exit();
 }

@@ -42,6 +42,7 @@ return [
     'createSupplier' => "Supplier was well booked.",
     'modifySupplier' => "Supplier was well modified.",
     'deleteSupplier' => "Supplier was well deleted.",
+    'errorSupplier' => "Unable to delete supplier because it is registered in an appointment",
     'suplliersListReturn' => "Back to suppliers list",
 
     'carriersList' => "Carriers list",
@@ -51,6 +52,7 @@ return [
     'createCarrier' => "Carrier was well booked.",
     'modifyCarrier' => "Carrier was well modified.",
     'deleteCarrier' => "Carrier was well deleted.",
+    'errorCarrier' => "Unable to delete carrier because it is registered in an appointment",
     'carriersListReturn' => "Back to carriers list",
 
     'supplierName2' => "Supplier name",

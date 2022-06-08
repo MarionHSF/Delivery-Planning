@@ -24,6 +24,13 @@ render('header', ['title' => $supplier->getName()]);
                 </div>
             </div>
         <?php endif; ?>
+        <?php if(isset($_GET['error'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('errorSupplier') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <h1><?= h($supplier->getName()); ?></h1>
         <p><?= Translation::of('comment') ?> : <?= h($supplier->getComment()); ?></p>
         <div>
