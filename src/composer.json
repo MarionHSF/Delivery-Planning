@@ -7,13 +7,16 @@
     ],
     "autoload": {
         "psr-4": {
-            "Calendar\\": "Calendar",
+            "Calendar\\": "App/Calendar",
             "App\\": "App",
-            "Supplier\\": "Supplier",
-            "Carrier\\": "Carrier",
-            "Localization\\": "Carrier",
-            "Translation\\": "Translation",
-            "User\\": "User"
+            "Supplier\\": "App/Supplier",
+            "Carrier\\": "App/Carrier",
+            "Localization\\": "App/Carrier",
+            "Translation\\": "App/Translation",
+            "User\\": "App/User",
+            "Lang\\": "App/Lang",
+            "Role\\": "App/Role",
+            "PDO\\": "App/PDO"
         }
     },
     "require": {}

@@ -19,7 +19,7 @@ return [
     'orderNumber' => "Numéro(s) de commande",
     'orderNumberSmall' => "<small>(Merci de saisir le ou les numéros de commandes concerné(s) <b><u>en cliquant sur le bouton '+' ci-dessous</u></b>)</small>",
     'phoneNumber' => "Numéro de téléphone",
-    'email' => "Email",
+    'email' => "Adresse email",
     'dangerousSubstance' => "Matières dangereuses",
     'dangerousSubstanceSmall' => "<small>(Cochez la case, si la livraison comprend des matières dangereuses)</small>",
     'date' => "Date",
@@ -30,7 +30,7 @@ return [
     'errorsMessage' => "Merci de corriger vos erreurs",
     'emptyField' => "Veuillez remplir le champs",
     'errorPhone' => "Le numéro de téléphone n'est pas valide",
-    'errorEmail' => "L'email n'est pas valide",
+    'errorEmail' => "L'adresse email n'est pas valide",
     "errorDate" => "La date n'est pas valide",
     "errorTime" => "L'heure n'est pas valide",
     "errorStartTime" => "L'heure de début doit être supérieure à l'heure de fin",
@@ -44,7 +44,6 @@ return [
     'deleteSupplier' => "Le fournisseur a bien été supprimé.",
     'errorSupplier' => "Impossible de supprimer le fournisseur car il est renseigné dans un rendez-vous",
     'suplliersListReturn' => "Retour à la liste des fournisseurs",
-
 
     'carriersList' => "Liste des transporteurs",
     'createCarrierTitle' => "Ajouter un transporteur",
@@ -69,6 +68,7 @@ return [
     'createAdmin' => "Le compte administrateur a bien été enregistré.",
     'modifyAdmin' => "Le compte administrateur a bien été modifié.",
     'deleteAdmin' => "Le administrateur a bien été supprimé.",
+    'adminsListReturn' => "Retour à la liste des administrateurs",
 
     'customersList' => "Liste des clients",
     'createCustomerTitle' => "Ajouter un compte client",
@@ -76,7 +76,30 @@ return [
     'deleteCustomerTitle' => "Supprimer le compte client",
     'createCustomer' => "Le compte client a bien été enregistré.",
     'modifyCustomer' => "Le compte client a bien été modifié.",
-    'deleteCustomer' => "Le client a bien été supprimé."
+    'deleteCustomer' => "Le client a bien été supprimé.",
+    'customersListReturn' => "Retour à la liste des clients",
+
+    'company_name' => "Nom de la société",
+    'name' => "Nom",
+    'firstname' => "Prénom",
+    'email_verif' => "Entrez votre adresse email à nouveau",
+    'password' => "Mot de passe",
+    'passwordSmall' => "Le mot de passe doit contenir au moins 6 caractères",
+    'password_verif' =>"Entrez votre mot de passe à nouveau",
+    'lang' => "Langage de l'interface",
+    'selectLang' => "Sélectionner un langage",
+    'french' => "Français",
+    'english' => "Anglais",
+    'userRole' => "Rôle de l'utilisateur",
+    'customer' => "Client",
+    'super_admin' => "Super administrateur (tous pouvoirs)",
+    'admin_purchase_reception' => "Administrateur achat/réception (création, modification et suppression de rendez-vous)",
+    'admin_validation' => "Administrateur validation (validation de la réception des livraisons)",
+
+    'errorUser' => "Impossible de supprimer le compte car il est renseigné dans un rendez-vous",
+    'errorEmailVerif' => "Les adresses email saisies sont différentes",
+    'errorEmailUniq' => "Un compte est déjà créé avec cette adresse email",
+    'errorPasswordVerif' => "Les mots de passe saisis sont différents",
 ];
 
 

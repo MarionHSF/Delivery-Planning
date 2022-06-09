@@ -1,7 +1,8 @@
 <?php
 use Translation\Translation;
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $carriers = new Carrier\Carriers($pdo);
 $carriers = $carriers->getCarriers();
 $suppliers = new Supplier\Suppliers($pdo);

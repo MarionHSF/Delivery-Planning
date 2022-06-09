@@ -115,7 +115,7 @@ class Validator {
     }
 
     /**
-     * * check if phone number is valid
+     * check if phone number is valid
      * @param string $field
      * @return bool
      */
@@ -128,7 +128,7 @@ class Validator {
     }
 
     /**
-     * * check if email is valid
+     * check if email is valid
      * @param string $field
      * @return bool
      */
@@ -138,6 +138,73 @@ class Validator {
             return false;
         };
         return true;
+    }
+
+    /**
+     * checks if the second email entry matches the first one
+     * @param string $field
+     * @return bool
+     * @throws \Exception
+     */
+    public function emailVerif(string $field): bool{
+        if ($this->email($field) && $this->email('email_verif')){
+            if($this->datas[$field] != $this->datas['email_verif']){
+                $this->errors[$field] = Translation::of('errorEmailVerif');
+                return false;
+            };
+            return true;
+        }
+        $this->errors[$field] = Translation::of('errorEmail');
+        return false;
+    }
+
+    public function emailUniq(string $field): bool{
+        if($this->emailVerif($field)){
+            $pdo = new \PDO\PDO();
+            $pdo = $pdo->get_pdo();
+            $users = new \User\Users($pdo);
+            $emailsList = $users->getUsersEmail();
+            foreach ($emailsList as $email){
+                $emailsList2[] = $email['email'];
+            }
+            if(in_array($this->datas[$field], $emailsList2)){
+                $this->errors[$field] = Translation::of('errorEmailUniq');
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * check if password is valid
+     * @param string $field
+     * @return bool
+     */
+    public function password(string $field): bool{
+        if($this->minLength($field, 6)){
+            return true;
+        };
+        $this->errors[$field] = Translation::of('passwordSmall');
+        return false;
+    }
+
+    /**
+     * checks if the second password entry matches the first one
+     * @param string $field
+     * @return bool
+     * @throws \Exception
+     */
+    public function passwordVerif(string $field): bool{
+        if ($this->password($field) && $this->password('password_verif')){
+            if($this->datas[$field] != $this->datas['password_verif']){
+                $this->errors[$field] = Translation::of('errorPasswordVerif');
+                return false;
+            };
+            return true;
+        }
+        $this->errors[$field] = Translation::of('passwordSmall');
+        return false;
     }
 }
 

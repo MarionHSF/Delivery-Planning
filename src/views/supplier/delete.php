@@ -1,7 +1,8 @@
 <?php
 require '../../functions.php';
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $suppliers = new \Supplier\Suppliers($pdo);
 $errors = [];
 try{

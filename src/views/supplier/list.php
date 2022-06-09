@@ -3,7 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $suppliers = new Supplier\Suppliers($pdo);
 $suppliers = $suppliers->getSuppliers();
 render('header', ['title' => Translation::of('suppliersList')]);
@@ -26,7 +27,7 @@ render('header', ['title' => Translation::of('suppliersList')]);
                 </div>
             <?php endif; ?>
             <div class="d-flex flex-row align-items-center justify-content-between mx-sm-3">
-                <h1><?= Translation::of('suplliersList') ?></h1>
+                <h1><?= Translation::of('suppliersList') ?></h1>
             </div>
 
             <table class="supplier_table">

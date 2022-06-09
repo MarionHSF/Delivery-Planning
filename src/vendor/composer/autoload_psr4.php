@@ -6,11 +6,14 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'User\\' => array($baseDir . '/User'),
-    'Translation\\' => array($baseDir . '/Translation'),
-    'Supplier\\' => array($baseDir . '/Supplier'),
-    'Localization\\' => array($baseDir . '/Carrier'),
-    'Carrier\\' => array($baseDir . '/Carrier'),
-    'Calendar\\' => array($baseDir . '/Calendar'),
+    'User\\' => array($baseDir . '/App/User'),
+    'Translation\\' => array($baseDir . '/App/Translation'),
+    'Supplier\\' => array($baseDir . '/App/Supplier'),
+    'Role\\' => array($baseDir . '/App/Role'),
+    'PDO\\' => array($baseDir . '/App/PDO'),
+    'Localization\\' => array($baseDir . '/App/Carrier'),
+    'Lang\\' => array($baseDir . '/App/Lang'),
+    'Carrier\\' => array($baseDir . '/App/Carrier'),
+    'Calendar\\' => array($baseDir . '/App/Calendar'),
     'App\\' => array($baseDir . '/App'),
 );

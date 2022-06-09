@@ -17,7 +17,7 @@ class Users {
      * @return array
      */
     public function getCustomersUsers(): array{
-        return $this->pdo->query("SELECT * FROM `user` WHERE `is_admin` = 0 ORDER BY `company_name` ASC")->fetchAll();
+        return $this->pdo->query("SELECT * FROM `user` WHERE `id_role` = 1 ORDER BY `company_name` ASC")->fetchAll();
     }
 
     /**
@@ -25,7 +25,7 @@ class Users {
      * @return array
      */
     public function getAdminUsers(): array{
-        return $this->pdo->query("SELECT * FROM `user` WHERE `is_admin` = 1 ORDER BY `name` ASC")->fetchAll();
+        return $this->pdo->query("SELECT * FROM `user` WHERE `id_role` != 1 ORDER BY `name` ASC")->fetchAll();
     }
 
     /**
@@ -44,6 +44,14 @@ class Users {
     }
 
     /**
+     * Return all users email
+     * @return array
+     */
+    public function getUsersEmail (): array{
+        return $this->pdo->query("SELECT `email` FROM `user`")->fetchAll();
+    }
+
+    /**
      * Modify datas before insertion in database (creation or update)
      * @param User $user
      * @param array $datas
@@ -56,8 +64,8 @@ class Users {
         $user->setPhone($datas['phone']);
         $user->setEmail($datas['email']);
         $user->setPassword($datas['password']); //TODO hash
-        $user->setLang($datas['lang']);
-        $user->setIsAdmin($datas['is_admin']);
+        $user->setIdLang($datas['id_lang']);
+        $user->setIdRole($datas['id_role']);
         return $user;
     }
 
@@ -67,7 +75,7 @@ class Users {
      * @return bool
      */
     public function create(\User\User $user): bool{
-        $statement = $this->pdo->prepare('INSERT INTO `user` (`company_name`, `name`, `firstname`, `phone`, `email`, `password`, `lang`, `is_admin`) VALUES (?,?,?,?,?,?,?,?)');
+        $statement = $this->pdo->prepare('INSERT INTO `user` (`company_name`, `name`, `firstname`, `phone`, `email`, `password`, `id_lang`, `id_role`) VALUES (?,?,?,?,?,?,?,?)');
         return $statement->execute([
             $user->getCompanyName(),
             $user->getName(),
@@ -75,8 +83,8 @@ class Users {
             $user->getPhone(),
             $user->getEmail(),
             $user->getPassword(),
-            $user->getLang(),
-            $user->getIsAdmin()
+            $user->getIdLang(),
+            $user->getIdRole()
         ]);
     }
 
@@ -86,7 +94,7 @@ class Users {
      * @return bool
      */
     public function update(\User\User $user): bool{
-        $statement = $this->pdo->prepare('UPDATE `user` SET `company_name` = ?, `name` = ?, `firstname` = ?, `phone` = ?, `email` = ?, `password` = ?, `lang` = ?, `is_admin` = ? WHERE `id` = ?');
+        $statement = $this->pdo->prepare('UPDATE `user` SET `company_name` = ?, `name` = ?, `firstname` = ?, `phone` = ?, `email` = ?, `password` = ?, `id_lang` = ?, `id_role` = ? WHERE `id` = ?');
         return $statement->execute([
             $user->getCompanyName(),
             $user->getName(),
@@ -94,8 +102,8 @@ class Users {
             $user->getPhone(),
             $user->getEmail(),
             $user->getPassword(),
-            $user->getLang(),
-            $user->getIsAdmin(),
+            $user->getIdLang(),
+            $user->getIdRole(),
             $user->getId()
         ]);
     }

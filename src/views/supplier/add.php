@@ -3,6 +3,9 @@ require '../../functions.php';
 
 use Translation\Translation;
 
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
+
 $datas = [];
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -10,7 +13,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $validator = new Supplier\SupplierValidator();
     $errors = $validator->validates($datas);
     if (empty($errors)){
-        $suppliers = new \Supplier\Suppliers(get_pdo());
+        $suppliers = new \Supplier\Suppliers($pdo);
         $supplier = $suppliers->hydrate(new \Supplier\Supplier(), $datas);
         $suppliers->create($supplier);
         header('Location: /views/supplier/list.php?creation=1');

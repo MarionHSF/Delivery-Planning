@@ -3,7 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $carriers = new \Carrier\Carriers($pdo);
 if(!isset($_GET['id'])){
     e404();

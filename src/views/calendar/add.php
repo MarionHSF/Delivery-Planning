@@ -3,6 +3,9 @@ require '../../functions.php';
 
 use Translation\Translation;
 
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
+
 $datas = [
         'date' => $_GET['date'] ?? date('Y-m-d'),
 ];
@@ -16,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $validator = new Calendar\EventValidator();
     $errors = $validator->validates($datas);
     if (empty($errors)){
-        $events = new \Calendar\Events(get_pdo());
+        $events = new \Calendar\Events($pdo);
         $event = $events->hydrate(new \Calendar\Event(), $datas);
         $events->create($event);
         header('Location: /?creation=1');

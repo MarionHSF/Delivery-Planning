@@ -13,7 +13,7 @@ class EventValidator extends Validator{
         parent::validates($datas);
         $this->validate('id_carrier', 'minLength', 1);
         $this->validate('ids_suppliers', 'minLength', 1);
-        $this->validate('order', 'minLength', 1); //TODO
+        $this->validate('order', 'minLength', 1);
         $this->validate('phone', 'phone', );
         $this->validate('email', 'email', );
         $this->validate('name', 'minLength', 1);

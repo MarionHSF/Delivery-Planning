@@ -15,8 +15,10 @@ class UserValidator extends Validator{
         $this->validate('name', 'minLength', 1);
         $this->validate('firstname', 'minLength', 1);
         $this->validate('phone', 'phone', );
-        $this->validate('email', 'email', );
-        $this->validate('lang', 'minLength', 1);
+        $this->validate('email', 'emailUniq');
+        $this->validate('password', 'passwordVerif');
+        $this->validate('id_lang', 'minLength', 1);
+        $this->validate('id_role', 'minLength', 1);
         return $this->errors;
     }
 

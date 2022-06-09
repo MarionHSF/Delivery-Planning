@@ -2,7 +2,7 @@
 
 namespace User;
 
-class user
+class User
 {
 
     private $id;
@@ -12,8 +12,8 @@ class user
     private $phone;
     private $email;
     private $password;
-    private $lang;
-    private $is_admin;
+    private $id_lang;
+    private $id_role;
 
     /* Getters */
     public function getId(): int
@@ -51,20 +51,20 @@ class user
         return $this->password;
     }
 
-    public function getLang(): string
+    public function getIdLang(): int
     {
-        return $this->lang;
+        return $this->id_lang;
     }
 
-    public function getIsAdmin(): int
+    public function getIdRole(): int
     {
-        return $this->is_admin;
+        return $this->id_role;
     }
 
     /* Setters */
-    public function setCompanyName(string $companyname)
+    public function setCompanyName(string $company_name)
     {
-        $this->companyname = $companyname;
+        $this->company_name = $company_name;
     }
 
     public function setName(string $name)
@@ -92,14 +92,14 @@ class user
         $this->password = $password;
     }
 
-    public function setLang(string $lang)
+    public function setIdLang(int $id_lang)
     {
-        $this->lang = $lang;
+        $this->id_lang = $id_lang;
     }
 
-    public function setIsAdmin(int $is_admin)
+    public function setIdRole(int $id_role)
     {
-        $this->is_admin = $is_admin;
+        $this->id_role = $id_role;
     }
 }
 

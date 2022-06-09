@@ -3,7 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $carriers = new \Carrier\Carriers($pdo);
 $errors = [];
 try{
@@ -30,10 +31,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 }
 
-render('header', ['title' => $carrier->getName()]);
+render('header', ['title' => Translation::of('modifyCarrierTitle')]);
 ?>
     <div class="container">
-        <h1><?= h($carrier->getName()); ?></h1>
+        <h1><?= Translation::of('modifyCarrierTitle'); ?></h1>
         <form action="" method="post" class="form">
             <?php render('carrier/form', ['datas' => $datas, 'errors' => $errors]); ?>
             <div class="form-group mt-3">

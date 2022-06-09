@@ -3,7 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $events = new \Calendar\Events($pdo);
 $errors = [];
 try{
@@ -40,10 +41,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 }
 
-render('header', ['title' => $event->getName()]);
+render('header', ['title' => Translation::of('modifyAppointementTitle')]);
 ?>
 <div class="container">
-    <h1><?= h($event->getName()); ?></h1>
+    <h1><?= Translation::of('modifyAppointementTitle') ?></h1>
     <form action="" method="post" class="form">
         <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">

@@ -3,7 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $customers = new User\Users($pdo);
 $customers = $customers->getCustomersUsers();
 render('header', ['title' => Translation::of('customersList')]);
@@ -35,13 +36,13 @@ render('header', ['title' => Translation::of('customersList')]);
                         <td><?= $customer['company_name']; ?></td>
                         <td><?= $customer['name']; ?></td>
                         <td><?= $customer['firstname']; ?></td>
-                        <td><a class="btn btn-primary mx-3" href="/views/carrier/carrier.php?id=<?= $customer['id'];?>"> <?= Translation::of('see') ?></a></td>
+                        <td><a class="btn btn-primary mx-3" href="/views/user/user.php?id=<?= $customer['id'];?>"> <?= Translation::of('see') ?></a></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
         </div>
         <div>
-            <a class="btn btn-primary mt-3" href="/views/user/add.php"><?=Translation::of('createCustomerTitle')  ?></a>
+            <a class="btn btn-primary mt-3" href="/views/user/add.php?customer=1"><?=Translation::of('createCustomerTitle')  ?></a>
         </div>
     </div>
 

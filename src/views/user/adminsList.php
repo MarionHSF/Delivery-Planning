@@ -3,7 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $admins = new User\Users($pdo);
 $admins = $admins->getAdminUsers();
 render('header', ['title' => Translation::of('adminsList')]);
@@ -34,13 +35,13 @@ render('header', ['title' => Translation::of('adminsList')]);
                     <tr>
                         <td><?= $admin['name']; ?></td>
                         <td><?= $admin['firstname']; ?></td>
-                        <td><a class="btn btn-primary mx-3" href="/views/carrier/carrier.php?id=<?= $admin['id'];?>"> <?= Translation::of('see') ?></a></td>
+                        <td><a class="btn btn-primary mx-3" href="/views/user/user.php?id=<?= $admin['id'];?>"> <?= Translation::of('see') ?></a></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
         </div>
         <div>
-            <a class="btn btn-primary mt-3" href="/views/user/add.php"><?=Translation::of('createAdminTitle')  ?></a>
+            <a class="btn btn-primary mt-3" href="/views/user/add.php?admin=1"><?=Translation::of('createAdminTitle')  ?></a>
         </div>
     </div>
 

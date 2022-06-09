@@ -19,9 +19,18 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         array (
             'Supplier\\' => 9,
         ),
+        'R' => 
+        array (
+            'Role\\' => 5,
+        ),
+        'P' => 
+        array (
+            'PDO\\' => 4,
+        ),
         'L' => 
         array (
             'Localization\\' => 13,
+            'Lang\\' => 5,
         ),
         'C' => 
         array (
@@ -37,27 +46,39 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
     public static $prefixDirsPsr4 = array (
         'User\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/User',
+            0 => __DIR__ . '/../..' . '/App/User',
         ),
         'Translation\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Translation',
+            0 => __DIR__ . '/../..' . '/App/Translation',
         ),
         'Supplier\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Supplier',
+            0 => __DIR__ . '/../..' . '/App/Supplier',
+        ),
+        'Role\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/Role',
+        ),
+        'PDO\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/PDO',
         ),
         'Localization\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Carrier',
+            0 => __DIR__ . '/../..' . '/App/Carrier',
+        ),
+        'Lang\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/Lang',
         ),
         'Carrier\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Carrier',
+            0 => __DIR__ . '/../..' . '/App/Carrier',
         ),
         'Calendar\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Calendar',
+            0 => __DIR__ . '/../..' . '/App/Calendar',
         ),
         'App\\' => 
         array (

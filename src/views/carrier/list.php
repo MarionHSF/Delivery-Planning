@@ -3,7 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-$pdo = get_pdo();
+$pdo = new PDO\PDO();
+$pdo = $pdo->get_pdo();
 $carriers = new Carrier\Carriers($pdo);
 $carriers = $carriers->getCarriers();
 render('header', ['title' => Translation::of('carriersList')]);
