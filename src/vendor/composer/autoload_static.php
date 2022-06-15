@@ -25,6 +25,7 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         ),
         'P' => 
         array (
+            'PHPMailer\\PHPMailer\\' => 20,
             'PDO\\' => 4,
         ),
         'L' => 
@@ -59,6 +60,10 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         'Role\\' => 
         array (
             0 => __DIR__ . '/../..' . '/App/Role',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'PDO\\' => 
         array (

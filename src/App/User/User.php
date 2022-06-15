@@ -14,6 +14,12 @@ class User
     private $password;
     private $id_lang;
     private $id_role;
+    private $confirmation_token;
+    private $confirmed_at;
+    private $reset_token;
+    private $reset_at;
+    private $remember_token;
+
 
     /* Getters */
     public function getId(): int
@@ -61,6 +67,31 @@ class User
         return $this->id_role;
     }
 
+    public function getConfirmationToken(): string
+    {
+        return $this->confirmation_token;
+    }
+
+    public function getConfirmAt(): string
+    {
+        return $this->confirmed_at;
+    }
+
+    public function getResetToken(): string
+    {
+        return $this->reset_token;
+    }
+
+    public function getResetAt(): string
+    {
+        return $this->reset_at;
+    }
+
+    public function getRememberToken(): string
+    {
+        return $this->remember_token;
+    }
+
     /* Setters */
     public function setCompanyName(string $company_name)
     {
@@ -101,5 +132,33 @@ class User
     {
         $this->id_role = $id_role;
     }
+
+    public function setConfirmationToken(string $confirmation_token)
+    {
+        $this->confirmation_token = $confirmation_token;
+    }
+
+    public function setConfirmAt(string $confirmed_at)
+    {
+        $this->confirmed_at = $confirmed_at;
+    }
+
+    public function setResetToken(string $reset_token)
+    {
+        $this->reset_token = $reset_token;
+    }
+
+    public function setResetAt(string $reset_at)
+    {
+        $this->reset_at = $reset_at;
+    }
+
+    public function setRememberToken(string $remember_token)
+    {
+        $this->remember_token = $remember_token;
+    }
+
+
+
 }
 

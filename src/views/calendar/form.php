@@ -1,6 +1,12 @@
 <?php
 use Translation\Translation;
 
+if(!isset($_SESSION['auth'])){
+    header('Location: /login.php?connexionOff=1');
+}
+
+reconnectFromCookie();
+
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $carriers = new Carrier\Carriers($pdo);
@@ -98,7 +104,11 @@ $suppliers = $suppliers->getSuppliers();
     <div class="col-sm-6">
         <div class="form-group  mt-3">
             <label for="phone"><?= Translation::of('phoneNumber') ?></label>
-            <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : ''; ?>">
+            <?php if($_SESSION['auth']->getIdRole() == 1){ ?>
+                <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : $_SESSION['auth']->getPhone(); ?>">
+            <?php } else { ?>
+                    <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : '' ?>">
+            <?php } ?>
             <?php if (isset($errors['phone'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['phone']; ?></small></p>
             <?php endif ?>
@@ -107,7 +117,11 @@ $suppliers = $suppliers->getSuppliers();
     <div class="col-sm-6">
         <div class="form-group  mt-3">
             <label for="email"><?= Translation::of('email') ?></label>
-            <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : ''; ?>">
+            <?php if($_SESSION['auth']->getIdRole() == 1){ ?>
+                <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : $_SESSION['auth']->getEmail(); ?>">
+            <?php } else { ?>
+                <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : '' ?>">
+            <?php } ?>
             <?php if (isset($errors['email'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['email']; ?></small></p>
             <?php endif ?>

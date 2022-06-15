@@ -3,6 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
+reconnectFromCookie();
+
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 
@@ -11,25 +13,22 @@ $errors = [];
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
     $validator = new User\UserValidator();
-    $errors = $validator->validates($datas);
+    $errors = $validator->validatesAdd($datas);
     if (empty($errors)){
         $users = new \User\Users($pdo);
         $user = $users->hydrate(new \User\User(), $datas);
         $users->create($user);
         if($datas['id_role'] != 1){
             header('Location: /views/user/adminsList.php?creation=1');
-        }else{
-            header('Location: /views/user/customersList.php?creation=1');
+        }else{//TODO rediriger sur customer liste si créé par un compte admin
+            //header('Location: /views/user/customersList.php?creation=1');
+            header('Location: /login.php?creation=1');
         };
         exit();
+
     }
 }
 
-/*if(strpos($_SERVER['HTTP_REFERER'],"adminsList")){
-    render('header', ['title' => Translation::of('createAdminTitle')]);
-}else{
-    render('header', ['title' => Translation::of('createCustomerTitle')]);
-}*/
 if(isset($_GET['admin'])){
     render('header', ['title' => Translation::of('createAdminTitle')]);
 }else{

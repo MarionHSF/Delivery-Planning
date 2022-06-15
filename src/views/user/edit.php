@@ -3,6 +3,13 @@ require '../../functions.php';
 
 use Translation\Translation;
 
+if(!isset($_SESSION['auth'])){
+    header('Location: /login.php?connexionOff=1');
+    exit();
+}
+
+reconnectFromCookie();
+
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $users = new \User\Users($pdo);
@@ -15,19 +22,20 @@ try{
     e404();
 }
 $datas = [
+    'id' => $user->getId(),
     'company_name' => $user->getCompanyName(),
     'name' => $user->getName(),
     'firstname' => $user->getFirstname(),
     'phone' => $user->getPhone(),
     'email' => $user->getEmail(),
-    'lang' => $user->getIdLang(),
-    'is_admin' => $user->getIdRole(),
+    'id_lang' => $user->getIdLang(),
+    'id_role' => $user->getIdRole(),
 ];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
     $validator = new User\UserValidator();
-    $errors = $validator->validates($datas);
+    $errors = $validator->validatesEdit($datas);
     if (empty($errors)){
         $users->hydrate($user, $datas);
         $users->update($user);

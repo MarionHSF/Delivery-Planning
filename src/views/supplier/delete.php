@@ -1,6 +1,13 @@
 <?php
 require '../../functions.php';
 
+if(!isset($_SESSION['auth'])){
+    header('Location: /login.php?connexionOff=1');
+    exit();
+}
+
+reconnectFromCookie();
+
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $suppliers = new \Supplier\Suppliers($pdo);

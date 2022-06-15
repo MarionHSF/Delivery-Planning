@@ -19,5 +19,7 @@
             "PDO\\": "App/PDO"
         }
     },
-    "require": {}
+    "require": {
+        "phpmailer/phpmailer": "^6.5"
+    }
 }

@@ -1,6 +1,13 @@
 <?php
 require '../../functions.php';
 
+if(!isset($_SESSION['auth'])){
+    header('Location: /login.php?connexionOff=1');
+    exit();
+}
+
+reconnectFromCookie();
+
 use Translation\Translation;
 
 $pdo = new PDO\PDO();

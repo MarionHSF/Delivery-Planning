@@ -35,6 +35,12 @@ services:
       - "3306:3306"
     networks:
       - agenda_net
+  mailserver:
+    image: sj26/mailcatcher
+    ports:
+      - "1080:1080"
+    networks:
+      - agenda_net
 volumes:
   data:
   mysql-data:

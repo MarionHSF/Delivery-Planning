@@ -22,11 +22,19 @@ if (isset($_SESSION['lang'])){
 
 <body>
 
-    <nav class="navbar navbar-dark bg-primary mb-3">
-        <a href="/index.php" class="navbar-brand"> <?= Translation::of('title') ?></a>
-        <div id="flag">
-            <a href="/views/lang/fr.php"><img src='/images/french_flag.jpg' class='flag'/></a>
-            <a href="/views/lang/en.php"><img src='/images/english_flag.jpg' class='flag'/></a>
+    <nav class="navbar navbar-dark bg-primary mb-3 px-3">
+        <a href="/index.php" class="navbar-brand"><img src='/images/logo-Henry-Schein.webp' class='logo'/></a> <?php //TODO redirection à changer si connecté ou non ?>
+        <div class="d-flex flex-column align-items-center">
+            <div id="flag">
+                <a href="/views/lang/fr.php"><img src='/images/french_flag.jpg' class='flag'/></a>
+                <a href="/views/lang/en.php"><img src='/images/english_flag.jpg' class='flag'/></a>
+            </div>
+            <?php if(!empty($_SESSION['auth'])):?>
+            <div class="mt-3">
+                <a class="text-dark text-decoration-none" href="/views/user/user.php?id=<?= $_SESSION['auth']->getId();?>"><?= Translation::of('account') ?></a>
+                <a class="text-dark text-decoration-none" href="/views/user/logout.php"><?= Translation::of('logout') ?></a>
+            </div>
+            <?php endif; ?>
         </div>
     </nav>
 

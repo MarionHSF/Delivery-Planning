@@ -3,6 +3,13 @@ require '../../functions.php';
 
 use Translation\Translation;
 
+if(!isset($_SESSION['auth'])){
+    header('Location: /login.php?connexionOff=1');
+    exit();
+}
+
+reconnectFromCookie();
+
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $users = new \User\Users($pdo);
@@ -21,6 +28,13 @@ render('header', ['title' => $user->getCompanyName()]);
 ?>
 
     <div class="container">
+        <?php if(isset($_GET['validation'])): ?>
+            <div class="container">
+                <div class="alert alert-success">
+                    <?= Translation::of('createAccount') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <?php if(isset($_GET['modification'])): ?>
             <div class="container">
                 <div class="alert alert-success">
@@ -29,6 +43,20 @@ render('header', ['title' => $user->getCompanyName()]);
                     <?php }else{ ?>
                         <?= Translation::of('modifyCustomer') ?>
                     <?php } ?>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if(isset($_GET['modificationEmail'])): ?>
+            <div class="container">
+                <div class="alert alert-success">
+                    <?= Translation::of('modifyEmail') ?>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if(isset($_GET['modificationPassword'])): ?>
+            <div class="container">
+                <div class="alert alert-success">
+                    <?= Translation::of('modifyPassword') ?>
                 </div>
             </div>
         <?php endif; ?>

@@ -164,12 +164,15 @@ class Validator {
             $pdo = $pdo->get_pdo();
             $users = new \User\Users($pdo);
             $emailsList = $users->getUsersEmail();
-            foreach ($emailsList as $email){
-                $emailsList2[] = $email['email'];
-            }
-            if(in_array($this->datas[$field], $emailsList2)){
-                $this->errors[$field] = Translation::of('errorEmailUniq');
-                return false;
+            if(!empty($emailsList)){
+                foreach ($emailsList as $email){
+                    $emailsList2[] = $email['email'];
+                }
+                if(in_array($this->datas[$field], $emailsList2)){
+                    $this->errors[$field] = Translation::of('errorEmailUniq');
+                    return false;
+                }
+                return true;
             }
             return true;
         }
@@ -182,7 +185,7 @@ class Validator {
      * @return bool
      */
     public function password(string $field): bool{
-        if($this->minLength($field, 6)){
+        if($this->minLength($field, 8)){
             return true;
         };
         $this->errors[$field] = Translation::of('passwordSmall');

@@ -10,6 +10,7 @@ return array(
     'Translation\\' => array($baseDir . '/App/Translation'),
     'Supplier\\' => array($baseDir . '/App/Supplier'),
     'Role\\' => array($baseDir . '/App/Role'),
+    'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'PDO\\' => array($baseDir . '/App/PDO'),
     'Localization\\' => array($baseDir . '/App/Carrier'),
     'Lang\\' => array($baseDir . '/App/Lang'),
