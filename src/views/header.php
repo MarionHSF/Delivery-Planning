@@ -31,12 +31,14 @@ if (isset($_SESSION['lang'])){
             </div>
             <?php if(!empty($_SESSION['auth'])):?>
             <div class="mt-3">
-                <a class="text-dark text-decoration-none" href="/views/user/user.php?id=<?= $_SESSION['auth']->getId();?>"><?= Translation::of('account') ?></a>
+                <a class="toggler text-dark text-decoration-none" href="#" id="toggler"><?= Translation::of('account') ?></a>
+                <div id="toggler-content" class="toggler-content p-2 bg-info" style="display: none;">
+                    <a class="text-dark text-decoration-none" href="/views/user/userDashboard.php">* <?= Translation::of('appointement') ?></a>
+                    <a class="text-dark text-decoration-none" href="/views/user/user.php?id=<?= $_SESSION['auth']->getId();?>">* <?= Translation::of('personalInfos') ?></a>
+                </div>
                 <a class="text-dark text-decoration-none" href="/views/user/logout.php"><?= Translation::of('logout') ?></a>
             </div>
             <?php endif; ?>
         </div>
     </nav>
-
-
 

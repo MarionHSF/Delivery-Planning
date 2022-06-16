@@ -5,6 +5,8 @@ use Translation\Translation;
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
+$langs = new Lang\Langs($pdo);
+$langs = $langs->getLangs();
 $datas = [];
 
 reconnectFromCookie();
@@ -28,6 +30,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         try{
             $user = $users->getConnexion($datas);
             $_SESSION['auth'] = $user;
+            $_SESSION['lang'] = $langs[$user->getIdLang()-1]['code'];
             if($user->getIdRole() == 1){
                 header('Location: /views/calendar/add.php?connexion=1');
             }else{

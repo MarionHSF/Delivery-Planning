@@ -10,3 +10,13 @@
 .container{
     margin-bottom: 90px;
 }
+
+.toggler{
+    position: relative;
+}
+
+.toggler-content{
+    background-color: aqua;
+    position: absolute;
+    bottom: -70%;
+}

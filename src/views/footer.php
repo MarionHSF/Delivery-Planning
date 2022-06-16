@@ -2,9 +2,6 @@
 
 use Translation\Translation;
 Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
-if (isset($_SESSION['lang'])){
-    Translation::forceLanguage($_SESSION['lang']);
-}
 
 ?>
 
@@ -12,6 +9,8 @@ if (isset($_SESSION['lang'])){
     <p>© Henry Schein France&emsp;-&emsp;</p>
     <a href="/privacy_policy.php" class="text-dark"><?= Translation::of('privacyPolicy') ?></a>
 </footer>
+
+<script src="/js/general.js" type="text/javascript"></script>
 
 </body>
 </html>

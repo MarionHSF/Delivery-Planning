@@ -107,6 +107,8 @@ return [
     'logoutText' => "Vous avez été déconnecté.",
     'errorConnexion' => "Adresse email ou mot de passe incorrect",
     'account' => "Mon compte /",
+    'personalInfos' => "Mes infos",
+    'appointement' => "Mes rendez-vous",
     'connexionText' => "Vous êtes connecté.",
     'connexionOff' => "Vous n'avez pas les droits pour accéder à cette page.",
     'forgottenPassword' => "Mot de passe oublié",
