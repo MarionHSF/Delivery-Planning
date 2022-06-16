@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="Clipbucket Dev Hsf Digital">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/src/vendor/phpmailer" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Dashboard Dev Hsf Digital">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/src/vendor/phpmailer" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Dev 2 Mega (SoClinic)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/src/vendor/phpmailer" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Dev HSF Digital Arcade">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/src/vendor/phpmailer" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Dev HSF Digital DentalInov">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/src/vendor/phpmailer" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Dev HSF Digital Dents">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/src/vendor/phpmailer" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Reveal Dev Hsf Digital">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/src/vendor/phpmailer" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Selecteur de dents Arseus Dev Hsf">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$/src/vendor/phpmailer" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

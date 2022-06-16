@@ -3,7 +3,9 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/phpmailer/phpmailer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor" />
     </content>
+    <content url="file://$MODULE_DIR$/src/vendor/phpmailer" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
