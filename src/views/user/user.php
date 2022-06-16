@@ -21,6 +21,10 @@ if(!isset($_GET['id'])){
 }
 try{
     $user = $users->find($_GET['id']);
+    if($_GET['id'] != $_SESSION['auth']->getId() && $_SESSION['auth']->getIdRole() != 4){
+            e404();
+            exit;
+    }
 } catch (\Exception $e){
     e404();
 }
@@ -28,6 +32,13 @@ render('header', ['title' => $user->getCompanyName()]);
 ?>
 
     <div class="container">
+        <?php if(isset($_GET['connexionOff'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('connexionOff') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <?php if(isset($_GET['validation'])): ?>
             <div class="container">
                 <div class="alert alert-success">
@@ -75,16 +86,15 @@ render('header', ['title' => $user->getCompanyName()]);
         <p><?= Translation::of('lang') ?> : <?= h(Translation::of($langs->find($user->getIdLang())->getName())); ?></p>
         <p><?= Translation::of('userRole') ?> : <?= h(Translation::of($roles->find($user->getIdRole())->getName())); ?></p>
         <div>
-            <?php if($user->getIdRole() != 1){ ?>
-                <a class="btn btn-primary mt-3" href="/views/user/edit.php?id=<?= $user->getId();?>"><?= Translation::of('modifyAdminTitle') ?></a>
-                <a class="btn btn-primary mt-3" href="/views/user/delete.php?id=<?= $user->getId();?>"><?= Translation::of('deleteAdminTitle') ?></a>
+            <a class="btn btn-primary mt-3" href="/views/user/edit.php?id=<?= $user->getId();?>"><?= Translation::of('modifyUserTitle') ?></a>
+            <?php if($_SESSION['auth']->getIdRole() == 4){ ?>
+                <a class="btn btn-primary mt-3" href="/views/user/delete.php?id=<?= $user->getId();?>"><?= Translation::of('deleteUserTitle') ?></a>
         </div>
-        <div> <a class="btn btn-primary mt-3" href="/views/user/adminsList.php"><?= Translation::of('adminsListReturn') ?></a></div>
-            <?php }else{ ?>
-                <a class="btn btn-primary mt-3" href="/views/user/edit.php?id=<?= $user->getId();?>"><?= Translation::of('modifyCustomerTitle') ?></a>
-                <a class="btn btn-primary mt-3" href="/views/user/delete.php?id=<?= $user->getId();?>"><?= Translation::of('deleteCustomerTitle') ?></a>
-        </div>
-        <div> <a class="btn btn-primary mt-3" href="/views/user/customersList.php"><?= Translation::of('customersListReturn') ?></a></div>
+                <?php if($user->getIdRole() != 1){ ?>
+                    <div> <a class="btn btn-primary mt-3" href="/views/user/adminsList.php"><?= Translation::of('adminsListReturn') ?></a></div>
+                <?php }else{?>
+                    <div> <a class="btn btn-primary mt-3" href="/views/user/customersList.php"><?= Translation::of('customersListReturn') ?></a></div>
+                <?php }?>
             <?php }?>
     </div>
 

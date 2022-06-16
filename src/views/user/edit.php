@@ -60,11 +60,7 @@ if($user->getIdRole() != 1 ){
         <form action="" method="post" class="form">
             <?php render('user/form', ['datas' => $datas, 'errors' => $errors]); ?>
             <div class="form-group mt-3">
-                <?php if($user->getIdRole() != 1 ){ ?>
-                    <button class="btn btn-primary"><?= Translation::of('modifyAdminTitle') ?></button>
-                <?php }else{ ?>
-                    <button class="btn btn-primary"><?= Translation::of('modifyCustomerTitle') ?></button>
-                <?php } ?>
+                <button class="btn btn-primary"><?= Translation::of('modifyUserTitle') ?></button>
             </div>
         </form>
         <?php if($user->getIdRole() != 1 ){ ?>
