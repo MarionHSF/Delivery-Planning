@@ -3,12 +3,9 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
+onlyConnectedUserAndSuperAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -21,10 +18,6 @@ if(!isset($_GET['id'])){
 }
 try{
     $user = $users->find($_GET['id']);
-    if($_GET['id'] != $_SESSION['auth']->getId() && $_SESSION['auth']->getIdRole() != 4){
-            e404();
-            exit;
-    }
 } catch (\Exception $e){
     e404();
 }
@@ -88,14 +81,17 @@ render('header', ['title' => $user->getCompanyName()]);
         <div>
             <a class="btn btn-primary mt-3" href="/views/user/edit.php?id=<?= $user->getId();?>"><?= Translation::of('modifyUserTitle') ?></a>
             <?php if($_SESSION['auth']->getIdRole() == 4){ ?>
-                <a class="btn btn-primary mt-3" href="/views/user/delete.php?id=<?= $user->getId();?>"><?= Translation::of('deleteUserTitle') ?></a>
+            <a class="btn btn-primary mt-3" href="/views/user/delete.php?id=<?= $user->getId();?>"><?= Translation::of('deleteUserTitle') ?></a>
         </div>
                 <?php if($user->getIdRole() != 1){ ?>
-                    <div> <a class="btn btn-primary mt-3" href="/views/user/adminsList.php"><?= Translation::of('adminsListReturn') ?></a></div>
+                    <div> <a class="btn btn-primary mt-3" href="/views/user/adminsList.php"><?= Translation::of('return') ?></a></div>
                 <?php }else{?>
-                    <div> <a class="btn btn-primary mt-3" href="/views/user/customersList.php"><?= Translation::of('customersListReturn') ?></a></div>
+                    <div> <a class="btn btn-primary mt-3" href="/views/user/customersList.php"><?= Translation::of('return') ?></a></div>
                 <?php }?>
-            <?php }?>
+            <?php }elseif($user->getId() == $_SESSION['auth']->getId()){ ?>
+        </div>
+            <div> <a class="btn btn-primary mt-3" href="/views/calendar/add.php"><?= Translation::of('return') ?></a></div>
+            <?php } ?>
     </div>
 
 <?php require '../footer.php'; ?>

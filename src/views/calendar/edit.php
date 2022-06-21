@@ -3,12 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -22,6 +18,14 @@ try{
 } catch (\Error $e){
     e404();
 }
+
+$date = new \DateTime(date('Y-m-d H:i:s'));
+$limitDate = $event->getStart()->modify('-24 hours');
+if($_SESSION['auth']->getIdRole() == 1 && $date > $limitDate){
+    header('Location: /views/calendar/event.php?id='.$event->getId().'&limitDate=1');
+    exit();
+}
+
 $datas = [
         'id_carrier' => $event->getIdCarrier(),
         'ids_suppliers' => $ids_suppliers,
@@ -29,11 +33,10 @@ $datas = [
         'phone' => $event->getPhone(),
         'email' => $event->getEmail(),
         'dangerous_substance' => $event->getDangerousSubstance(),
-        'name' => $event->getName(),
         'date' => $event->getStart()->format('Y-m-d'),
         'start' => $event->getStart()->format('H:i'),
         'end' => $event->getEnd()->format('H:i'),
-        'description' => $event->getDescription()
+        'comment' => $event->getComment()
 ];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -43,7 +46,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if (empty($errors)){
         $events->hydrate($event, $datas);
         $events->update($event);
-        header('Location: /?modification=1');
+        header('Location: /views/calendar/event.php?id='. $event->getId() .'&modification=1');
         exit();
     }
 }

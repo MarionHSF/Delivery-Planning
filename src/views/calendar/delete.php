@@ -1,13 +1,8 @@
 <?php
 require '../../functions.php';
 
-
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -22,7 +17,18 @@ try{
 }
 
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
+    $date = new \DateTime(date('Y-m-d H:i:s'));
+    $limitDate = $event->getStart()->modify('-24 hours');
+    if($_SESSION['auth']->getIdRole() == 1 && $date > $limitDate){
+        header('Location: /views/calendar/event.php?id='.$event->getId().'&limitDate=1');
+    }else{
         $events->delete($event);
-        header('Location: /?supression=1');
-        exit();
+        if($_SESSION['auth']->getIdRole() == 1){
+            header('Location: /views/user/userDashboard.php?id='.$_SESSION['auth']->getId().'&supression=1');
+            exit();
+        }else{
+            header('Location: /views/user/adminDashboard.php?supression=1');
+            exit();
+        }
+    }
 }

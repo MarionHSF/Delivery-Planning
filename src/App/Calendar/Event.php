@@ -13,10 +13,13 @@ class Event
     private $phone;
     private $email;
     private $dangerous_substance;
-    private $name;
-    private $description;
+    private $comment;
     private $start;
     private $end;
+    private $reception_validation;
+    private $reception_date;
+    private $reception_line;
+    private $storage_validation;
 
 
     /* Getters */
@@ -60,14 +63,9 @@ class Event
         return $this->dangerous_substance;
     }
 
-    public function getName(): string
+    public function getComment(): string
     {
-        return $this->name;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
+        return $this->comment;
     }
 
     public function getStart(): \DateTime
@@ -78,6 +76,26 @@ class Event
     public function getEnd(): \DateTime
     {
         return new \DateTime($this->end);
+    }
+
+    public function getReceptionValidation(): string
+    {
+        return $this->reception_validation;
+    }
+
+    public function getReceptionDate(): \DateTime
+    {
+        return new \DateTime($this->reception_date);
+    }
+
+    public function getReceptionLine(): string
+    {
+        return $this->reception_line;
+    }
+
+    public function getStorageValidation(): string
+    {
+        return $this->storage_validation;
     }
 
     /* Setters */
@@ -116,14 +134,10 @@ class Event
         $this->dangerous_substance = $dangerous_substance;
     }
 
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
 
-    public function setDescription(string $description)
+    public function setComment(string $comment)
     {
-        $this->description = $description;
+        $this->comment = $comment;
     }
 
     public function setStart(string $start)
@@ -134,5 +148,25 @@ class Event
     public function setEnd(string $end)
     {
         $this->end = $end;
+    }
+
+    public function setReceptionValidation(string $reception_validation)
+    {
+        $this->reception_validation = $reception_validation;
+    }
+
+    public function setReceptionDate(string $reception_date)
+    {
+        $this->reception_date = $reception_date;
+    }
+
+    public function setReceptionLine(string $reception_line)
+    {
+        $this->reception_line = $reception_line;
+    }
+
+    public function setStorageValidation(string $storage_validation)
+    {
+        $this->storage_validation = $storage_validation;
     }
 }

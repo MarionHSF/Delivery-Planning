@@ -3,12 +3,9 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
+onlySuperAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -48,6 +45,9 @@ render('header', ['title' => Translation::of('carriersList')]);
         </div>
         <div>
             <a class="btn btn-primary mt-3" href="/views/carrier/add.php"><?=Translation::of('createCarrierTitle')  ?></a>
+        </div>
+        <div>
+            <a class="btn btn-primary mt-3" href="/views/user/adminDashboard.php"><?=Translation::of('return')  ?></a>
         </div>
     </div>
 

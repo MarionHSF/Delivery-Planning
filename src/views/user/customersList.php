@@ -3,12 +3,9 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
+onlySuperAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -44,12 +41,16 @@ render('header', ['title' => Translation::of('customersList')]);
                         <td><?= $customer['name']; ?></td>
                         <td><?= $customer['firstname']; ?></td>
                         <td><a class="btn btn-primary mx-3" href="/views/user/user.php?id=<?= $customer['id'];?>"> <?= Translation::of('see') ?></a></td>
+                        <td><a class="btn btn-primary mx-3" href="/views/user/userDashboard.php?id=<?= $customer['id'];?>"> <?= Translation::of('appointementList') ?></a></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
         </div>
         <div>
             <a class="btn btn-primary mt-3" href="/views/user/add.php?customer=1"><?=Translation::of('createCustomerTitle')  ?></a>
+        </div>
+        <div>
+            <a class="btn btn-primary mt-3" href="/views/user/adminDashboard.php"><?=Translation::of('return')  ?></a>
         </div>
     </div>
 

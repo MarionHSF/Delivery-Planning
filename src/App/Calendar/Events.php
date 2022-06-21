@@ -1,6 +1,10 @@
 <?php
 namespace Calendar;
 
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use Translation\Translation;
+
 class Events {
 
     private $pdo;
@@ -21,6 +25,15 @@ class Events {
     public function getEventsBetween(\DateTime $start, \DateTime $end): array{
         return $this->pdo->query("SELECT * FROM `event` WHERE `start` BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}' ORDER BY start ASC")->fetchAll();
     }
+
+    public function getEventsBetweenTime(\DateTime $start, \DateTime $end, $sort): array{
+        //$statement =  $this->pdo->query("SELECT * FROM `event` WHERE `start` BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}' ORDER BY start :sort");
+        //$statement->bindParam('sort', $sort, \PDO::PARAM_STR);
+        //$result = $statement->fetchAll();
+        //return $result;
+        return $this->pdo->query("SELECT * FROM `event` WHERE `start` BETWEEN '{$start->format('Y-m-d H:i:s')}' AND '{$end->format('Y-m-d H:i:s')}' ORDER BY start DESC")->fetchAll();
+    }
+
 
     /**
      * Return events between two dates indexed by day
@@ -65,9 +78,13 @@ class Events {
      */
     public function findIdsSuppliers (int $id): array {
         $statement = $this->pdo->query("SELECT `id_supplier` FROM `event_supplier` WHERE `id_event` = $id");
+        //$statement = $this->pdo->query("SELECT `*` FROM `supplier`, `event_supplier`, `event` WHERE `supplier.id` = `event_supplier.id_supplier` AND `event_supplier.id_event` = `event.id` AND `event.id` = $id");
+        //$statement = $this->pdo->query("SELECT `*` FROM `supplier` JOIN (`event`, `event_supplier`) ON (`event_supplier.id_event` = `event.id` AND `event_supplier.id_supplier` = `supplier.id`) WHERE `event.id` = $id");
         $result = $statement->fetchAll();
+        //var_dump($result);
+        //die();
         if ($result === false) {
-            throw new \Exception('Aucun résultat n\'a été trouvé');
+        throw new \Exception('Aucun résultat n\'a été trouvé');
         }
         return $result;
     }
@@ -86,10 +103,11 @@ class Events {
         $event->setPhone($datas['phone']);
         $event->setEmail($datas['email']);
         isset($datas['dangerous_substance']) ? $event->setDangerousSubstance('yes') : $event->setDangerousSubstance('no') ;
-        $event->setName($datas['name']);
-        $event->setDescription($datas['description']);
+        $event->setComment($datas['comment']);
         $event->setStart(\DateTime::createFromFormat('Y-m-d H:i',$datas['date'] . ' ' . $datas['start'])->format('Y-m-d H:i:s'));
         $event->setEnd(\DateTime::createFromFormat('Y-m-d H:i',$datas['date'] . ' ' . $datas['end'])->format('Y-m-d H:i:s'));
+        $event->setReceptionValidation('no');
+        $event->setStorageValidation('no');
         return $event;
     }
 
@@ -99,7 +117,7 @@ class Events {
      * @return bool
      */
     public function create(\Calendar\Event $event): void{
-        $statement = $this->pdo->prepare('INSERT INTO `event` (`entry_date`, `id_carrier`, `order`, `phone`, `email`, `dangerous_substance`, `name`, `description`, `start`, `end`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $statement = $this->pdo->prepare('INSERT INTO `event` (`entry_date`, `id_carrier`, `order`, `phone`, `email`, `dangerous_substance`, `comment`, `start`, `end`, `reception_validation`, `storage_validation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $statement->execute([
             $event->getEntryDate()->format('Y-m-d H:i:s'),
             $event->getIdCarrier(),
@@ -107,10 +125,11 @@ class Events {
             $event->getPhone(),
             $event->getEmail(),
             $event->getDangerousSubstance(),
-            $event->getName(),
-            $event->getDescription(),
+            $event->getComment(),
             $event->getStart()->format('Y-m-d H:i:s'),
-            $event->getEnd()->format('Y-m-d H:i:s')
+            $event->getEnd()->format('Y-m-d H:i:s'),
+            $event->getReceptionValidation(),
+            $event->getStorageValidation()
         ]);
         $id_event = $this->pdo->lastInsertId();
         $statement2 = $this->pdo->prepare('INSERT INTO `event_supplier` (`id_event`, `id_supplier`) VALUES (?, ?)');
@@ -120,6 +139,61 @@ class Events {
                 $id_supplier
             ]);
         }
+        $statement3 = $this->pdo->prepare('INSERT INTO `user_event` (`id_user`, `id_event`) VALUES (?, ?)');
+        $statement3->execute([
+            $_SESSION['auth']->getID(), //TODO à revoir si c'est admin qui créé rdv
+            $id_event
+        ]);
+
+        try { // Send user confirmation mail
+            //Server settings
+            $mail = new PHPMailer(true);
+            initSmtp($mail);
+
+            //Recipients
+            $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+            $mail->addAddress($event->getEmail(),);
+
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = Translation::of('mailAppointementSubjet');
+            if($_SESSION['lang'] == 'en-US'){
+                $date = $event->getStart()->format('m/d/Y H:i');
+            }else{
+                $date = $event->getStart()->format('d/m/Y H:i');
+            }
+            $mail->Body    = Translation::of('mailCreateAppointementText').' '.$date.'.</br></br>'.Translation::of('warningModifyAppointement').'</br></br>'.Translation::of('mailAppointementFooter');
+
+            $mail->send();
+        } catch (Exception $e) {
+            echo $mail->ErrorInfo;
+        }
+        // Send admin warning dangerous substance mail
+        if($event->getDangerousSubstance() == "yes"){
+            try {
+                //Server settings
+                $mail = new PHPMailer(true);
+                initSmtp($mail);
+
+                //Recipients
+                $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+                $mail->addAddress('test@test.com'); // TODO modifier email admin
+
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = Translation::of('dangerousSubstance');
+                if($_SESSION['lang'] == 'en-US'){
+                    $date = $event->getStart()->format('m/d/Y H:i');
+                }else{
+                    $date = $event->getStart()->format('d/m/Y H:i');
+                }
+                $mail->Body    = Translation::of('dangerousSubstanceMail').' '.$date.'.';
+
+                $mail->send();
+            } catch (Exception $e) {
+                echo $mail->ErrorInfo;
+            }
+        }
     }
 
     /**
@@ -128,15 +202,14 @@ class Events {
      * @return bool
      */
     public function update(\Calendar\Event $event): void{
-        $statement = $this->pdo->prepare('UPDATE `event` SET `id_carrier` = ?, `order` = ?, `phone` = ?, `email` = ?, `dangerous_substance` = ?, `name` = ?, `description` = ?, `start` = ?, `end` = ? WHERE `id` = ?');
+        $statement = $this->pdo->prepare('UPDATE `event` SET `id_carrier` = ?, `order` = ?, `phone` = ?, `email` = ?, `dangerous_substance` = ?, `comment` = ?, `start` = ?, `end` = ? WHERE `id` = ?');
         $statement->execute([
             $event->getIdCarrier(),
             $event->getOrder(),
             $event->getPhone(),
             $event->getEmail(),
             $event->getDangerousSubstance(),
-            $event->getName(),
-            $event->getDescription(),
+            $event->getComment(),
             $event->getStart()->format('Y-m-d H:i:s'),
             $event->getEnd()->format('Y-m-d H:i:s'),
             $event->getId()
@@ -152,6 +225,29 @@ class Events {
                 $id_supplier
             ]);
         }
+        try { // Send user confirmation mail
+            //Server settings
+            $mail = new PHPMailer(true);
+            initSmtp($mail);
+
+            //Recipients
+            $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+            $mail->addAddress($event->getEmail(),);
+
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = Translation::of('mailAppointementSubjet');
+            if($_SESSION['lang'] == 'en-US'){
+                $date = $event->getStart()->format('m/d/Y H:i');
+            }else{
+                $date = $event->getStart()->format('d/m/Y H:i');
+            }
+            $mail->Body    = Translation::of('mailModifyAppointementText').' '.$date.'.</br></br>'.Translation::of('mailAppointementFooter');
+
+            $mail->send();
+        } catch (Exception $e) {
+            echo $mail->ErrorInfo;
+        }
     }
 
     /**
@@ -164,8 +260,69 @@ class Events {
         $statement->execute([
             $event->getId()
         ]);
-        $statement2 = $this->pdo->prepare('DELETE from `event` WHERE `id` = ?');
+        $statement2 = $this->pdo->prepare('DELETE from `user_event` WHERE `id_event` = ?');
         $statement2->execute([
+            $event->getId()
+        ]);
+        $statement3 = $this->pdo->prepare('DELETE from `event` WHERE `id` = ?');
+        $statement3->execute([
+            $event->getId()
+        ]);
+        try { // Send user confirmation mail
+            //Server settings
+            $mail = new PHPMailer(true);
+            initSmtp($mail);
+
+            //Recipients
+            $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+            $mail->addAddress($event->getEmail(),);
+
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = Translation::of('mailAppointementSubjet');
+            if($_SESSION['lang'] == 'en-US'){
+                $date = $event->getStart()->format('m/d/Y H:i');
+            }else{
+                $date = $event->getStart()->format('d/m/Y H:i');
+            }
+            $mail->Body    = Translation::of('mailDeleteAppointementText').' '.$date.'.</br></br>'.Translation::of('mailAppointementFooter');
+
+            $mail->send();
+        } catch (Exception $e) {
+            echo $mail->ErrorInfo;
+        }
+    }
+
+    /**
+     * Insert reception validation in database
+     * @param Event $event
+     * @param array $datas
+     * @return void
+     */
+    public function validationReception(\Calendar\Event $event, array $datas): void{
+        $event->setReceptionValidation('yes');
+        $event->setReceptionDate(\DateTime::createFromFormat('Y-m-d H:i',$datas['date'] . ' ' . $datas['start'])->format('Y-m-d H:i:s'));
+        $event->setReceptionLine($datas['reception_line']);
+        $statement = $this->pdo->prepare('UPDATE `event` SET `reception_validation` = ?, `reception_date` = ?, `reception_line` = ? WHERE `id` = ?');
+        $statement->execute([
+            $event->getReceptionValidation(),
+            $event->getReceptionDate()->format('Y-m-d H:i:s'),
+            $event->getReceptionLine(),
+            $event->getId()
+        ]);
+    }
+
+    /**
+     * Insert reception validation in database
+     * @param Event $event
+     * @param array $datas
+     * @return void
+     */
+    public function validationStorage(\Calendar\Event $event): void{
+        $event->setStorageValidation('yes');
+        $statement = $this->pdo->prepare('UPDATE `event` SET `storage_validation` = ? WHERE `id` = ?');
+        $statement->execute([
+            $event->getStorageValidation(),
             $event->getId()
         ]);
     }

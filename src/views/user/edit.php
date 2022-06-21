@@ -3,12 +3,9 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
+onlyConnectedUserAndSuperAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -63,11 +60,7 @@ if($user->getIdRole() != 1 ){
                 <button class="btn btn-primary"><?= Translation::of('modifyUserTitle') ?></button>
             </div>
         </form>
-        <?php if($user->getIdRole() != 1 ){ ?>
-            <a class="btn btn-primary mt-3" href="/views/user/adminsList.php"><?= Translation::of('adminsListReturn') ?></a>
-        <?php }else{ ?>
-            <a class="btn btn-primary mt-3" href="/views/user/customersList.php"><?= Translation::of('customersListReturn') ?></a>
-        <?php } ?>
+        <a class="btn btn-primary mt-3" href="/views/user/user.php?id=<?= $user->getId();?>"><?= Translation::of('return') ?></a>
     </div>
 
 <?php require '../footer.php'; ?>

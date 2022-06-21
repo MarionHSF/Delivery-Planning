@@ -55,6 +55,14 @@ function initSmtp($mail){
     $mail->CharSet    = 'UTF-8';
 }
 
+/* Automatic redirection if not connect */
+function isNotConnected(){
+    if(!isset($_SESSION['auth'])){
+        header('Location: /login.php?connexionOff=1');
+        exit();
+    }
+}
+
 /* Automatic reconnexion from cookie */
 function reconnectFromCookie(){
     $pdo = new PDO\PDO();
@@ -77,6 +85,38 @@ function reconnectFromCookie(){
             setcookie('remember', NULL, -1, '/');
             header('Location: /login.php');
         }
+    }
+}
+
+/* Rights only for super admin */
+function onlySuperAdminRights(){
+    if($_SESSION['auth']->getIdRole() != 4){
+        e404();
+        exit();
+    }
+}
+
+/* Rights only for connected user & super admin */
+function onlyConnectedUserAndSuperAdminRights(){
+    if($_GET['id'] != $_SESSION['auth']->getId() && $_SESSION['auth']->getIdRole() != 4){
+        e404();
+        exit;
+    }
+}
+
+/* Rights only for admin */
+function onlyAdminRights(){
+    if($_SESSION['auth']->getIdRole() == 1){
+        e404();
+        exit;
+    }
+}
+
+/* Rights only for validation */
+function receptionValidationRights(){
+    if($_SESSION['auth']->getIdRole() == 1 || $_SESSION['auth']->getIdRole() == 3){
+        e404();
+        exit;
     }
 }
 

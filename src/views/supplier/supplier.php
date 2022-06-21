@@ -3,12 +3,9 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
+onlySuperAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -45,7 +42,7 @@ render('header', ['title' => $supplier->getName()]);
             <a class="btn btn-primary mt-3" href="/views/supplier/edit.php?id=<?= $supplier->getId();?>"><?= Translation::of('modifySupplierTitle') ?></a>
             <a class="btn btn-primary mt-3" href="/views/supplier/delete.php?id=<?= $supplier->getId();?>"><?= Translation::of('deleteSupplierTitle') ?></a>
         </div>
-        <div> <a class="btn btn-primary mt-3" href="/views/supplier/list.php"><?= Translation::of('suplliersListReturn') ?></a></div>
+        <div> <a class="btn btn-primary mt-3" href="/views/supplier/list.php"><?= Translation::of('return') ?></a></div>
     </div>
 
 <?php require '../footer.php'; ?>

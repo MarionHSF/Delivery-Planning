@@ -1,12 +1,6 @@
 <?php
 use Translation\Translation;
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-}
-
-reconnectFromCookie();
-
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $carriers = new Carrier\Carriers($pdo);
@@ -135,15 +129,6 @@ $suppliers = $suppliers->getSuppliers();
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group  mt-3">
-            <label for="name">Titre</label>
-            <input id="name" type="text" required class="form-control" name="name" value="<?= isset($datas['name']) ? h($datas['name']) : ''; ?>">
-            <?php if (isset($errors['name'])) : ?>
-                <p><small class="form-text text-danger"><?= $errors['name']; ?></small></p>
-            <?php endif ?>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group  mt-3">
             <label for="date"><?= Translation::of('date') ?></label>
             <input id="date" type="date" required class="form-control" name="date" value="<?= isset($datas['date']) ? h($datas['date']) : ''; ?>">
             <?php if (isset($errors['date'])) : ?>
@@ -173,6 +158,6 @@ $suppliers = $suppliers->getSuppliers();
     </div>
 </div>
 <div class="form-group mt-3">
-    <label for="description">Description</label>
-    <textarea name="description" id="description" required class="form-control"><?= isset($datas['description']) ? h($datas['description']) : ''; ?></textarea>
+    <label for="comment"><?= Translation::of('comment') ?> (<?= Translation::of('optional') ?>)</label>
+    <textarea name="comment" id="comment" class="form-control"><?= isset($datas['comment']) ? h($datas['comment']) : ''; ?></textarea>
 </div>

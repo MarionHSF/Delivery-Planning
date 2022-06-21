@@ -1,5 +1,6 @@
 .calendar{
     position: relative;
+    margin-bottom: 90px;
 }
 
 .calendar_table{
@@ -69,4 +70,16 @@
 
 .btn.btn-primary.form.remove{
    margin-left: 10px;
+}
+
+.calendar_link{
+    color: black;
+}
+
+.calendar_link:hover{
+    color: #0a58ca;
+}
+
+.gestion{
+    width: auto;
 }

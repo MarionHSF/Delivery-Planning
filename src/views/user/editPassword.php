@@ -42,7 +42,7 @@ render('header', ['title' => Translation::of('modifyPasswordTitle')]);
                 <button class="btn btn-primary"><?= Translation::of('modifyPasswordTitle') ?></button>
             </div>
         </form>
-        <a class="btn btn-primary mt-3" href="/views/user/user.php?id=<?= $user->getId();?>"><?= Translation::of('userReturn') ?></a>
+        <a class="btn btn-primary mt-3" href="/views/user/edit.php?id=<?= $user->getId();?>"><?= Translation::of('return') ?></a>
     </div>
 
 <?php require '../footer.php'; ?>

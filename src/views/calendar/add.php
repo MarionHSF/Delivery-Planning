@@ -3,12 +3,8 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -29,7 +25,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $events = new \Calendar\Events($pdo);
         $event = $events->hydrate(new \Calendar\Event(), $datas);
         $events->create($event);
-        header('Location: /?creation=1');
+        if($_SESSION['auth']->getIdRole() == 1){
+            header('Location: /views/user/userDashboard.php?id='.$_SESSION['auth']->getId().'&creation=1');
+        }else{
+            header('Location: /views/user/adminDashboard.php?creation=1');
+        }
         exit();
     }
 }
@@ -43,6 +43,13 @@ render('header', ['title' => Translation::of('createAppointementTitle')]);
         <div class="container">
             <div class="alert alert-success">
                 <?= Translation::of('connexionText') ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php if(isset($_GET['creation'])): ?>
+        <div class="container">
+            <div class="alert alert-success">
+                <?= Translation::of('createAppointement') ?>
             </div>
         </div>
     <?php endif; ?>

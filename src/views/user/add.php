@@ -3,8 +3,6 @@ require '../../functions.php';
 
 use Translation\Translation;
 
-reconnectFromCookie();
-
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 
@@ -19,7 +17,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $user = $users->hydrate(new \User\User(), $datas);
         $users->create($user);
         if($datas['id_role'] != 1){
-            header('Location: /views/user/adminsList.php?creation=1');
+            header('Location: /views/user/adminsList.php?creation=1'); //TODO à revoir pas logique de rediriger là
         }else{//TODO rediriger sur customer liste si créé par un compte admin
             //header('Location: /views/user/customersList.php?creation=1');
             header('Location: /login.php?creation=1');
@@ -59,9 +57,9 @@ if(isset($_GET['admin'])){
         </div>
     </form>
     <?php if(isset($_GET['admin'])){ ?>
-        <a class="btn btn-primary mt-3" href="/views/user/AdminsList.php"><?= Translation::of('adminsListReturn') ?></a>
+        <a class="btn btn-primary mt-3" href="/views/user/AdminsList.php"><?= Translation::of('return') ?></a>
     <?php }else{ ?>
-        <a class="btn btn-primary mt-3" href="/views/user/CustomersList.php"><?= Translation::of('customersListReturn') ?></a>
+        <a class="btn btn-primary mt-3" href="/views/user/CustomersList.php"><?= Translation::of('return') ?></a>
     <?php } ?>
 </div>
 

@@ -1,12 +1,9 @@
 <?php
 require '../../functions.php';
 
-if(!isset($_SESSION['auth'])){
-    header('Location: /login.php?connexionOff=1');
-    exit();
-}
-
 reconnectFromCookie();
+isNotConnected();
+onlySuperAdminRights();
 
 use Translation\Translation;
 
@@ -48,7 +45,7 @@ render('header', ['title' => Translation::of('modifySupplierTitle')]);
                 <button class="btn btn-primary"><?= Translation::of('modifySupplierTitle') ?></button>
             </div>
         </form>
-        <a  class="btn btn-primary mt-3" href="/views/supplier/list.php"><?= Translation::of('suplliersListReturn') ?></a>
+        <a class="btn btn-primary mt-3" href="/views/supplier/supplier.php?id=<?= $supplier->getId();?>"><?= Translation::of('return') ?></a>
     </div>
 
 <?php require '../footer.php'; ?>

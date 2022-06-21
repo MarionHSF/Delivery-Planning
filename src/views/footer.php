@@ -11,6 +11,7 @@ Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
 </footer>
 
 <script src="/js/general.js" type="text/javascript"></script>
+<script src="/js/user.js" type="text/javascript"></script>
 
 </body>
 </html>

@@ -119,7 +119,7 @@ class Users {
         ]);
         if( $user->getIdRole() == 1){
             $id_user = $this->pdo->lastInsertId();
-            try {
+            try { // Send user confirmation mail
                 //Server settings
                 $mail = new PHPMailer(true);
                 initSmtp($mail);
@@ -165,11 +165,9 @@ class Users {
      */
     public function updateEmail(\User\User $user, array $datas): bool{
         $user->setEmail($datas['email']);
-        $user->setConfirmationToken(bin2hex(random_bytes(32))); //TODO à revoir si utile, si oui reset confirmed_at et envoyer un mail de confirm
-        $statement = $this->pdo->prepare('UPDATE `user` SET `email` = ?, `confirmation_token` = ? WHERE `id` = ?');
+        $statement = $this->pdo->prepare('UPDATE `user` SET `email` = ? WHERE `id` = ?');
         return $statement->execute([
             $user->getEmail(),
-            $user->getConfirmationToken(),
             $user->getId()
         ]);
     }
@@ -254,7 +252,7 @@ class Users {
                 date("Y-m-d H:i:s"),
                 $user->getId()
             ]);
-            try {
+            try { // Send user forgot password mail
                 //Server settings
                 $mail = new PHPMailer(true);
                 initSmtp($mail);
@@ -275,5 +273,22 @@ class Users {
         }else{
             throw new \Exception(Translation::of('errorForgottenPassword'));
         }
+    }
+
+    //TODO
+
+    /**
+     * Return list of events ids of user
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function findEvents (int $id): array {
+        $statement = $this->pdo->query("SELECT `id_event` FROM `user_event` WHERE `id_user` = $id");
+        $result = $statement->fetchAll();
+        if ($result === false) {
+            throw new \Exception('Aucun résultat n\'a été trouvé');
+        }
+        return $result;
     }
 }
