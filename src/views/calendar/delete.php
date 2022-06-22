@@ -24,10 +24,10 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
     }else{
         $events->delete($event);
         if($_SESSION['auth']->getIdRole() == 1){
-            header('Location: /views/user/userDashboard.php?id='.$_SESSION['auth']->getId().'&supression=1');
+            header('Location: /views/user/userDashboard.php?id='.$_SESSION['auth']->getId().'&suppression=1');
             exit();
         }else{
-            header('Location: /views/user/adminDashboard.php?supression=1');
+            header('Location: /views/user/adminDashboard.php?suppression=1');
             exit();
         }
     }

@@ -38,3 +38,25 @@ function removeOrderInput(i){
     const divOrderNumber = document.getElementById("divOrder" + i);
     divOrder.removeChild(divOrderNumber);
 }
+
+var email = document.getElementById("email");
+email.addEventListener("change",function(e){
+    try{
+        const httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+                var phone = document.getElementById("phone");
+                phone.value = httpRequest.responseText;
+            }
+        };
+        httpRequest.open('GET', 'http://localhost:8000/views/user/userPhone.php?email='+email.value, true);
+        httpRequest.send();
+    }catch (e){
+        console.log(e.description);
+    }
+})
+
+
+
+
+

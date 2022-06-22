@@ -151,7 +151,8 @@ return [
     'receptionTime' => "Heure de réception",
     'storageValidation' => "Validation du stockage",
     'storageValidationText' => "La validation du stockage a bien été prise en compte.",
-
+    'selectEmail' => "Séctionner une adresse email",
+    'errorFindByEmail' => "Cette adresse email ne correspond à un aucun compte.",
 
 
 

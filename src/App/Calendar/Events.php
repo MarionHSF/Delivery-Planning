@@ -23,17 +23,8 @@ class Events {
      * @return array
      */
     public function getEventsBetween(\DateTime $start, \DateTime $end): array{
-        return $this->pdo->query("SELECT * FROM `event` WHERE `start` BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}' ORDER BY start ASC")->fetchAll();
+        return $this->pdo->query("SELECT * FROM `event` WHERE `start` BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}' ORDER BY `start` ASC")->fetchAll();
     }
-
-    public function getEventsBetweenTime(\DateTime $start, \DateTime $end, $sort): array{
-        //$statement =  $this->pdo->query("SELECT * FROM `event` WHERE `start` BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}' ORDER BY start :sort");
-        //$statement->bindParam('sort', $sort, \PDO::PARAM_STR);
-        //$result = $statement->fetchAll();
-        //return $result;
-        return $this->pdo->query("SELECT * FROM `event` WHERE `start` BETWEEN '{$start->format('Y-m-d H:i:s')}' AND '{$end->format('Y-m-d H:i:s')}' ORDER BY start DESC")->fetchAll();
-    }
-
 
     /**
      * Return events between two dates indexed by day
@@ -71,18 +62,29 @@ class Events {
     }
 
     /**
-     * Return list of supplier ids of event
+     * Return carrier of event
      * @param int $id
      * @return array
      * @throws \Exception
      */
-    public function findIdsSuppliers (int $id): array {
-        $statement = $this->pdo->query("SELECT `id_supplier` FROM `event_supplier` WHERE `id_event` = $id");
-        //$statement = $this->pdo->query("SELECT `*` FROM `supplier`, `event_supplier`, `event` WHERE `supplier.id` = `event_supplier.id_supplier` AND `event_supplier.id_event` = `event.id` AND `event.id` = $id");
-        //$statement = $this->pdo->query("SELECT `*` FROM `supplier` JOIN (`event`, `event_supplier`) ON (`event_supplier.id_event` = `event.id` AND `event_supplier.id_supplier` = `supplier.id`) WHERE `event.id` = $id");
+    public function findCarrier (int $id): array {
+        $statement = $this->pdo->query("SELECT `carrier`.`id`, `carrier`.`name` FROM `carrier` LEFT JOIN (`event`) ON (`carrier`.`id` = `event`.`id_carrier`) WHERE `event`.`id` = $id");
         $result = $statement->fetchAll();
-        //var_dump($result);
-        //die();
+        if ($result === false) {
+            throw new \Exception('Aucun résultat n\'a été trouvé');
+        }
+        return $result;
+    }
+
+    /**
+     * Return list of supplier of event
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function findSuppliers (int $id): array {
+        $statement = $this->pdo->query("SELECT `supplier`.`id`, `supplier`.`name` FROM `supplier` LEFT JOIN (`event_supplier`, `event`) ON (`supplier`.`id` = `event_supplier`.`id_supplier` AND `event_supplier`.`id_event` = `event`.`id`) WHERE `event`.`id` = $id");
+        $result = $statement->fetchAll();
         if ($result === false) {
         throw new \Exception('Aucun résultat n\'a été trouvé');
         }
@@ -140,8 +142,15 @@ class Events {
             ]);
         }
         $statement3 = $this->pdo->prepare('INSERT INTO `user_event` (`id_user`, `id_event`) VALUES (?, ?)');
+        if($_SESSION['auth']->getIdRole() == 1){
+            $id_user = $_SESSION['auth']->getID();
+        }else{
+            $users = new \User\Users($this->pdo);
+            $user = $users->findByEmail($event->getEmail(),'event');
+            $id_user = $user->getId();
+        }
         $statement3->execute([
-            $_SESSION['auth']->getID(), //TODO à revoir si c'est admin qui créé rdv
+            $id_user,
             $id_event
         ]);
 
@@ -225,6 +234,27 @@ class Events {
                 $id_supplier
             ]);
         }
+        $statement4 = $this->pdo->prepare('DELETE from `user_event` WHERE `id_event` = ?');
+        $statement4->execute([
+            $event->getId()
+        ]);
+        $statement5 = $this->pdo->prepare('INSERT INTO `user_event` (`id_user`, `id_event`) VALUES (?, ?)');
+        if($_SESSION['auth']->getIdRole() == 1){
+            $id_user = $_SESSION['auth']->getID();
+        }else{
+            $users = new \User\Users($this->pdo);
+            $user = $users->findByEmail($event->getEmail(),'event');
+            $id_user = $user->getId();
+        }
+        $statement5->execute([
+            $id_user,
+            $event->getId()
+        ]);
+
+
+
+
+
         try { // Send user confirmation mail
             //Server settings
             $mail = new PHPMailer(true);

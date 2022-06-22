@@ -22,9 +22,9 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
         $id_role = $user->getIdRole();
         $users->delete($user);
         if($id_role != 1){
-            header('Location: /views/user/adminsList.php?supression=1');
+            header('Location: /views/user/adminsList.php?suppression=1');
         }else{
-            header('Location: /views/user/customersList.php?supression=1');
+            header('Location: /views/user/customersList.php?suppression=1');
         }
     }catch (\Exception $e){
         header('Location: '.$_SERVER['HTTP_REFERER'].'&error=1');

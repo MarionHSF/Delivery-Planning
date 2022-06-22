@@ -9,15 +9,13 @@ isNotConnected();
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $events = new \Calendar\Events($pdo);
-$carriers =  new \Carrier\Carriers($pdo);
-$suppliers =  new \Supplier\Suppliers($pdo);
 if(!isset($_GET['id'])){
     e404();
 }
 try{
     $event = $events->find($_GET['id']);
-    $carrier = $carriers->find($event->getIdCarrier())->getName();
-    $ids_suppliers = $events->findIdsSuppliers($_GET['id']);
+    $carrier = $events->findCarrier($_GET['id']);
+    $suppliers = $events->findSuppliers($_GET['id']);
 } catch (\Exception $e){
     e404();
 }
@@ -56,10 +54,10 @@ render('header', ['title' => Translation::of('appointementDetails')]);
        <h1><?= Translation::of('appointementDetails') ?> : </h1>
         <ul>
             <li><?= Translation::of('entryDate') ?> : <?= $event->getEntryDate()->format('d/m/Y'); ?></li>
-            <li><?= Translation::of('carrier') ?> : <?= $carrier ?></li>
+            <li><?= Translation::of('carrier') ?> : <?= $carrier['0']['name'] ?></li>
             <li><?= Translation::of('supplier') ?> : <?php
-                                    foreach ($ids_suppliers as $id_supplier) {
-                                        $suppliersName[] = $suppliers->find($id_supplier['id_supplier'])->getName();
+                                    foreach ($suppliers as $supplier) {
+                                        $suppliersName[] = $supplier['name'];
                                     }
                                     echo implode(', ',$suppliersName);
                                 ?></li>

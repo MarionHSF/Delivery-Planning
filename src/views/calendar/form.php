@@ -7,6 +7,8 @@ $carriers = new Carrier\Carriers($pdo);
 $carriers = $carriers->getCarriers();
 $suppliers = new Supplier\Suppliers($pdo);
 $suppliers = $suppliers->getSuppliers();
+$users = new User\Users($pdo);
+$emailsList = $users->getUsersEmail();
 ?>
 
 <div class="row mt-5 d-flex align-items-center">
@@ -37,7 +39,7 @@ $suppliers = $suppliers->getSuppliers();
                                     echo 'selected';
                                 }else{
                                     if($id_supplier == $supplier['id']){
-                                       echo 'selected';
+                                        echo 'selected';
                                     }
                                 }
                             }
@@ -97,27 +99,35 @@ $suppliers = $suppliers->getSuppliers();
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group  mt-3">
-            <label for="phone"><?= Translation::of('phoneNumber') ?></label>
+            <label for="email"><?= Translation::of('email') ?></label>
             <?php if($_SESSION['auth']->getIdRole() == 1){ ?>
-                <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : $_SESSION['auth']->getPhone(); ?>">
+                <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : $_SESSION['auth']->getEmail(); ?>">
             <?php } else { ?>
-                    <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : '' ?>">
-            <?php } ?>
-            <?php if (isset($errors['phone'])) : ?>
-                <p><small class="form-text text-danger"><?= $errors['phone']; ?></small></p>
+                <select name="email" id="email" class="mx-3" required">
+                    <option value="<?= !empty($datas['email']) ? h($datas['email']) : ''; ?>"><?= !empty($datas['email']) ? h($datas['email']) : '--'.Translation::of('selectEmail').'--'; ?></option>
+                    <?php foreach ($emailsList as $email): ?>
+                        <option value="<?= $email['email']; ?>"><?= $email['email']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            <?php }?>
+            <?php if (isset($errors['email'])) : ?>
+                <p><small class="form-text text-danger"><?= $errors['email']; ?></small></p>
+            <?php endif ?>
+            <?php if (isset($errors['errorFindByEmail'])) : ?>
+                <p><small class="form-text text-danger"><?= $errors['errorFindByEmail']; ?></small></p>
             <?php endif ?>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group  mt-3">
-            <label for="email"><?= Translation::of('email') ?></label>
+            <label for="phone"><?= Translation::of('phoneNumber') ?></label>
             <?php if($_SESSION['auth']->getIdRole() == 1){ ?>
-                <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : $_SESSION['auth']->getEmail(); ?>">
-            <?php } else { ?>
-                <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : '' ?>">
+                <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : $_SESSION['auth']->getPhone(); ?>">
+            <?php } else {?>
+                <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : '' ?>">
             <?php } ?>
-            <?php if (isset($errors['email'])) : ?>
-                <p><small class="form-text text-danger"><?= $errors['email']; ?></small></p>
+            <?php if (isset($errors['phone'])) : ?>
+                <p><small class="form-text text-danger"><?= $errors['phone']; ?></small></p>
             <?php endif ?>
         </div>
     </div>

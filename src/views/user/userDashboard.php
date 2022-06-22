@@ -10,16 +10,28 @@ onlyConnectedUserAndSuperAdminRights();
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $users = new User\Users($pdo);
-$users_events_ids = $users->findEvents($_GET['id']);
-if($users_events_ids){
-    foreach ($users_events_ids as $users_events_id){
-        $users_events_ids_list[] = $users_events_id['id_event'];
+$users_events = $users->findEvents($_GET['id']);
+if($users_events){
+    foreach ($users_events as $users_event){
+        if($users_event['start'] > date('Y-m-d H:i:s')){
+            $upcoming_events[] = $users_event;
+        }else{
+            $past_events[] = $users_event;
+        }
     }
-    $users_events_ids_list = implode(',', $users_events_ids_list);
-    $events = new Calendar\Events($pdo);
-    $upcoming_events = $events->getEventsBetweenTime(new \DateTime(date('Y-m-d H:i:s')), new \DateTime(date('Y-m-d H:i:s', strtotime('+365 days'))), "ASC");
-    $past_events = $events->getEventsBetweenTime(new \DateTime(date('Y-m-d H:i:s', strtotime('-365 days'))), new \DateTime(date('Y-m-d H:i:s')), "DESC");
-
+    $start = array();
+    if(isset($upcoming_events)){
+        foreach ($upcoming_events as $key => $event){
+            $start[$key] = $event['start'];
+        }
+        array_multisort($start, SORT_ASC, $upcoming_events);
+    }
+    if(isset($past_events)){
+        foreach ($past_events as $key => $event){
+            $start[$key] = $event['start'];
+        }
+        array_multisort($start, SORT_DESC, $past_events);
+    }
 }
 
 render('header', ['title' => Translation::of('appointement')]);
@@ -33,7 +45,7 @@ render('header', ['title' => Translation::of('appointement')]);
                 </div>
             </div>
         <?php endif; ?>
-        <?php if(isset($_GET['supression'])): ?>
+        <?php if(isset($_GET['suppression'])): ?>
             <div class="container">
                 <div class="alert alert-success">
                     <?= Translation::of('deleteAppointement') ?>
@@ -43,13 +55,14 @@ render('header', ['title' => Translation::of('appointement')]);
         <h1 class="mb-5"><?= Translation::of('appointement') ?></h1>
         <h2 id="upcoming-appointement-toogler" class="mb-3 px-3"><u><?= Translation::of('upcomingAppointement') ?></u></h2>
         <div id="upcoming-appointement-toogler-content" class="mb-5 px-5">
-            <?php if($users_events_ids){ ?>
-                <?php if($upcoming_events){ ?>
-                    <?php foreach ($upcoming_events as $upcoming_event){?>
-                        <?php if(strpos($users_events_ids_list, $upcoming_event['id']) !== false){
-                            $event = $events->find($upcoming_event['id'])?>
-                            <a href="/views/calendar/event.php?id=<?= $upcoming_event['id'];?>"><?= $event->getStart()->format('d/m/Y H:i'); ?></a></br>
-                        <?php } ?>
+            <?php if($users_events){ ?>
+                <?php if(isset($upcoming_events)){ ?>
+                    <?php foreach ($upcoming_events as $upcoming_event){ ?>
+                            <?php if($_SESSION['lang'] == 'en-US'){ ?>
+                                <a href="/views/calendar/event.php?id=<?= $upcoming_event['id_event'];?>"><?= (new \DateTime($upcoming_event['start']))->format('m/d/Y H:i') ?></a></br>
+                            <?php }else{ ?>
+                                <a href="/views/calendar/event.php?id=<?= $upcoming_event['id_event'];?>"><?= (new \DateTime($upcoming_event['start']))->format('d/m/Y H:i') ?></a></br>
+                            <?php } ?>
                     <?php } ?>
                 <?php }else{ ?>
                     <p><?= Translation::of('emptyUpcomingAppointement') ?></p>
@@ -60,12 +73,13 @@ render('header', ['title' => Translation::of('appointement')]);
         </div>
         <h2 id="past-appointement-toogler" class="mb-3 px-3"><u><?= Translation::of('pastAppointement') ?></u></h2>
         <div id="past-appointement-toogler-content" class="px-5" style="display: none">
-            <?php if($users_events_ids){ ?>
-                <?php if($past_events){ ?>
+            <?php if($users_events){ ?>
+                <?php if(isset($past_events)){ ?>
                     <?php foreach ($past_events as $past_event){ ?>
-                        <?php if(strpos($users_events_ids_list, $past_event['id']) !== false){
-                            $event = $events->find($past_event['id'])?>
-                            <a href="/views/calendar/event.php?id=<?= $past_event['id'];?>"><?= $event->getStart()->format('d/m/Y H:i'); ?></a></br>
+                        <?php if($_SESSION['lang'] == 'en-US'){ ?>
+                            <a href="/views/calendar/event.php?id=<?= $past_event['id_event'];?>"><?= (new \DateTime($past_event['start']))->format('m/d/Y H:i') ?></a></br>
+                        <?php }else{ ?>
+                            <a href="/views/calendar/event.php?id=<?= $past_event['id_event'];?>"><?= (new \DateTime($past_event['start']))->format('d/m/Y H:i') ?></a></br>
                         <?php } ?>
                     <?php } ?>
                 <?php }else{ ?>

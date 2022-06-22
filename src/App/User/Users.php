@@ -62,6 +62,8 @@ class Users {
                 throw new \Exception(Translation::of('errorConnexion'));
             }elseif($function == "password"){
                 throw new \Exception(Translation::of('errorForgottenPassword'));
+            }elseif ($function == "event"){
+                throw new \Exception(Translation::of('errorFindByEmail'));
             }
 
         }
@@ -275,16 +277,14 @@ class Users {
         }
     }
 
-    //TODO
-
     /**
-     * Return list of events ids of user
+     * Return list of events of user
      * @param int $id
      * @return array
      * @throws \Exception
      */
     public function findEvents (int $id): array {
-        $statement = $this->pdo->query("SELECT `id_event` FROM `user_event` WHERE `id_user` = $id");
+        $statement = $this->pdo->query("SELECT * FROM `event` LEFT JOIN (`user_event`, `user`) ON (`event`.`id` = `user_event`.`id_event` AND `user_event`.`id_user` = `user`.`id`) WHERE `user`.`id` = $id");
         $result = $statement->fetchAll();
         if ($result === false) {
             throw new \Exception('Aucun résultat n\'a été trouvé');

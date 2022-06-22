@@ -20,7 +20,7 @@ try{
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
     try{
         $carriers->delete($carrier);
-        header('Location: /views/carrier/list.php?supression=1');
+        header('Location: /views/carrier/list.php?suppression=1');
     }catch (\Exception $e){
         header('Location: '.$_SERVER['HTTP_REFERER'].'&error=1');
     }

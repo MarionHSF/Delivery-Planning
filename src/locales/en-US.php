@@ -151,6 +151,8 @@ return [
     'receptionTime' => "Time of reception",
     'storageValidation' => "Storage validation",
     'storageValidationText' => "Storage validation was well registered.",
+    'selectEmail' => "Please select email address",
+    'errorFindByEmail' => "This email address doesn't correspond to any account.",
 
 
 

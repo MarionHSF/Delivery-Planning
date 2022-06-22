@@ -24,13 +24,17 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if (empty($errors)){
         $events = new \Calendar\Events($pdo);
         $event = $events->hydrate(new \Calendar\Event(), $datas);
-        $events->create($event);
-        if($_SESSION['auth']->getIdRole() == 1){
-            header('Location: /views/user/userDashboard.php?id='.$_SESSION['auth']->getId().'&creation=1');
-        }else{
-            header('Location: /views/user/adminDashboard.php?creation=1');
+        try{
+            $events->create($event);
+            if($_SESSION['auth']->getIdRole() == 1){
+                header('Location: /views/user/userDashboard.php?id='.$_SESSION['auth']->getId().'&creation=1');
+            }else{
+                header('Location: /views/user/adminDashboard.php?creation=1');
+            }
+            exit();
+        }catch (\Exception $e){
+            $errors['errorFindByEmail'] = $e->getMessage();
         }
-        exit();
     }
 }
 

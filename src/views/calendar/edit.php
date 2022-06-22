@@ -12,7 +12,12 @@ $events = new \Calendar\Events($pdo);
 $errors = [];
 try{
     $event = $events->find($_GET['id'] ?? null);
-    $ids_suppliers = $events->findIdsSuppliers($_GET['id'] ?? null);
+    $carrier = $events->findCarrier($_GET['id'] ?? null);
+    $suppliers = $events->findSuppliers($_GET['id'] ?? null);
+    $ids_suppliers = [];
+    foreach ($suppliers as $supplier){
+        $ids_suppliers[] = $supplier['id'];
+    }
 } catch (\Exception $e){
     e404();
 } catch (\Error $e){
@@ -27,7 +32,7 @@ if($_SESSION['auth']->getIdRole() == 1 && $date > $limitDate){
 }
 
 $datas = [
-        'id_carrier' => $event->getIdCarrier(),
+        'id_carrier' => $carrier[0]['id'],
         'ids_suppliers' => $ids_suppliers,
         'order' => $event->getOrder(),
         'phone' => $event->getPhone(),
@@ -45,15 +50,24 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $errors = $validator->validates($datas);
     if (empty($errors)){
         $events->hydrate($event, $datas);
-        $events->update($event);
-        header('Location: /views/calendar/event.php?id='. $event->getId() .'&modification=1');
-        exit();
+        try{
+            $events->update($event);
+            header('Location: /views/calendar/event.php?id='. $event->getId() .'&modification=1');
+            exit();
+        }catch (\Exception $e){
+            $errors['errorFindByEmail'] = $e->getMessage();
+        }
     }
 }
 
 render('header', ['title' => Translation::of('modifyAppointementTitle')]);
 ?>
 <div class="container">
+    <?php if(!empty($errors)) : ?>
+        <div class="alert alert-danger">
+            <?= Translation::of('errorsMessage') ?>
+        </div>
+    <?php endif; ?>
     <h1><?= Translation::of('modifyAppointementTitle') ?></h1>
     <form action="" method="post" class="form">
         <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>

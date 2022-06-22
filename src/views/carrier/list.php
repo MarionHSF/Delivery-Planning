@@ -23,7 +23,7 @@ render('header', ['title' => Translation::of('carriersList')]);
                     </div>
                 </div>
             <?php endif; ?>
-            <?php if(isset($_GET['supression'])): ?>
+            <?php if(isset($_GET['suppression'])): ?>
                 <div class="container">
                     <div class="alert alert-success">
                         <?= Translation::of('deleteCarrier') ?>
