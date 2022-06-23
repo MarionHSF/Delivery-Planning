@@ -56,6 +56,28 @@ email.addEventListener("change",function(e){
     }
 })
 
+function removeUploadFile(fileID){
+    const divUploadFile = document.getElementById("uploadFile");
+    const divUploadFileNumber = document.getElementById("uploadFile" + fileID);
+    divUploadFile.removeChild(divUploadFileNumber);
+    try{
+        const httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+                alert('fichier supprimé');
+            }
+        };
+        httpRequest.open('GET', 'http://localhost:8000/views/file/delete.php?fileId='+fileID, true);
+        httpRequest.send();
+        console.log(httpRequest);
+    }catch (e){
+        console.log(e.description);
+    }
+}
+
+
+
+
 
 
 

@@ -21,6 +21,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
     $validator = new Calendar\EventValidator();
     $errors = $validator->validates($datas);
+    $uploadResult = uploadFiles($errors, $datas);
+    if(key_exists('errorUploadFiles', $uploadResult)){
+        $errors['errorUploadFiles'] = $uploadResult['errorUploadFiles'];
+    }elseif (key_exists('uploadFiles', $uploadResult)){
+        foreach ($uploadResult['uploadFiles'] as $uploadFile){
+            $datas['uploadFiles'][] = $uploadFile;
+        }
+    }
     if (empty($errors)){
         $events = new \Calendar\Events($pdo);
         $event = $events->hydrate(new \Calendar\Event(), $datas);
@@ -63,7 +71,7 @@ render('header', ['title' => Translation::of('createAppointementTitle')]);
         </div>
     <?php endif; ?>
     <h1><?= Translation::of('createAppointementTitle') ?></h1>
-    <form action="" method="post" class="form">
+    <form action="" method="post" class="form" enctype="multipart/form-data">
         <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
             <button class="btn btn-primary"><?= Translation::of('createAppointementTitle') ?></button>

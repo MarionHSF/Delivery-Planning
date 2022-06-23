@@ -41,19 +41,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 }
 
-if($user->getIdRole() != 1 ){
-    render('header', ['title' => Translation::of('modifyAdminTitle')]);
-}else{
-    render('header', ['title' => Translation::of('modifyCustomerTitle')]);
-}
+render('header', ['title' => Translation::of('modifyUserTitle')]);
 
 ?>
     <div class="container">
-        <?php if($user->getIdRole() != 1 ){ ?>
-            <h1><?= Translation::of('modifyAdminTitle') ?></h1>
-        <?php }else{ ?>
-            <h1><?= Translation::of('modifyCustomerTitle') ?></h1>
-        <?php } ?>
+        <h1><?= Translation::of('modifyUserTitle') ?></h1>
         <form action="" method="post" class="form">
             <?php render('user/form', ['datas' => $datas, 'errors' => $errors]); ?>
             <div class="form-group mt-3">

@@ -14,6 +14,7 @@ return array(
     'PDO\\' => array($baseDir . '/App/PDO'),
     'Localization\\' => array($baseDir . '/App/Carrier'),
     'Lang\\' => array($baseDir . '/App/Lang'),
+    'File\\' => array($baseDir . '/App/File'),
     'Carrier\\' => array($baseDir . '/App/Carrier'),
     'Calendar\\' => array($baseDir . '/App/Calendar'),
     'App\\' => array($baseDir . '/App'),

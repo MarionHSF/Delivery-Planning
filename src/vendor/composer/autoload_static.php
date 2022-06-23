@@ -33,6 +33,10 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
             'Localization\\' => 13,
             'Lang\\' => 5,
         ),
+        'F' => 
+        array (
+            'File\\' => 5,
+        ),
         'C' => 
         array (
             'Carrier\\' => 8,
@@ -77,6 +81,10 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         array (
             0 => __DIR__ . '/../..' . '/App/Lang',
         ),
+        'File\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/File',
+        ),
         'Carrier\\' => 
         array (
             0 => __DIR__ . '/../..' . '/App/Carrier',
@@ -93,6 +101,7 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Verot\\Upload\\Upload' => __DIR__ . '/..' . '/verot/class.upload.php/src/class.upload.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

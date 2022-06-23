@@ -10,14 +10,14 @@ render('header', ['title' => Translation::of('privacyPolicy')]);
 <div class="container">
     <div class="d-flex justify-content-between my-5">
         <p><?= Translation::of('update') ?>
-            <?php if($_SESSION['lang'] == "fr-FR"){
+            <?php if($_SESSION['lang'] == "fr_FR"){
                 echo '22/05/18';
             }else{
                 echo '05/22/18';
             } ?>
         </p>
         <p><?= Translation::of('applicationDate') ?>
-            <?php if($_SESSION['lang'] == "fr-FR"){
+            <?php if($_SESSION['lang'] == "fr_FR"){
                 echo '22/05/18';
             }else{
                 echo '05/22/18';

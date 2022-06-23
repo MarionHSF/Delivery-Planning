@@ -1,5 +1,4 @@
 <?php
-
 use Translation\Translation;
 Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
 if (isset($_SESSION['lang'])){

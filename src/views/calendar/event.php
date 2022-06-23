@@ -16,6 +16,8 @@ try{
     $event = $events->find($_GET['id']);
     $carrier = $events->findCarrier($_GET['id']);
     $suppliers = $events->findSuppliers($_GET['id']);
+    $files = $events->findUploadFiles($_GET['id']);
+    dd($files);
 } catch (\Exception $e){
     e404();
 }
@@ -56,12 +58,22 @@ render('header', ['title' => Translation::of('appointementDetails')]);
             <li><?= Translation::of('entryDate') ?> : <?= $event->getEntryDate()->format('d/m/Y'); ?></li>
             <li><?= Translation::of('carrier') ?> : <?= $carrier['0']['name'] ?></li>
             <li><?= Translation::of('supplier') ?> : <?php
-                                    foreach ($suppliers as $supplier) {
-                                        $suppliersName[] = $supplier['name'];
-                                    }
-                                    echo implode(', ',$suppliersName);
-                                ?></li>
+                foreach ($suppliers as $supplier) {
+                    $suppliersName[] = $supplier['name'];
+                }
+                echo implode(', ',$suppliersName); ?>
+            </li>
             <li><?= Translation::of('orderNumber') ?> : <?= h($event->getOrder()); ?></li>
+            <li><?= Translation::of('attachments') ?> : </br><?php
+                foreach ($files as $file) { ?>
+                    <a href="/uploadFiles/<?= $file['name'] ?>" target="_blank"><?= $file['name'] ?></a>
+                    </br>
+                <?php } ?>
+            </li>
+
+
+
+
             <li><?= Translation::of('phoneNumber') ?> : <?= h($event->getPhone()); ?></li>
             <li><?= Translation::of('email') ?> : <?= h($event->getEmail()); ?></li>
             <li><?= Translation::of('dangerousSubstance') ?> : <?= $event->getDangerousSubstance() == "yes" ? Translation::of('yes') : Translation::of('no') ?></li>

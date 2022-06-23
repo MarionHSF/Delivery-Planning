@@ -14,6 +14,7 @@ try{
     $event = $events->find($_GET['id'] ?? null);
     $carrier = $events->findCarrier($_GET['id'] ?? null);
     $suppliers = $events->findSuppliers($_GET['id'] ?? null);
+    $files = $events->findUploadFiles($_GET['id'] ?? null);
     $ids_suppliers = [];
     foreach ($suppliers as $supplier){
         $ids_suppliers[] = $supplier['id'];
@@ -41,13 +42,21 @@ $datas = [
         'date' => $event->getStart()->format('Y-m-d'),
         'start' => $event->getStart()->format('H:i'),
         'end' => $event->getEnd()->format('H:i'),
-        'comment' => $event->getComment()
+        'comment' => $event->getComment(),
+        'uploadFiles' => $files
 ];
-
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
     $validator = new Calendar\EventValidator();
     $errors = $validator->validates($datas);
+    $uploadResult = uploadFiles($errors, $datas);
+    if(key_exists('errorUploadFiles', $uploadResult)){
+        $errors['errorUploadFiles'] = $uploadResult['errorUploadFiles'];
+    }elseif (key_exists('uploadFiles', $uploadResult)){
+        foreach ($uploadResult['uploadFiles'] as $uploadFile){
+            $datas['uploadFiles'][] = $uploadFile;
+        }
+    }
     if (empty($errors)){
         $events->hydrate($event, $datas);
         try{
@@ -69,7 +78,7 @@ render('header', ['title' => Translation::of('modifyAppointementTitle')]);
         </div>
     <?php endif; ?>
     <h1><?= Translation::of('modifyAppointementTitle') ?></h1>
-    <form action="" method="post" class="form">
+    <form action="" method="post" class="form" enctype="multipart/form-data">
         <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
             <button class="btn btn-primary"><?= Translation::of('modifyAppointementTitle') ?></button>

@@ -92,6 +92,21 @@ class Events {
     }
 
     /**
+     * Return list of upload files of event
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function findUploadFiles (int $id): array {
+        $statement = $this->pdo->query("SELECT `file`.`id`, `file`.`name` FROM `file` LEFT JOIN (`event_file`, `event`) ON (`file`.`id` = `event_file`.`id_file` AND `event_file`.`id_event` = `event`.`id`) WHERE `event`.`id` = $id");
+        $result = $statement->fetchAll();
+        if ($result === false) {
+            throw new \Exception('Aucun résultat n\'a été trouvé');
+        }
+        return $result;
+    }
+
+    /**
      * Modify datas before insertion in database (creation or update)
      * @param Event $event
      * @param array $datas
@@ -110,6 +125,9 @@ class Events {
         $event->setEnd(\DateTime::createFromFormat('Y-m-d H:i',$datas['date'] . ' ' . $datas['end'])->format('Y-m-d H:i:s'));
         $event->setReceptionValidation('no');
         $event->setStorageValidation('no');
+        if(isset($datas['uploadFiles'])){
+            $event->setUploadFiles($datas['uploadFiles']);
+        }
         return $event;
     }
 
@@ -119,6 +137,7 @@ class Events {
      * @return bool
      */
     public function create(\Calendar\Event $event): void{
+        //Add event in event table
         $statement = $this->pdo->prepare('INSERT INTO `event` (`entry_date`, `id_carrier`, `order`, `phone`, `email`, `dangerous_substance`, `comment`, `start`, `end`, `reception_validation`, `storage_validation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $statement->execute([
             $event->getEntryDate()->format('Y-m-d H:i:s'),
@@ -133,6 +152,7 @@ class Events {
             $event->getReceptionValidation(),
             $event->getStorageValidation()
         ]);
+        //Add event in event_supplier table
         $id_event = $this->pdo->lastInsertId();
         $statement2 = $this->pdo->prepare('INSERT INTO `event_supplier` (`id_event`, `id_supplier`) VALUES (?, ?)');
         foreach ($event->getIdsSuppliers() as $id_supplier){
@@ -141,6 +161,7 @@ class Events {
                 $id_supplier
             ]);
         }
+        //Add event in user_event table
         $statement3 = $this->pdo->prepare('INSERT INTO `user_event` (`id_user`, `id_event`) VALUES (?, ?)');
         if($_SESSION['auth']->getIdRole() == 1){
             $id_user = $_SESSION['auth']->getID();
@@ -153,8 +174,24 @@ class Events {
             $id_user,
             $id_event
         ]);
-
-        try { // Send user confirmation mail
+        //Add upload files in file table
+        $files = new \File\Files($this->pdo);
+        $uploadFiles = $event->getUploadFiles();
+        if(isset($uploadFiles)){
+            foreach ($uploadFiles as $uploadFile){
+                $file = $files->hydrate(new \File\File(), $uploadFile);
+                $files->create($file);
+                //Add upload files in event_file table
+                $id_file = $this->pdo->lastInsertId();
+                $statement4 = $this->pdo->prepare('INSERT INTO `event_file` (`id_event`, `id_file`) VALUES (?, ?)');
+                $statement4->execute([
+                    $id_event,
+                    $id_file
+                ]);
+            }
+        }
+        // Send user confirmation mail
+        try {
             //Server settings
             $mail = new PHPMailer(true);
             initSmtp($mail);
@@ -166,7 +203,7 @@ class Events {
             //Content
             $mail->isHTML(true);
             $mail->Subject = Translation::of('mailAppointementSubjet');
-            if($_SESSION['lang'] == 'en-US'){
+            if($_SESSION['lang'] == 'en_GB'){
                 $date = $event->getStart()->format('m/d/Y H:i');
             }else{
                 $date = $event->getStart()->format('d/m/Y H:i');
@@ -191,7 +228,7 @@ class Events {
                 //Content
                 $mail->isHTML(true);
                 $mail->Subject = Translation::of('dangerousSubstance');
-                if($_SESSION['lang'] == 'en-US'){
+                if($_SESSION['lang'] == 'en_GB'){
                     $date = $event->getStart()->format('m/d/Y H:i');
                 }else{
                     $date = $event->getStart()->format('d/m/Y H:i');
@@ -211,6 +248,7 @@ class Events {
      * @return bool
      */
     public function update(\Calendar\Event $event): void{
+        //Update event in event table
         $statement = $this->pdo->prepare('UPDATE `event` SET `id_carrier` = ?, `order` = ?, `phone` = ?, `email` = ?, `dangerous_substance` = ?, `comment` = ?, `start` = ?, `end` = ? WHERE `id` = ?');
         $statement->execute([
             $event->getIdCarrier(),
@@ -223,6 +261,7 @@ class Events {
             $event->getEnd()->format('Y-m-d H:i:s'),
             $event->getId()
         ]);
+        //Delete and re add event in event_supplier table
         $statement2 = $this->pdo->prepare('DELETE from `event_supplier` WHERE `id_event` = ?');
         $statement2->execute([
             $event->getId()
@@ -234,6 +273,7 @@ class Events {
                 $id_supplier
             ]);
         }
+        //Delete and re add event in user_event table
         $statement4 = $this->pdo->prepare('DELETE from `user_event` WHERE `id_event` = ?');
         $statement4->execute([
             $event->getId()
@@ -250,12 +290,24 @@ class Events {
             $id_user,
             $event->getId()
         ]);
-
-
-
-
-
-        try { // Send user confirmation mail
+        //Add upload files in file table
+        $files = new \File\Files($this->pdo);
+        $uploadFiles = $event->getUploadFiles();
+        if(isset($uploadFiles)){
+            foreach ($uploadFiles as $uploadFile){
+                $file = $files->hydrate(new \File\File(), $uploadFile);
+                $files->create($file);
+                //Add upload files in event_file table
+                $id_file = $this->pdo->lastInsertId();
+                $statement6 = $this->pdo->prepare('INSERT INTO `event_file` (`id_event`, `id_file`) VALUES (?, ?)');
+                $statement6->execute([
+                    $event->getId(),
+                    $id_file
+                ]);
+            }
+        }
+        // Send user confirmation mail
+        try {
             //Server settings
             $mail = new PHPMailer(true);
             initSmtp($mail);
@@ -267,7 +319,7 @@ class Events {
             //Content
             $mail->isHTML(true);
             $mail->Subject = Translation::of('mailAppointementSubjet');
-            if($_SESSION['lang'] == 'en-US'){
+            if($_SESSION['lang'] == 'en_GB'){
                 $date = $event->getStart()->format('m/d/Y H:i');
             }else{
                 $date = $event->getStart()->format('d/m/Y H:i');
@@ -310,7 +362,7 @@ class Events {
             //Content
             $mail->isHTML(true);
             $mail->Subject = Translation::of('mailAppointementSubjet');
-            if($_SESSION['lang'] == 'en-US'){
+            if($_SESSION['lang'] == 'en_GB'){
                 $date = $event->getStart()->format('m/d/Y H:i');
             }else{
                 $date = $event->getStart()->format('d/m/Y H:i');

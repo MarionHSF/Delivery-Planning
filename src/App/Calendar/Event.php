@@ -20,6 +20,7 @@ class Event
     private $reception_date;
     private $reception_line;
     private $storage_validation;
+    private $upload_files;
 
 
     /* Getters */
@@ -65,7 +66,7 @@ class Event
 
     public function getComment(): string
     {
-        return $this->comment;
+        return $this->comment ?? '';
     }
 
     public function getStart(): \DateTime
@@ -96,6 +97,11 @@ class Event
     public function getStorageValidation(): string
     {
         return $this->storage_validation;
+    }
+
+    public function getUploadFiles(): array
+    {
+        return $this->upload_files ?? [];
     }
 
     /* Setters */
@@ -168,5 +174,10 @@ class Event
     public function setStorageValidation(string $storage_validation)
     {
         $this->storage_validation = $storage_validation;
+    }
+
+    public function setUploadFiles(array $upload_files)
+    {
+        $this->upload_files = $upload_files;
     }
 }

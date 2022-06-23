@@ -120,3 +120,33 @@ function receptionValidationRights(){
     }
 }
 
+/* Upload Files */
+function uploadFiles($errors, $datas){
+    $files = array();
+
+    foreach ($_FILES['uploadFiles'] as $k => $l) {
+        foreach ($l as $i => $v) {
+            if (!array_key_exists($i, $files))
+                $files[$i] = array();
+            $files[$i][$k] = $v;
+        }
+    }
+    foreach ($files as $file) {
+        $handle = new \Verot\Upload\Upload($file, $_SESSION['lang']);
+        if ($handle->uploaded) {
+            $handle->process('../../uploadFiles/');
+            if ($handle->processed) {
+                $datas['uploadFiles'][] = $handle->file_dst_name_body.'.'.$handle->file_dst_name_ext;
+            } else {
+                $errors['errorUploadFiles'] = $handle->error;
+                return $errors;
+            }
+        } else {
+            if(strpos($_SERVER['HTTP_REFERER'], 'add')){
+                $errors['errorUploadFiles'] = $handle->error;
+                return $errors;
+            }
+        }
+    }
+    return $datas;
+}

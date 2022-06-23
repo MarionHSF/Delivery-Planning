@@ -58,7 +58,7 @@ render('header', ['title' => Translation::of('appointement')]);
             <?php if($users_events){ ?>
                 <?php if(isset($upcoming_events)){ ?>
                     <?php foreach ($upcoming_events as $upcoming_event){ ?>
-                            <?php if($_SESSION['lang'] == 'en-US'){ ?>
+                            <?php if($_SESSION['lang'] == 'en_GB'){ ?>
                                 <a href="/views/calendar/event.php?id=<?= $upcoming_event['id_event'];?>"><?= (new \DateTime($upcoming_event['start']))->format('m/d/Y H:i') ?></a></br>
                             <?php }else{ ?>
                                 <a href="/views/calendar/event.php?id=<?= $upcoming_event['id_event'];?>"><?= (new \DateTime($upcoming_event['start']))->format('d/m/Y H:i') ?></a></br>
@@ -76,7 +76,7 @@ render('header', ['title' => Translation::of('appointement')]);
             <?php if($users_events){ ?>
                 <?php if(isset($past_events)){ ?>
                     <?php foreach ($past_events as $past_event){ ?>
-                        <?php if($_SESSION['lang'] == 'en-US'){ ?>
+                        <?php if($_SESSION['lang'] == 'en_GB'){ ?>
                             <a href="/views/calendar/event.php?id=<?= $past_event['id_event'];?>"><?= (new \DateTime($past_event['start']))->format('m/d/Y H:i') ?></a></br>
                         <?php }else{ ?>
                             <a href="/views/calendar/event.php?id=<?= $past_event['id_event'];?>"><?= (new \DateTime($past_event['start']))->format('d/m/Y H:i') ?></a></br>

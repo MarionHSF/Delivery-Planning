@@ -88,9 +88,32 @@ $emailsList = $users->getUsersEmail();
             <p><small class="form-text text-danger"><?= $errors['order']; ?></small></p>
         <?php endif ?>
     </div>
-
     <div>
         <a id="buttonOrder" class="btn btn-primary form" onclick=addOrderInput();>+</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-8">
+        <div class="form-group mt-3">
+            <label for="uploadFiles[]" class="mb-2"><?= Translation::of('attachments') ?> <?= Translation::of('attachmentsText') ?></label>
+            </br>
+            <?php if(isset($datas['uploadFiles'])){
+                $i = 0; ?>
+                <div id="uploadFile">
+                    <?php foreach ($datas['uploadFiles'] as $uploadFile){?>
+                        <div id="uploadFile<?= $uploadFile['id'] ?>">
+                            <a href="/uploadFiles/<?= $uploadFile['name'] ?>" target="_blank"><?= $uploadFile['name'] ?></a>
+                            <a class="text-decoration-none" onclick=removeUploadFile(<?= $uploadFile['id'] ?>);>&#128465;</a>
+                        </div>
+                    <?php }?>
+                </div>
+            <?php }?>
+            <?php /*<input type="button" id="loadFileXml" value="loadXml" onclick="document.getElementById('uploadFiles').click();" />*/ ?>
+            <input type="file" id="uploadFiles" name="uploadFiles[]" multiple="multiple" accept="image/*,.pdf" class="mt-2" <?= !isset($datas['uploadFiles']) ? 'required' : ''?>/>
+            <?php if (isset($errors['errorUploadFiles'])) : ?>
+                <p><small class="form-text text-danger"><?= $errors['errorUploadFiles']; ?></small></p>
+            <?php endif ?>
+        </div>
     </div>
 </div>
 <div class="form-group mt-3"> <?php // TODO ?>

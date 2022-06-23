@@ -16,10 +16,12 @@
             "User\\": "App/User",
             "Lang\\": "App/Lang",
             "Role\\": "App/Role",
-            "PDO\\": "App/PDO"
+            "PDO\\": "App/PDO",
+            "File\\": "App/File"
         }
     },
     "require": {
-        "phpmailer/phpmailer": "^6.5"
+        "phpmailer/phpmailer": "^6.5",
+        "verot/class.upload.php": "*"
     }
 }
