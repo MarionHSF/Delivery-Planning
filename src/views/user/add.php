@@ -16,10 +16,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $users = new \User\Users($pdo);
         $user = $users->hydrate(new \User\User(), $datas);
         $users->create($user);
-        if($datas['id_role'] != 1){
-            header('Location: /views/user/adminsList.php?creation=1'); //TODO à revoir pas logique de rediriger là
-        }else{//TODO rediriger sur customer liste si créé par un compte admin
-            //header('Location: /views/user/customersList.php?creation=1');
+        if(isset($_SESSION['auth']) && $_SESSION['auth']->getIdRole() != 1){
+            if($datas['id_role'] != 1){
+                header('Location: /views/user/adminsList.php?creation=1');
+            }else{
+                header('Location: /views/user/customersList.php?creation=1');
+            };
+        } else{
             header('Location: /login.php?creation=1');
         };
         exit();
@@ -30,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 if(isset($_GET['admin'])){
     render('header', ['title' => Translation::of('createAdminTitle')]);
 }else{
-    render('header', ['title' => Translation::of('createAdminTitle')]);
+    render('header', ['title' => Translation::of('createCustomerTitle')]);
 }
 
 ?>

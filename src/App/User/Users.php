@@ -225,7 +225,7 @@ class Users {
     }
 
     /**
-     * TODO
+     * Connect user to his account
      * @param array $datas
      * @return User
      * @throws \Exception

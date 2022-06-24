@@ -36,8 +36,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             }else{
                 header('Location: /views/user/adminDashboard.php?connexion=1');
             }
-
-            // TODO rediriger vers dashbord
             exit();
         }catch (\Exception $e){
             $errors['errorConnexion'] = $e->getMessage();
