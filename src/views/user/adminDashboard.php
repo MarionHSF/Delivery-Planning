@@ -9,8 +9,8 @@ onlyAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
-$events = new Calendar\Events($pdo);
-$month = new Calendar\Month($_GET['month'] ?? null, $_GET['year'] ?? null);
+$events = new Event\Events($pdo);
+$month = new Event\Month($_GET['month'] ?? null, $_GET['year'] ?? null);
 $start = $month->getStartingDay();
 $start = $start->format('N') === '1' ? $start : $month->getStartingDay()->modify('last monday');
 $weeks = $month->getWeeks();
@@ -71,11 +71,11 @@ require '../../views/header.php';
                             <?php if($i === 0): ?>
                                 <div class="calendar_weekday"><?= $day; ?></div>
                             <?php endif; ?>
-                            <a class="calendar_day" href="/views/calendar/add.php?date=<?= $date->format('Y-m-d'); ?>"><?= $date->format('d') ?></a>
+                            <a class="calendar_day" href="/views/event/add.php?date=<?= $date->format('Y-m-d'); ?>"><?= $date->format('d') ?></a>
                             <?php foreach ($eventsForDay as $event): ?>
                                 <div class="calendar_event">
                                     <?php $carrier = $carriers->find($event['id_carrier'])->getName(); ?>
-                                    <?= (new DateTime($event['start']))->format('H:i') ?> - <?= (new DateTime($event['end']))->format('H:i') ?> - <a href="/views/calendar/event.php?id=<?= $event['id'];?>"><?= $carrier ?></a>
+                                    <?= (new DateTime($event['start']))->format('H:i') ?> - <?= (new DateTime($event['end']))->format('H:i') ?> - <a href="/views/event/event.php?id=<?= $event['id'];?>"><?= $carrier ?></a>
                                 </div>
                             <?php endforeach ?>
                         </td>
@@ -83,7 +83,7 @@ require '../../views/header.php';
                 </tr>
             <?php endfor; ?>
         </table>
-        <a href="/views/calendar/add.php" class="calendar_button">+</a>
+        <a href="/views/event/add.php" class="calendar_button">+</a>
     </div>
 
 <?php require '../../views/footer.php'; ?>

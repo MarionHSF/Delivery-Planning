@@ -90,7 +90,7 @@ render('header', ['title' => $user->getCompanyName()]);
                 <?php }?>
             <?php }elseif($user->getId() == $_SESSION['auth']->getId()){ ?>
         </div>
-            <div> <a class="btn btn-primary mt-3" href="/views/calendar/add.php"><?= Translation::of('return') ?></a></div>
+            <div> <a class="btn btn-primary mt-3" href="/views/event/add.php"><?= Translation::of('return') ?></a></div>
             <?php } ?>
     </div>
 

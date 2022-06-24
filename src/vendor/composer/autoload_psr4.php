@@ -15,7 +15,7 @@ return array(
     'Localization\\' => array($baseDir . '/App/Carrier'),
     'Lang\\' => array($baseDir . '/App/Lang'),
     'File\\' => array($baseDir . '/App/File'),
+    'Event\\' => array($baseDir . '/App/Event'),
     'Carrier\\' => array($baseDir . '/App/Carrier'),
-    'Calendar\\' => array($baseDir . '/App/Calendar'),
     'App\\' => array($baseDir . '/App'),
 );

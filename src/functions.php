@@ -77,7 +77,6 @@ function reconnectFromCookie(){
             if($expected == $_COOKIE['remember']){
                 $_SESSION['auth'] = $user;
                 setcookie('remember', $_COOKIE['remember'], time() + 60 * 60 * 24 * 7, '/'); // cookie sur 7 jours
-                //header('Location: /views/calendar/add.php');
             }else{
                 setcookie('remember', NULL, -1, '/');
             }
@@ -108,7 +107,7 @@ function onlyConnectedUserAndSuperAdminRights(){
 function onlyConnectedUserAndAdminRights(){
     $pdo = new PDO\PDO();
     $pdo = $pdo->get_pdo();
-    $events = new \Calendar\Events($pdo);
+    $events = new \Event\Events($pdo);
     if(strpos($_SERVER['REQUEST_URI'], 'file')){
         $userEvent = $events->findUser($_GET['eventId']);
     }else{
@@ -124,7 +123,7 @@ function onlyConnectedUserAndAdminRights(){
 function onlyConnectedUserAndAdminExcept2Rights(){
     $pdo = new PDO\PDO();
     $pdo = $pdo->get_pdo();
-    $events = new \Calendar\Events($pdo);
+    $events = new \Event\Events($pdo);
     $userEvent = $events->findUser($_GET['id']);
     if($userEvent[0]['id_user'] != $_SESSION['auth']->getId() && ($_SESSION['auth']->getIdRole() == 1 || $_SESSION['auth']->getIdRole() == 2)){
         e404();

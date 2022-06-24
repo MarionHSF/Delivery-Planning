@@ -1,6 +1,6 @@
 <?php
 
-namespace Calendar;
+namespace Event;
 
 class Event
 {

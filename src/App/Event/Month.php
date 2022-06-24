@@ -1,5 +1,5 @@
 <?php
-namespace Calendar;
+namespace Event;
 
 use Translation\Translation;
 

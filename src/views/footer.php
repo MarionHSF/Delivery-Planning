@@ -10,7 +10,7 @@ Translation::setLocalesDir($_SERVER['DOCUMENT_ROOT'].'/locales');
     <a href="/privacy_policy.php" class="text-dark"><?= Translation::of('privacyPolicy') ?></a>
 </footer>
 
-<script src="/js/calendar.js" type="text/javascript"></script>
+<script src="/js/event.js" type="text/javascript"></script>
 <script src="/js/general.js" type="text/javascript"></script>
 <script src="/js/user.js" type="text/javascript"></script>
 

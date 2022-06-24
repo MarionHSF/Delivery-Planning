@@ -20,13 +20,13 @@ if(!$validator->validate('reception_date', 'date')){
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
-    $validator = new Calendar\EventValidator();
+    $validator = new Event\EventValidator();
     $errors = $validator->validatesReceptionValidation($datas);
     if (empty($errors)){
-        $events = new \Calendar\Events($pdo);
+        $events = new \Event\Events($pdo);
         $event = $events->find($_GET['id']);
         $events->validationReception($event, $datas);
-        header('Location: /views/calendar/event.php?id='.$_GET['id'].'&reception=1');
+        header('Location: /views/event/event.php?id='.$_GET['id'].'&reception=1');
         exit();
     }
 }

@@ -102,7 +102,7 @@ $emailsList = $users->getUsersConfirmedEmail();
                 <div id="uploadFile">
                     <?php foreach ($datas['uploadFiles'] as $uploadFile){?>
                         <div id="uploadFile<?= $uploadFile['id'] ?>">
-                            <a href="/uploadFiles/<?= $uploadFile['name'] ?>" target="_blank"><?= $uploadFile['name'] ?></a>
+                            <a href="/views/file/file.php?fileId=<?= $uploadFile['id'] ?>&eventId=<?= $_GET['id'] ?>" target="_blank"><?= $uploadFile['name'] ?></a>
                             <a class="text-decoration-none" onclick=removeUploadFile(<?= $uploadFile['id'] ?>);>&#128465;</a>
                         </div>
                     <?php }?>

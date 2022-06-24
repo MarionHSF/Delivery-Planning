@@ -7,7 +7,7 @@ onlyConnectedUserAndAdminExcept2Rights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
-$events = new \Calendar\Events($pdo);
+$events = new \Event\Events($pdo);
 $errors = [];
 try{
     $event = $events->find($_GET['id'] ?? null);
@@ -21,7 +21,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
     $date = new \DateTime(date('Y-m-d H:i:s'));
     $limitDate = $event->getStart()->modify('-24 hours');
     if($_SESSION['auth']->getIdRole() == 1 && $date > $limitDate){
-        header('Location: /views/calendar/event.php?id='.$event->getId().'&limitDate=1');
+        header('Location: /views/event/event.php?id='.$event->getId().'&limitDate=1');
     }else{
         $events->delete($event);
         if($_SESSION['auth']->getIdRole() == 1){

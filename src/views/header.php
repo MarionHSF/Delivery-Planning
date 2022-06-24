@@ -23,7 +23,7 @@ if (isset($_SESSION['lang'])){
         <?php if(!isset($_SESSION['auth'])){ ?>
             <a href="/login.php" class="navbar-brand"><img src='/images/logo-Henry-Schein.webp' class='logo'/></a>
         <?php }elseif($_SESSION['auth']->getIdRole() == 1){ ?>
-            <a href="/views/calendar/add.php" class="navbar-brand"><img src='/images/logo-Henry-Schein.webp' class='logo'/></a>
+            <a href="/views/event/add.php" class="navbar-brand"><img src='/images/logo-Henry-Schein.webp' class='logo'/></a>
         <?php }else{ ?>
             <a href="/views/user/adminDashboard.php" class="navbar-brand"><img src='/images/logo-Henry-Schein.webp' class='logo'/></a>
         <?php } ?>

@@ -13,7 +13,7 @@ reconnectFromCookie();
 
 if(isset($_SESSION['auth'])){
     if($_SESSION['auth']->getIdRole() == 1){
-        header('Location: /views/calendar/add.php');
+        header('Location: /views/event/add.php');
         exit();
     }else{
         header('Location: /views/user/adminDashboard.php');
@@ -32,7 +32,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $_SESSION['auth'] = $user;
             $_SESSION['lang'] = $langs[$user->getIdLang()-1]['code'];
             if($user->getIdRole() == 1){
-                header('Location: /views/calendar/add.php?connexion=1');
+                header('Location: /views/event/add.php?connexion=1');
             }else{
                 header('Location: /views/user/adminDashboard.php?connexion=1');
             }

@@ -116,6 +116,7 @@ return [
     'return' => "Return",
     'hello' => "Hello",
     'mailAppointementSubjet' => "Your Henry Schein appointment",
+    'mailReminderAppointementSubjet' => "Reminder : Your Henry Schein appointment",
     'mailCreateAppointementText' => "Hello,
                                 </br></br>
                                 We confirm your appointment of",
@@ -125,6 +126,9 @@ return [
     'mailDeleteAppointementText' => "Hello,
                                 </br></br>
                                 We confirm that the following appointment has been deleted : ",
+    'mailReminderAppointementText' => "Hello,
+                                </br></br>
+                                We remind you your appointment of",
     'mailAppointementFooter' => "Henry Schein Team",
     'warningModifyAppointement' => "! You can change or cancel your appointment up to 24 hours before. In case of problem, you can contact us at the following number : XX XX XX XX XX.", //TODO
     'upcomingAppointement' => "Upcoming appointments",

@@ -116,6 +116,7 @@ return [
     'return' => "Retour",
     'hello' => "Bonjour",
     'mailAppointementSubjet' => "Votre rendez-vous Henry Schein",
+    'mailReminderAppointementSubjet' => "Rappel : Votre rendez-vous Henry Schein",
     'mailCreateAppointementText' => "Bonjour,
                                 </br></br>
                                 Nous vous confirmons votre rendez-vous du",
@@ -125,6 +126,9 @@ return [
     'mailDeleteAppointementText' => "Bonjour,
                                 </br></br>
                                 Nous vous confirmons que le rendez-vous suivant a bien été supprimé : ",
+    'mailReminderAppointementText' => "Bonjour,
+                                </br></br>
+                                Nous vous rappelons votre rendez-vous du",
     'mailAppointementFooter' => "L'équipe Henry Schein",
     'warningModifyAppointement' => "! Vous pouvez modifier ou supprimer votre rendez-vous jusqu'à 24h avant. En cas de problème, vous pouvez-nous contacter au numéro suivant : XX XX XX XX XX.", //TODO
     'upcomingAppointement' => "Rendez-vous à venir",

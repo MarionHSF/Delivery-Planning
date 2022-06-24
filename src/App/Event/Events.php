@@ -1,5 +1,5 @@
 <?php
-namespace Calendar;
+namespace Event;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -51,9 +51,9 @@ class Events {
      * @param int $id
      * @return array
      */
-    public function find (int $id): \Calendar\Event {
+    public function find (int $id): \Event\Event {
         $statement = $this->pdo->query("SELECT * FROM `event` WHERE id = $id LIMIT 1");
-        $statement->setFetchMode(\PDO::FETCH_CLASS, \Calendar\Event::class);
+        $statement->setFetchMode(\PDO::FETCH_CLASS, \Event\Event::class);
         $result = $statement->fetch();
         if ($result === false) {
             throw new \Exception('Aucun résultat n\'a été trouvé');
@@ -151,7 +151,7 @@ class Events {
      * @param \Event $event
      * @return bool
      */
-    public function create(\Calendar\Event $event): void{
+    public function create(\Event\Event $event): void{
         //Add event in event table
         $statement = $this->pdo->prepare('INSERT INTO `event` (`entry_date`, `id_carrier`, `order`, `phone`, `email`, `dangerous_substance`, `comment`, `start`, `end`, `reception_validation`, `storage_validation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $statement->execute([
@@ -262,7 +262,7 @@ class Events {
      * @param Event $event
      * @return bool
      */
-    public function update(\Calendar\Event $event): void{
+    public function update(\Event\Event $event): void{
         //Update event in event table
         $statement = $this->pdo->prepare('UPDATE `event` SET `id_carrier` = ?, `order` = ?, `phone` = ?, `email` = ?, `dangerous_substance` = ?, `comment` = ?, `start` = ?, `end` = ? WHERE `id` = ?');
         $statement->execute([
@@ -352,7 +352,7 @@ class Events {
      * @param Event $event
      * @return bool
      */
-    public function delete(\Calendar\Event $event): void{
+    public function delete(\Event\Event $event): void{
                 $statement = $this->pdo->prepare('DELETE from `event_supplier` WHERE `id_event` = ?');
         $statement->execute([
             $event->getId()
@@ -406,7 +406,7 @@ class Events {
      * @param array $datas
      * @return void
      */
-    public function validationReception(\Calendar\Event $event, array $datas): void{
+    public function validationReception(\Event\Event $event, array $datas): void{
         $event->setReceptionValidation('yes');
         $event->setReceptionDate(\DateTime::createFromFormat('Y-m-d H:i',$datas['date'] . ' ' . $datas['start'])->format('Y-m-d H:i:s'));
         $event->setReceptionLine($datas['reception_line']);
@@ -425,7 +425,7 @@ class Events {
      * @param array $datas
      * @return void
      */
-    public function validationStorage(\Calendar\Event $event): void{
+    public function validationStorage(\Event\Event $event): void{
         $event->setStorageValidation('yes');
         $statement = $this->pdo->prepare('UPDATE `event` SET `storage_validation` = ? WHERE `id` = ?');
         $statement->execute([

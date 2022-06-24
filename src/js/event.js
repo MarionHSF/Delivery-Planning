@@ -40,21 +40,23 @@ function removeOrderInput(i){
 }
 
 var email = document.getElementById("email2");
-email.addEventListener("change",function(e){
-    try{
-        const httpRequest = new XMLHttpRequest();
-        httpRequest.onreadystatechange = function() {
-            if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
-                var phone = document.getElementById("phone");
-                phone.value = httpRequest.responseText;
-            }
-        };
-        httpRequest.open('GET', 'http://localhost:8000/views/user/userPhone.php?email='+email.value, true);
-        httpRequest.send();
-    }catch (e){
-        console.log(e.description);
-    }
-})
+if(email){
+    email.addEventListener("change",function(e){
+        try{
+            const httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = function() {
+                if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+                    var phone = document.getElementById("phone");
+                    phone.value = httpRequest.responseText;
+                }
+            };
+            httpRequest.open('GET', 'http://localhost:8000/views/user/userPhone.php?email='+email.value, true);
+            httpRequest.send();
+        }catch (e){
+            console.log(e.description);
+        }
+    })
+}
 
 function removeUploadFile(fileID){
     const divUploadFile = document.getElementById("uploadFile");
@@ -75,38 +77,43 @@ function removeUploadFile(fileID){
 }
 
 const buttonUploadFiles = document.getElementById("uploadFiles");
-buttonUploadFiles.addEventListener("change",function(e){
-    const loading = document.getElementById("loading");
-    loading.textContent = "";
-    for (let file of buttonUploadFiles.files){
-        loading.innerHTML = loading.innerHTML + '</br>' + file.name;
-    }
+if(buttonUploadFiles){
+    buttonUploadFiles.addEventListener("change",function(e){
+        const loading = document.getElementById("loading");
+        loading.textContent = "";
+        for (let file of buttonUploadFiles.files){
+            loading.innerHTML = loading.innerHTML + '</br>' + file.name;
+        }
 
-    const errorFileFR = document.getElementById("errorFileFR");
-    if(errorFileFR){
-        errorFileFR.textContent = "";
-    }
-
-    const errorFileEN = document.getElementById("errorFileEN");
-    if(errorFileEN){
-        errorFileEN.textContent = "";
-    }
-})
-
-const submitForm = document.getElementById("submitForm");
-submitForm.addEventListener("click",function(e){
-    if(buttonUploadFiles.files.length === 0){
         const errorFileFR = document.getElementById("errorFileFR");
         if(errorFileFR){
-            errorFileFR.textContent = "Le serveur n'a pas reçu de fichier";
+            errorFileFR.textContent = "";
         }
 
         const errorFileEN = document.getElementById("errorFileEN");
         if(errorFileEN){
-            errorFileEN.textContent = "File upload error (no file was uploaded)";
+            errorFileEN.textContent = "";
         }
-    }
-})
+    })
+}
+
+const submitForm = document.getElementById("submitForm");
+if(submitForm){
+    submitForm.addEventListener("click",function(e){
+        if(buttonUploadFiles.files.length === 0){
+            const errorFileFR = document.getElementById("errorFileFR");
+            if(errorFileFR){
+                errorFileFR.textContent = "Le serveur n'a pas reçu de fichier";
+            }
+
+            const errorFileEN = document.getElementById("errorFileEN");
+            if(errorFileEN){
+                errorFileEN.textContent = "File upload error (no file was uploaded)";
+            }
+        }
+    })
+}
+
 
 
 

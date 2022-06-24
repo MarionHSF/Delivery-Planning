@@ -9,7 +9,7 @@ receptionValidationRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
-$events = new \Calendar\Events($pdo);
+$events = new \Event\Events($pdo);
 
 try{
     $event = $events->find($_GET['id']);
@@ -21,6 +21,6 @@ try{
 
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
     $events->validationStorage($event);
-    header('Location: /views/calendar/event.php?id='.$_GET['id'].'&storage=1');
+    header('Location: /views/event/event.php?id='.$_GET['id'].'&storage=1');
     exit();
 }

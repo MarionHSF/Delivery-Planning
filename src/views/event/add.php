@@ -19,7 +19,7 @@ if(!$validator->validate('date', 'date')){
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
-    $validator = new Calendar\EventValidator();
+    $validator = new Event\EventValidator();
     $errors = $validator->validates($datas);
     $uploadResult = uploadFiles($errors, $datas);
     if(key_exists('errorUploadFiles', $uploadResult)){
@@ -30,8 +30,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
     }
     if (empty($errors)){
-        $events = new \Calendar\Events($pdo);
-        $event = $events->hydrate(new \Calendar\Event(), $datas);
+        $events = new \Event\Events($pdo);
+        $event = $events->hydrate(new \Event\Event(), $datas);
         try{
             $events->create($event);
             if($_SESSION['auth']->getIdRole() == 1){
@@ -72,7 +72,7 @@ render('header', ['title' => Translation::of('createAppointementTitle')]);
     <?php endif; ?>
     <h1><?= Translation::of('createAppointementTitle') ?></h1>
     <form action="" method="post" class="form" enctype="multipart/form-data">
-        <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
+        <?php render('event/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
             <button id="submitForm" class="btn btn-primary"><?= Translation::of('createAppointementTitle') ?></button>
         </div>

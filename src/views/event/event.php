@@ -9,7 +9,7 @@ onlyConnectedUserAndAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
-$events = new \Calendar\Events($pdo);
+$events = new \Event\Events($pdo);
 if(!isset($_GET['id'])){
     e404();
 }
@@ -66,7 +66,6 @@ render('header', ['title' => Translation::of('appointementDetails')]);
             <li><?= Translation::of('orderNumber') ?> : <?= h($event->getOrder()); ?></li>
             <li><?= Translation::of('attachments') ?> : </br><?php
                 foreach ($files as $file) { ?>
-                    <a href="/uploadFiles/<?= $file['name'] ?>" target="_blank"><?= $file['name'] ?></a>
                     <a href="/views/file/file.php?fileId=<?= $file['id'] ?>&eventId=<?= $event->getId() ?>" target="_blank"><?= $file['name'] ?></a>
                     </br>
                 <?php } ?>
@@ -96,16 +95,16 @@ render('header', ['title' => Translation::of('appointementDetails')]);
         </ul>
         <?php if($_SESSION['auth']->getIdRole() != 2){ ?>
             <div>
-                <a class="btn btn-primary" href="/views/calendar/edit.php?id=<?= $event->getId();?>"><?= Translation::of('modifyAppointementTitle') ?></a>
-                <a class="btn btn-primary" href="/views/calendar/delete.php?id=<?= $event->getId();?>"><?= Translation::of('deleteAppointementTitle') ?></a>
+                <a class="btn btn-primary" href="/views/event/edit.php?id=<?= $event->getId();?>"><?= Translation::of('modifyAppointementTitle') ?></a>
+                <a class="btn btn-primary" href="/views/event/delete.php?id=<?= $event->getId();?>"><?= Translation::of('deleteAppointementTitle') ?></a>
             </div>
         <?php } ?>
         <?php if($_SESSION['auth']->getIdRole() == 2 || $_SESSION['auth']->getIdRole() == 4){ ?>
             <?php if($event->getReceptionValidation() == 'no'){ ?>
-                <div> <a class="btn btn-primary mt-3" href="/views/calendar/receptionValidation.php?id=<?= $event->getId() ?>"><?= Translation::of('receptionValidation') ?></a></div>
+                <div> <a class="btn btn-primary mt-3" href="/views/event/receptionValidation.php?id=<?= $event->getId() ?>"><?= Translation::of('receptionValidation') ?></a></div>
             <?php }?>
             <?php if($event->getReceptionValidation() == 'yes' && $event->getStorageValidation() == 'no'){ ?>
-                <div> <a class="btn btn-primary mt-3" href="/views/calendar/storageValidation.php?id=<?= $event->getId() ?>"><?= Translation::of('storageValidation') ?></a></div>
+                <div> <a class="btn btn-primary mt-3" href="/views/event/storageValidation.php?id=<?= $event->getId() ?>"><?= Translation::of('storageValidation') ?></a></div>
             <?php }?>
         <?php }?>
         <div>

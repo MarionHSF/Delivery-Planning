@@ -9,7 +9,7 @@ onlyConnectedUserAndAdminExcept2Rights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
-$events = new \Calendar\Events($pdo);
+$events = new \Event\Events($pdo);
 $errors = [];
 try{
     $event = $events->find($_GET['id'] ?? null);
@@ -29,7 +29,7 @@ try{
 $date = new \DateTime(date('Y-m-d H:i:s'));
 $limitDate = $event->getStart()->modify('-24 hours');
 if($_SESSION['auth']->getIdRole() == 1 && $date > $limitDate){
-    header('Location: /views/calendar/event.php?id='.$event->getId().'&limitDate=1');
+    header('Location: /views/event/event.php?id='.$event->getId().'&limitDate=1');
     exit();
 }
 
@@ -48,7 +48,7 @@ $datas = [
 ];
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
-    $validator = new Calendar\EventValidator();
+    $validator = new Event\EventValidator();
     $errors = $validator->validates($datas);
     $uploadResult = uploadFiles($errors, $datas);
     if(key_exists('errorUploadFiles', $uploadResult)){
@@ -62,7 +62,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $events->hydrate($event, $datas);
         try{
             $events->update($event);
-            header('Location: /views/calendar/event.php?id='. $event->getId() .'&modification=1');
+            header('Location: /views/event/event.php?id='. $event->getId() .'&modification=1');
             exit();
         }catch (\Exception $e){
             $errors['errorFindByEmail'] = $e->getMessage();
@@ -80,7 +80,7 @@ render('header', ['title' => Translation::of('modifyAppointementTitle')]);
     <?php endif; ?>
     <h1><?= Translation::of('modifyAppointementTitle') ?></h1>
     <form action="" method="post" class="form" enctype="multipart/form-data">
-        <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
+        <?php render('event/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
             <button id="submitForm" class="btn btn-primary"><?= Translation::of('modifyAppointementTitle') ?></button>
         </div>

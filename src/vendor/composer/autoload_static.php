@@ -37,10 +37,13 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         array (
             'File\\' => 5,
         ),
+        'E' => 
+        array (
+            'Event\\' => 6,
+        ),
         'C' => 
         array (
             'Carrier\\' => 8,
-            'Calendar\\' => 9,
         ),
         'A' => 
         array (
@@ -85,13 +88,13 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         array (
             0 => __DIR__ . '/../..' . '/App/File',
         ),
+        'Event\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/Event',
+        ),
         'Carrier\\' => 
         array (
             0 => __DIR__ . '/../..' . '/App/Carrier',
-        ),
-        'Calendar\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/App/Calendar',
         ),
         'App\\' => 
         array (
