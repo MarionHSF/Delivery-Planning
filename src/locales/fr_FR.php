@@ -146,6 +146,8 @@ return [
     'errorFindByEmail' => "Cette adresse email ne correspond à un aucun compte.",
     'attachments' => "Pièce(s) jointe(s)",
     'attachmentsText' => "<small>(Bon de commande, bon de livraison... Vous pouvez insérer plusieurs fichiers simultanément)</small>",
+    'browse' => "Parcourir",
+    'emptyFile' => "Aucun fichier sélectionné",
 
     //Privacy Policy
     'privacyPolicy' => "Politique de confidentialité",

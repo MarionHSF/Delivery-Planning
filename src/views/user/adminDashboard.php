@@ -36,8 +36,8 @@ require '../../views/header.php';
             </div>
         </div>
     <?php endif; ?>
-    <div class="container d-flex flex-column gestion p-3 border border-dark">
-        <?php if($_SESSION['auth']->getIdRole() == 4){ ?>
+    <?php if($_SESSION['auth']->getIdRole() == 4){ ?>
+        <div class="container d-flex flex-column gestion p-3 border border-dark">
             <h1><?= Translation::of('gestion') ?> : </h1>
             <div>
                 <a class="text-decoration-none calendar_link" href="/views/supplier/list.php"><?= Translation::of('suppliersList') ?>&emsp;/&emsp;</a>
@@ -47,8 +47,8 @@ require '../../views/header.php';
                 <a class="text-decoration-none calendar_link" href="/views/user/adminsList.php"><?=Translation::of('adminsList') ?>&emsp;/&emsp;</a>
                 <a class="text-decoration-none calendar_link" href="/views/user/customersList.php"><?=Translation::of('customersList') ?></a>
             </div>
-        <?php } ?>
-    </div>
+        </div>
+    <?php } ?>
     <div class="calendar">
         <div class="d-flex flex-row align-items-center justify-content-between mx-sm-3">
             <h1><?= $month->toString(); ?></h1>

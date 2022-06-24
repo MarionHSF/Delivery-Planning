@@ -74,7 +74,7 @@ render('header', ['title' => Translation::of('createAppointementTitle')]);
     <form action="" method="post" class="form" enctype="multipart/form-data">
         <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
-            <button class="btn btn-primary"><?= Translation::of('createAppointementTitle') ?></button>
+            <button id="submitForm" class="btn btn-primary"><?= Translation::of('createAppointementTitle') ?></button>
         </div>
     </form>
 </div>

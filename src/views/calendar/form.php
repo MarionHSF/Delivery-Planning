@@ -8,7 +8,7 @@ $carriers = $carriers->getCarriers();
 $suppliers = new Supplier\Suppliers($pdo);
 $suppliers = $suppliers->getSuppliers();
 $users = new User\Users($pdo);
-$emailsList = $users->getUsersEmail();
+$emailsList = $users->getUsersConfirmedEmail();
 ?>
 
 <div class="row mt-5 d-flex align-items-center">
@@ -108,8 +108,15 @@ $emailsList = $users->getUsersEmail();
                     <?php }?>
                 </div>
             <?php }?>
-            <?php /*<input type="button" id="loadFileXml" value="loadXml" onclick="document.getElementById('uploadFiles').click();" />*/ ?>
-            <input type="file" id="uploadFiles" name="uploadFiles[]" multiple="multiple" accept="image/*,.pdf" class="mt-2" <?= !isset($datas['uploadFiles']) ? 'required' : ''?>/>
+            <input type="button" id="loadFileXml" value="<?= Translation::of('browse') ?>" onclick="document.getElementById('uploadFiles').click();" class="mt-2" />
+            <input style="display:none" type="file" id="uploadFiles" name="uploadFiles[]" multiple="multiple" accept="image/*,.pdf" class="mt-2" <?= !isset($datas['uploadFiles']) ? 'required' : ''?>/>
+            <p id="loading"><?= Translation::of('emptyFile') ?></p>
+            <?php if($_SESSION['lang'] == 'fr_FR'){ ?>
+                <p id="errorFileFR" class="text-danger"></p>
+            <?php }?>
+            <?php if($_SESSION['lang'] == 'en_GB'){ ?>
+                <p id="errorFileEN" class="text-danger"></p>
+            <?php }?>
             <?php if (isset($errors['errorUploadFiles'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['errorUploadFiles']; ?></small></p>
             <?php endif ?>
@@ -126,7 +133,7 @@ $emailsList = $users->getUsersEmail();
             <?php if($_SESSION['auth']->getIdRole() == 1){ ?>
                 <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : $_SESSION['auth']->getEmail(); ?>">
             <?php } else { ?>
-                <select name="email" id="email" class="mx-3" required">
+                <select name="email" id="email2" class="mx-3" required">
                     <option value="<?= !empty($datas['email']) ? h($datas['email']) : ''; ?>"><?= !empty($datas['email']) ? h($datas['email']) : '--'.Translation::of('selectEmail').'--'; ?></option>
                     <?php foreach ($emailsList as $email): ?>
                         <option value="<?= $email['email']; ?>"><?= $email['email']; ?></option>

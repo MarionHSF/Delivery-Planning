@@ -5,6 +5,7 @@ use Translation\Translation;
 
 reconnectFromCookie();
 isNotConnected();
+onlyConnectedUserAndAdminExcept2Rights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -81,7 +82,7 @@ render('header', ['title' => Translation::of('modifyAppointementTitle')]);
     <form action="" method="post" class="form" enctype="multipart/form-data">
         <?php render('calendar/form', ['datas' => $datas, 'errors' => $errors]); ?>
         <div class="form-group mt-3">
-            <button class="btn btn-primary"><?= Translation::of('modifyAppointementTitle') ?></button>
+            <button id="submitForm" class="btn btn-primary"><?= Translation::of('modifyAppointementTitle') ?></button>
         </div>
     </form>
 </div>

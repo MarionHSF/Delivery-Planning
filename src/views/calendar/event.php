@@ -5,6 +5,7 @@ use Translation\Translation;
 
 reconnectFromCookie();
 isNotConnected();
+onlyConnectedUserAndAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
@@ -17,7 +18,6 @@ try{
     $carrier = $events->findCarrier($_GET['id']);
     $suppliers = $events->findSuppliers($_GET['id']);
     $files = $events->findUploadFiles($_GET['id']);
-    dd($files);
 } catch (\Exception $e){
     e404();
 }
@@ -67,13 +67,10 @@ render('header', ['title' => Translation::of('appointementDetails')]);
             <li><?= Translation::of('attachments') ?> : </br><?php
                 foreach ($files as $file) { ?>
                     <a href="/uploadFiles/<?= $file['name'] ?>" target="_blank"><?= $file['name'] ?></a>
+                    <a href="/views/file/file.php?fileId=<?= $file['id'] ?>&eventId=<?= $event->getId() ?>" target="_blank"><?= $file['name'] ?></a>
                     </br>
                 <?php } ?>
             </li>
-
-
-
-
             <li><?= Translation::of('phoneNumber') ?> : <?= h($event->getPhone()); ?></li>
             <li><?= Translation::of('email') ?> : <?= h($event->getEmail()); ?></li>
             <li><?= Translation::of('dangerousSubstance') ?> : <?= $event->getDangerousSubstance() == "yes" ? Translation::of('yes') : Translation::of('no') ?></li>
@@ -97,10 +94,12 @@ render('header', ['title' => Translation::of('appointementDetails')]);
                 </div>
             <?php } ?>
         </ul>
-        <div>
-            <a class="btn btn-primary" href="/views/calendar/edit.php?id=<?= $event->getId();?>"><?= Translation::of('modifyAppointementTitle') ?></a>
-            <a class="btn btn-primary" href="/views/calendar/delete.php?id=<?= $event->getId();?>"><?= Translation::of('deleteAppointementTitle') ?></a>
-        </div>
+        <?php if($_SESSION['auth']->getIdRole() != 2){ ?>
+            <div>
+                <a class="btn btn-primary" href="/views/calendar/edit.php?id=<?= $event->getId();?>"><?= Translation::of('modifyAppointementTitle') ?></a>
+                <a class="btn btn-primary" href="/views/calendar/delete.php?id=<?= $event->getId();?>"><?= Translation::of('deleteAppointementTitle') ?></a>
+            </div>
+        <?php } ?>
         <?php if($_SESSION['auth']->getIdRole() == 2 || $_SESSION['auth']->getIdRole() == 4){ ?>
             <?php if($event->getReceptionValidation() == 'no'){ ?>
                 <div> <a class="btn btn-primary mt-3" href="/views/calendar/receptionValidation.php?id=<?= $event->getId() ?>"><?= Translation::of('receptionValidation') ?></a></div>

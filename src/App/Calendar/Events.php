@@ -62,6 +62,21 @@ class Events {
     }
 
     /**
+     * Return user of event
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function findUser (int $id): array {
+        $statement = $this->pdo->query("SELECT * FROM `user` LEFT JOIN (`user_event`, `event`) ON (`user`.`id` = `user_event`.`id_user` AND `user_event`.`id_event` = `event`.`id`) WHERE `event`.`id` = $id");
+        $result = $statement->fetchAll();
+        if ($result === false) {
+            throw new \Exception('Aucun résultat n\'a été trouvé');
+        }
+        return $result;
+    }
+
+    /**
      * Return carrier of event
      * @param int $id
      * @return array
@@ -338,7 +353,7 @@ class Events {
      * @return bool
      */
     public function delete(\Calendar\Event $event): void{
-        $statement = $this->pdo->prepare('DELETE from `event_supplier` WHERE `id_event` = ?');
+                $statement = $this->pdo->prepare('DELETE from `event_supplier` WHERE `id_event` = ?');
         $statement->execute([
             $event->getId()
         ]);
@@ -346,8 +361,18 @@ class Events {
         $statement2->execute([
             $event->getId()
         ]);
-        $statement3 = $this->pdo->prepare('DELETE from `event` WHERE `id` = ?');
+        $statement3 = $this->pdo->prepare('DELETE from `event_file` WHERE `id_event` = ?');
         $statement3->execute([
+            $event->getId()
+        ]);
+        $files = $this->findUploadFiles($event->getId());
+        foreach ($files as $file){
+            $files = new \File\Files($this->pdo);
+            $file = $files->find($file['id']);
+            $files->delete($file);
+        }
+        $statement4 = $this->pdo->prepare('DELETE from `event` WHERE `id` = ?');
+        $statement4->execute([
             $event->getId()
         ]);
         try { // Send user confirmation mail

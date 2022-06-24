@@ -96,9 +96,37 @@ function onlySuperAdminRights(){
     }
 }
 
-/* Rights only for connected user & super admin */
+/* Rights only for connected user & super admin !! in all pages excepted EVENT pages */
 function onlyConnectedUserAndSuperAdminRights(){
     if($_GET['id'] != $_SESSION['auth']->getId() && $_SESSION['auth']->getIdRole() != 4){
+        e404();
+        exit;
+    }
+}
+
+/* Rights only for connected user & admin !! only on EVENT pages */
+function onlyConnectedUserAndAdminRights(){
+    $pdo = new PDO\PDO();
+    $pdo = $pdo->get_pdo();
+    $events = new \Calendar\Events($pdo);
+    if(strpos($_SERVER['REQUEST_URI'], 'file')){
+        $userEvent = $events->findUser($_GET['eventId']);
+    }else{
+        $userEvent = $events->findUser($_GET['id']);
+    }
+    if($userEvent[0]['id_user'] != $_SESSION['auth']->getId() && $_SESSION['auth']->getIdRole() == 1){
+        e404();
+        exit;
+    }
+}
+
+/* Rights only for connected user & admin (except role 2, validation) !! only on EVENT pages */
+function onlyConnectedUserAndAdminExcept2Rights(){
+    $pdo = new PDO\PDO();
+    $pdo = $pdo->get_pdo();
+    $events = new \Calendar\Events($pdo);
+    $userEvent = $events->findUser($_GET['id']);
+    if($userEvent[0]['id_user'] != $_SESSION['auth']->getId() && ($_SESSION['auth']->getIdRole() == 1 || $_SESSION['auth']->getIdRole() == 2)){
         e404();
         exit;
     }

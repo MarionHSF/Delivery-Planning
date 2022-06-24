@@ -79,6 +79,14 @@ class Users {
     }
 
     /**
+     * Return all users confirmed email
+     * @return array
+     */
+    public function getUsersConfirmedEmail (): array{
+        return $this->pdo->query("SELECT `email` FROM `user` WHERE `confirmed_at` IS NOT NULL")->fetchAll();
+    }
+
+    /**
      * Modify datas before insertion in database (creation or update)
      * @param User $user
      * @param array $datas

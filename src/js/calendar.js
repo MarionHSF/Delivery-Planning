@@ -39,7 +39,7 @@ function removeOrderInput(i){
     divOrder.removeChild(divOrderNumber);
 }
 
-var email = document.getElementById("email");
+var email = document.getElementById("email2");
 email.addEventListener("change",function(e){
     try{
         const httpRequest = new XMLHttpRequest();
@@ -62,18 +62,51 @@ function removeUploadFile(fileID){
     divUploadFile.removeChild(divUploadFileNumber);
     try{
         const httpRequest = new XMLHttpRequest();
-        httpRequest.onreadystatechange = function() {
-            if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
-                alert('fichier supprimé');
-            }
-        };
         httpRequest.open('GET', 'http://localhost:8000/views/file/delete.php?fileId='+fileID, true);
         httpRequest.send();
-        console.log(httpRequest);
     }catch (e){
         console.log(e.description);
     }
+    console.log(divUploadFile);
+    if(divUploadFile.childElementCount === 0){
+        const buttonUploadFiles = document.getElementById("uploadFiles");
+        buttonUploadFiles.setAttribute('required', 'required');
+    }
 }
+
+const buttonUploadFiles = document.getElementById("uploadFiles");
+buttonUploadFiles.addEventListener("change",function(e){
+    const loading = document.getElementById("loading");
+    loading.textContent = "";
+    for (let file of buttonUploadFiles.files){
+        loading.innerHTML = loading.innerHTML + '</br>' + file.name;
+    }
+
+    const errorFileFR = document.getElementById("errorFileFR");
+    if(errorFileFR){
+        errorFileFR.textContent = "";
+    }
+
+    const errorFileEN = document.getElementById("errorFileEN");
+    if(errorFileEN){
+        errorFileEN.textContent = "";
+    }
+})
+
+const submitForm = document.getElementById("submitForm");
+submitForm.addEventListener("click",function(e){
+    if(buttonUploadFiles.files.length === 0){
+        const errorFileFR = document.getElementById("errorFileFR");
+        if(errorFileFR){
+            errorFileFR.textContent = "Le serveur n'a pas reçu de fichier";
+        }
+
+        const errorFileEN = document.getElementById("errorFileEN");
+        if(errorFileEN){
+            errorFileEN.textContent = "File upload error (no file was uploaded)";
+        }
+    }
+})
 
 
 

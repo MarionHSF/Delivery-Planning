@@ -146,6 +146,8 @@ return [
     'errorFindByEmail' => "This email address doesn't correspond to any account.",
     'attachments' => "Attachment(s)",
     'attachmentsText' => "<small>(Purchase order, delivery order... You can insert several files simultaneously)</small>",
+    'browse' => "Browse",
+    'emptyFile' => "No file selected",
 
     //Privacy Policys
     'privacyPolicy' => "Privacy policy",

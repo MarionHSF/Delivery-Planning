@@ -10,7 +10,7 @@ $roles = $roles->getRoles();
 ?>
 
 <?php if(isset($_GET['admin']) || (isset($datas['id_role']) && $datas['id_role'] != 1)): ?>
-<div class="row">
+<div class="row" style="display:none">
     <div class="col-sm-6">
         <div class="form-group mt-3">
             <label for="company_name"><?= Translation::of('company_name') ?></label>
@@ -160,7 +160,7 @@ $roles = $roles->getRoles();
         </div>
     </div>
 <?php else: ?>
-    <div class="form-group mt-3">
+    <div class="form-group mt-3" style="display:none">
         <p><?= Translation::of('userRole') ?></p>
         <div class="d-flex flex-column">
             <div>

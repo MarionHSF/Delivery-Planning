@@ -3,6 +3,7 @@ require '../../functions.php';
 
 reconnectFromCookie();
 isNotConnected();
+onlyConnectedUserAndAdminExcept2Rights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
