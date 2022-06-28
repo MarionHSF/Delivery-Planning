@@ -69,7 +69,6 @@ function removeUploadFile(fileID){
     }catch (e){
         console.log(e.description);
     }
-    console.log(divUploadFile);
     if(divUploadFile.childElementCount === 0){
         const buttonUploadFiles = document.getElementById("uploadFiles");
         buttonUploadFiles.setAttribute('required', 'required');
@@ -112,6 +111,28 @@ if(submitForm){
             }
         }
     })
+}
+
+function displayWeek(weekNumber){
+    const tooglerWeek = document.getElementById('week'+weekNumber);
+    tooglerWeek.style.display ='';
+
+    for (let week of document.getElementById('weekDiv').children){
+       if(week.id.substr(4,2) != weekNumber){
+          const tooglerWeek = document.getElementById('week'+week.id.substr(4,2));
+           tooglerWeek.style.display ='none';
+       }
+    }
+}
+
+function displayTextAddButton(){
+    const textAddButton = document.getElementById('textAddButton');
+    textAddButton.style.display ='';
+}
+
+function undisplayTextAddButton(){
+    const textAddButton = document.getElementById('textAddButton');
+    textAddButton.style.display ='none';
 }
 
 

@@ -101,8 +101,10 @@ return [
     'logoutText' => "Vous avez été déconnecté.",
     'errorConnexion' => "Adresse email ou mot de passe incorrect",
     'account' => "Mon compte",
+    'accountInfo' => "Informations du compte",
     'personalInfos' => "Mes infos",
     'appointement' => "Mes rendez-vous",
+    'appointementList' => "Liste des rendez-vous",
     'connexionText' => "Vous êtes connecté.",
     'connexionOff' => "Vous n'avez pas les droits pour accéder à cette page.",
     'forgottenPassword' => "Mot de passe oublié",
@@ -152,6 +154,8 @@ return [
     'attachmentsText' => "<small>(Bon de commande, bon de livraison... Vous pouvez insérer plusieurs fichiers simultanément)</small>",
     'browse' => "Parcourir",
     'emptyFile' => "Aucun fichier sélectionné",
+    'week' => "Semaine",
+    'dayOf' => "Journée du",
 
     //Privacy Policy
     'privacyPolicy' => "Politique de confidentialité",

@@ -1,27 +1,23 @@
+/* Admin dashboard Page */
+
+.calendar_link:hover{
+    color: #0a58ca !important;
+}
+
 .calendar{
-    position: relative;
     margin-bottom: 90px;
 }
 
-.calendar_table{
-    width: 100%;
-    height: calc(100vh - 128px); /* nav 72px, h1 56px */
-}
-
-.calendar_table td{
-    padding: 10px;
+.calendar_table_global{
     border: 1px solid #CCC;
-    vertical-align: top;
+}
+
+.calendar_table_global td{
     width: calc(100% / 7);
-    height: calc(100% / 5);
 }
 
-.calendar_table td.is_today{
-    background-color: #f3f3f3;
-}
-
-.calendar_table_6weeks td{
-    height: calc(100% / 6);
+.calendar_table_global td p{
+   cursor: pointer;
 }
 
 .calendar_weekday{
@@ -30,17 +26,20 @@
     font-size: 1.2em;
 }
 
-.calendar_day{
-    font-size: 1.3em;
-    color: #000;
-    font-weight: bold;
-}
-
 .calendar_overmonth .calendar_day{
     opacity: 0.3;
 }
 
+.calendar_table_global td.is_today, .calendar_table td.is_today{
+    background-color: #f3f3f3;
+}
+
+.calendar_table_global td.is_today{
+    font-weight: bold;
+}
+
 .calendar_button{
+    display: block;
     width: 55px;
     height: 55px;
     line-height: 55px;
@@ -51,10 +50,7 @@
     border-radius: 50%;
     text-decoration: none;
     box-shadow: 0 6px 10px 0 #0000001a,0 1px 18px 0 #0000001a,0 3px 5px -1px #0003;
-
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
+    margin-bottom: 10px;
     transition: transform 0.3s;
 }
 
@@ -64,6 +60,30 @@
     transform: scale(1.2);
 }
 
+.printButton{
+    font-size: 25px;
+    text-align: left;
+}
+
+.calendar_table{
+    width: 100%;
+}
+
+.calendar_table tbody td{
+    padding: 10px;
+    border: 1px solid #CCC;
+    vertical-align: top;
+    width: calc(100% / 7);
+}
+
+.calendar_table .calendar_day{
+    font-size: 1.3em;
+    color: #000;
+    font-weight: bold;
+}
+
+/* Event Page */
+
 .btn.btn-primary.form{
     border-radius: 50%;
 }
@@ -72,14 +92,6 @@
    margin-left: 10px;
 }
 
-.calendar_link{
-    color: black;
-}
-
-.calendar_link:hover{
-    color: #0a58ca;
-}
-
-.gestion{
-    width: auto;
+embed{
+    min-height: 70vh;
 }

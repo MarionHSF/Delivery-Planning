@@ -34,8 +34,11 @@ if($users_events){
     }
 }
 
-render('header', ['title' => Translation::of('appointement')]);
-
+if($_SESSION['auth']->getId() != $_GET['id']){
+    render('header', ['title' => Translation::of('appointementList')]);
+}else {
+    render('header', ['title' => Translation::of('appointement')]);
+}
 ?>
     <div class="container">
         <?php if(isset($_GET['creation'])): ?>
@@ -52,7 +55,11 @@ render('header', ['title' => Translation::of('appointement')]);
                 </div>
             </div>
         <?php endif; ?>
-        <h1 class="mb-5"><?= Translation::of('appointement') ?></h1>
+        <?php if($_SESSION['auth']->getId() !=  $_GET['id']){ ?>
+            <h1 class="mb-3"><?= Translation::of('appointementList') ?></h1>
+        <?php }else{?>
+            <h1 class="mb-3"><?= Translation::of('appointement') ?></h1>
+        <?php }?>
         <h2 id="upcoming-appointement-toogler" class="mb-3 px-3"><u><?= Translation::of('upcomingAppointement') ?></u></h2>
         <div id="upcoming-appointement-toogler-content" class="mb-5 px-5">
             <?php if($users_events){ ?>

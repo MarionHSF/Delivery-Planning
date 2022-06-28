@@ -21,7 +21,7 @@
         }
     },
     "require": {
-        "phpmailer/phpmailer": "^6.5",
-        "verot/class.upload.php": "*"
+        "phpmailer/phpmailer": "6.6.3",
+        "verot/class.upload.php": "2.1.1"
     }
 }

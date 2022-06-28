@@ -101,8 +101,10 @@ return [
     'logoutText' => "You have been disconnected.",
     'errorConnexion' => "Wrong email address or password",
     'account' => "My account",
+    'accountInfo' => "Account informations",
     'personalInfos' => "My infos",
     'appointement' => "My appointements",
+    'appointementList' => "Appointements List",
     'connexionText' => "You are connected.",
     'connexionOff' => "You don't have rights to access this page.",
     'forgottenPassword' => "Forgotten password",
@@ -152,6 +154,8 @@ return [
     'attachmentsText' => "<small>(Purchase order, delivery order... You can insert several files simultaneously)</small>",
     'browse' => "Browse",
     'emptyFile' => "No file selected",
+    'week' => "Week",
+    'dayOf' => "Day of",
 
     //Privacy Policys
     'privacyPolicy' => "Privacy policy",

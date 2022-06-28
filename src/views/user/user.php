@@ -21,7 +21,13 @@ try{
 } catch (\Exception $e){
     e404();
 }
-render('header', ['title' => $user->getCompanyName()]);
+
+
+if($_SESSION['auth']->getId() != $user->getId()){
+    render('header', ['title' => Translation::of('accountInfo')]);
+}else {
+    render('header', ['title' => Translation::of('account')]);
+}
 ?>
 
     <div class="container">
@@ -71,7 +77,11 @@ render('header', ['title' => $user->getCompanyName()]);
                 </div>
             </div>
         <?php endif; ?>
-        <h1><?= h($user->getCompanyName()); ?></h1>
+        <?php if($_SESSION['auth']->getId() != $user->getId()){ ?>
+             <h1 class="mb-3"><?= Translation::of('accountInfo') ?></h1>
+        <?php }else{?>
+             <h1 class="mb-3"><?= Translation::of('account') ?></h1>
+        <?php }?>
         <p><?= Translation::of('name') ?> : <?= h($user->getName()); ?></p>
         <p><?= Translation::of('firstname') ?> : <?= h($user->getFirstName()); ?></p>
         <p><?= Translation::of('phoneNumber') ?> : <?= h($user->getPhone()); ?></p>
@@ -83,8 +93,10 @@ render('header', ['title' => $user->getCompanyName()]);
             <?php if($_SESSION['auth']->getIdRole() == 4){ ?>
             <a class="btn btn-primary mt-3" href="/views/user/delete.php?id=<?= $user->getId();?>"><?= Translation::of('deleteUserTitle') ?></a>
         </div>
-                <?php if($user->getIdRole() != 1){ ?>
+                <?php if($user->getIdRole() != 1 && $_SESSION['auth']->getId() != $user->getId()){ ?>
                     <div> <a class="btn btn-primary mt-3" href="/views/user/adminsList.php"><?= Translation::of('return') ?></a></div>
+                <?php }elseif($user->getIdRole() != 1 && $_SESSION['auth']->getId() == $user->getId()){?>
+                    <div> <a class="btn btn-primary mt-3" href="/views/user/adminDashboard.php"><?= Translation::of('return') ?></a></div>
                 <?php }else{?>
                     <div> <a class="btn btn-primary mt-3" href="/views/user/customersList.php"><?= Translation::of('return') ?></a></div>
                 <?php }?>

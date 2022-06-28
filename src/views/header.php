@@ -27,7 +27,7 @@ if (isset($_SESSION['lang'])){
         <?php }else{ ?>
             <a href="/views/user/adminDashboard.php" class="navbar-brand"><img src='/images/logo-Henry-Schein.webp' class='logo'/></a>
         <?php } ?>
-        <div class="d-flex flex-column align-items-end">
+        <div class="d-flex flex-column align-items-end d-print-none">
             <div id="flag">
                 <a href="/views/lang/fr.php"><img src='/images/french_flag.jpg' class='flag'/></a>
                 <a href="/views/lang/en.php"><img src='/images/english_flag.jpg' class='flag'/></a>
