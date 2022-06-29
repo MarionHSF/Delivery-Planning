@@ -37,52 +37,73 @@ class Suppliers {
 
     /**
      * Modify datas before insertion in database (creation or update)
-     * @param Supplier $supllier
+     * @param Supplier $supplier
      * @param array $datas
      * @return Supplier
      */
-    public function hydrate(Supplier $supllier, array $datas){
-        $supllier->setName($datas['name']);
-        $supllier->setComment($datas['comment']);
-        return $supllier;
+    public function hydrate(Supplier $supplier, array $datas){
+        $supplier->setName($datas['name']);
+        $supplier->setComment($datas['comment']);
+        return $supplier;
     }
 
     /**
      * Insert new supplier in database
-     * @param \Supplier $supllier
+     * @param \Supplier $supplier
      * @return bool
      */
-    public function create(\Supplier\Supplier $supllier): bool{
-        $statement = $this->pdo->prepare('INSERT INTO `supplier` (`name`, `comment`) VALUES (?,?)');
-        return $statement->execute([
-            $supllier->getName(),
-            $supllier->getComment()
-        ]);
+    public function create(\Supplier\Supplier $supplier): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('INSERT INTO `supplier` (`name`, `comment`) VALUES (?,?)');
+            $statement->execute([
+                $supplier->getName(),
+                $supplier->getComment()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/supplier/add.php?errorDB=1');
+            exit();
+        }
     }
 
     /**
      * Update supplier in database
-     * @param Supplier $supllier
+     * @param Supplier $supplier
      * @return bool
      */
-    public function update(\Supplier\Supplier $supllier): bool{
-        $statement = $this->pdo->prepare('UPDATE `supplier` SET `name` = ?, `comment` = ? WHERE `id` = ?');
-        return $statement->execute([
-            $supllier->getName(),
-            $supllier->getComment(),
-            $supllier->getId()
-        ]);
+    public function update(\Supplier\Supplier $supplier): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('UPDATE `supplier` SET `name` = ?, `comment` = ? WHERE `id` = ?');
+            $statement->execute([
+                $supplier->getName(),
+                $supplier->getComment(),
+                $supplier->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/supplier/edit.php?id='.$supplier->getId().'&errorDB=1');
+            exit();
+        }
     }
 
     /**
      *  Delete supplier in database
-     * @param Supplier $supllier
+     * @param Supplier $supplier
      * @return bool
      */
-    public function delete(\Supplier\Supplier $supllier): bool{
-        $statement = $this->pdo->prepare('DELETE from `supplier` WHERE `id` = ?');
-        return $statement->execute([
-            $supllier->getId()
-        ]);
+    public function delete(\Supplier\Supplier $supplier): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('DELETE from `supplier` WHERE `id` = ?');
+            $statement->execute([
+                $supplier->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/supplier/supplier.php?id='.$supplier->getId().'&errorDB=1');
+            exit();
+        }
     }
 }

@@ -17,7 +17,8 @@
             "Lang\\": "App/Lang",
             "Role\\": "App/Role",
             "PDO\\": "App/PDO",
-            "File\\": "App/File"
+            "File\\": "App/File",
+            "Day\\": "App/Day"
         }
     },
     "require": {

@@ -5,6 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/phpmailer/phpmailer" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/phpmailer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/uploadFiles" />
     </content>
     <content url="file://$MODULE_DIR$/src/vendor/phpmailer" />
     <orderEntry type="inheritedJdk" />

@@ -113,9 +113,11 @@ $emailsList = $users->getUsersConfirmedEmail();
             <p id="loading"><?= Translation::of('emptyFile') ?></p>
             <?php if($_SESSION['lang'] == 'fr_FR'){ ?>
                 <p id="errorFileFR" class="text-danger"></p>
+                <p id="errorDBFR" class="text-danger"></p>
             <?php }?>
             <?php if($_SESSION['lang'] == 'en_GB'){ ?>
                 <p id="errorFileEN" class="text-danger"></p>
+                <p id="errorDBEN" class="text-danger"></p>
             <?php }?>
             <?php if (isset($errors['errorUploadFiles'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['errorUploadFiles']; ?></small></p>

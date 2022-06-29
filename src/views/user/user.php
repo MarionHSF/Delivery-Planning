@@ -70,6 +70,13 @@ if($_SESSION['auth']->getId() != $user->getId()){
                 </div>
             </div>
         <?php endif; ?>
+        <?php if(isset($_GET['errorDB'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('errorDB') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <?php if(isset($_GET['error'])): ?>
             <div class="container">
                 <div class="alert alert-danger">
@@ -82,6 +89,9 @@ if($_SESSION['auth']->getId() != $user->getId()){
         <?php }else{?>
              <h1 class="mb-3"><?= Translation::of('account') ?></h1>
         <?php }?>
+        <?php if($user->getIdRole() == 1){ ?>
+            <p><?= Translation::of('companyName') ?> : <?= h($user->getCompanyName()); ?></p>
+        <?php } ?>
         <p><?= Translation::of('name') ?> : <?= h($user->getName()); ?></p>
         <p><?= Translation::of('firstname') ?> : <?= h($user->getFirstName()); ?></p>
         <p><?= Translation::of('phoneNumber') ?> : <?= h($user->getPhone()); ?></p>

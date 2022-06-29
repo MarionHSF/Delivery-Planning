@@ -53,6 +53,13 @@ render('header', ['title' => Translation::of('appointementDetails')]);
                 </div>
             </div>
         <?php endif; ?>
+        <?php if(isset($_GET['errorDB'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('errorDB') ?>
+                </div>
+            </div>
+        <?php endif; ?>
        <h1><?= Translation::of('appointementDetails') ?> : </h1>
         <ul>
             <li><?= Translation::of('entryDate') ?> : <?= $event->getEntryDate()->format('d/m/Y'); ?></li>

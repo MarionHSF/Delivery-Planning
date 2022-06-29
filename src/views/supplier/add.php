@@ -30,6 +30,13 @@ render('header', ['title' => Translation::of('createSupplierTitle')]);
 ?>
 
 <div class="container">
+    <?php if(isset($_GET['errorDB'])): ?>
+        <div class="container">
+            <div class="alert alert-danger">
+                <?= Translation::of('errorDB') ?>
+            </div>
+        </div>
+    <?php endif; ?>
     <?php if(!empty($errors)) : ?>
         <div class="alert alert-danger">
            <?= Translation::of('errorsMessage') ?>

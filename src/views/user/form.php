@@ -13,7 +13,7 @@ $roles = $roles->getRoles();
 <div class="row" style="display:none">
     <div class="col-sm-6">
         <div class="form-group mt-3">
-            <label for="company_name"><?= Translation::of('company_name') ?></label>
+            <label for="company_name"><?= Translation::of('companyName') ?></label>
             <input id="company_name" type="text" required class="form-control" name="company_name" readonly value="<?= isset($datas['company_name']) ? h($datas['company_name']) : 'Henry Schein'; ?>">
             <?php if (isset($errors['company_name'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['company_name']; ?></small></p>
@@ -25,7 +25,7 @@ $roles = $roles->getRoles();
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group mt-3">
-            <label for="company_name"><?= Translation::of('company_name') ?></label>
+            <label for="company_name"><?= Translation::of('companyName') ?></label>
             <input id="company_name" type="text" required class="form-control" name="company_name" value="<?= isset($datas['company_name']) ? h($datas['company_name']) : ''; ?>">
             <?php if (isset($errors['company_name'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['company_name']; ?></small></p>

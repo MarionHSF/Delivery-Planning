@@ -29,6 +29,13 @@ render('header', ['title' => $supplier->getName()]);
                 </div>
             </div>
         <?php endif; ?>
+        <?php if(isset($_GET['errorDB'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('errorDB') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <?php if(isset($_GET['error'])): ?>
             <div class="container">
                 <div class="alert alert-danger">

@@ -18,22 +18,6 @@ class Users {
     }
 
     /**
-     * Return customers users list
-     * @return array
-     */
-    public function getCustomersUsers(): array{
-        return $this->pdo->query("SELECT * FROM `user` WHERE `id_role` = 1 ORDER BY `company_name` ASC")->fetchAll();
-    }
-
-    /**
-     * Return admin users list
-     * @return array
-     */
-    public function getAdminUsers(): array{
-        return $this->pdo->query("SELECT * FROM `user` WHERE `id_role` != 1 ORDER BY `name` ASC")->fetchAll();
-    }
-
-    /**
      * Return user by id
      * @param int $id
      * @return array
@@ -65,9 +49,39 @@ class Users {
             }elseif ($function == "event"){
                 throw new \Exception(Translation::of('errorFindByEmail'));
             }
-
         }
         return $user;
+    }
+
+    /**
+     * Return customers users list
+     * @return array
+     */
+    public function findCustomersUsers(): array{
+        return $this->pdo->query("SELECT * FROM `user` WHERE `id_role` = 1 ORDER BY `company_name` ASC")->fetchAll();
+    }
+
+    /**
+     * Return admin users list
+     * @return array
+     */
+    public function findAdminUsers(): array{
+        return $this->pdo->query("SELECT * FROM `user` WHERE `id_role` != 1 ORDER BY `name` ASC")->fetchAll();
+    }
+
+    /**
+     * Return list of events of user
+     * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function findEvents (int $id): array {
+        $statement = $this->pdo->query("SELECT * FROM `event` LEFT JOIN (`user_event`, `user`) ON (`event`.`id` = `user_event`.`id_event` AND `user_event`.`id_user` = `user`.`id`) WHERE `user`.`id` = $id");
+        $result = $statement->fetchAll();
+        if ($result === false) {
+            throw new \Exception('Aucun résultat n\'a été trouvé');
+        }
+        return $result;
     }
 
     /**
@@ -115,38 +129,45 @@ class Users {
      * @return bool
      */
     public function create(\User\User $user): void{
-        $statement = $this->pdo->prepare('INSERT INTO `user` (`company_name`, `name`, `firstname`, `phone`, `email`, `password`, `id_lang`, `id_role`, `confirmation_token`) VALUES (?,?,?,?,?,?,?,?,?)');
-        $statement->execute([
-            $user->getCompanyName(),
-            $user->getName(),
-            $user->getFirstname(),
-            $user->getPhone(),
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getIdLang(),
-            $user->getIdRole(),
-            $user->getConfirmationToken()
-        ]);
-        if( $user->getIdRole() == 1){
-            $id_user = $this->pdo->lastInsertId();
-            try { // Send user confirmation mail
-                //Server settings
-                $mail = new PHPMailer(true);
-                initSmtp($mail);
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('INSERT INTO `user` (`company_name`, `name`, `firstname`, `phone`, `email`, `password`, `id_lang`, `id_role`, `confirmation_token`) VALUES (?,?,?,?,?,?,?,?,?)');
+            $statement->execute([
+                $user->getCompanyName(),
+                $user->getName(),
+                $user->getFirstname(),
+                $user->getPhone(),
+                $user->getEmail(),
+                $user->getPassword(),
+                $user->getIdLang(),
+                $user->getIdRole(),
+                $user->getConfirmationToken()
+            ]);
+            if( $user->getIdRole() == 1){
+                $id_user = $this->pdo->lastInsertId();
+                try { // Send user confirmation mail
+                    //Server settings
+                    $mail = new PHPMailer(true);
+                    initSmtp($mail);
 
-                //Recipients
-                $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
-                $mail->addAddress($user->getEmail());
+                    //Recipients
+                    $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+                    $mail->addAddress($user->getEmail());
 
-                //Content
-                $mail->isHTML(true);
-                $mail->Subject = Translation::of('accountConfirmation');
-                $mail->Body    = Translation::of('accountConfirmationText').'</br> <a href="http://'.$_SERVER['HTTP_HOST'].'/views/user/confirm.php?id='.$id_user.'&token='.$user->getConfirmationToken().'">http://'.$_SERVER['HTTP_HOST'].'/views/user/confirm.php?id='.$id_user.'&token='.$user->getConfirmationToken().'</a>';
+                    //Content
+                    $mail->isHTML(true);
+                    $mail->Subject = Translation::of('accountConfirmation');
+                    $mail->Body    = Translation::of('accountConfirmationText').'</br> <a href="http://'.$_SERVER['HTTP_HOST'].'/views/user/confirm.php?id='.$id_user.'&token='.$user->getConfirmationToken().'">http://'.$_SERVER['HTTP_HOST'].'/views/user/confirm.php?id='.$id_user.'&token='.$user->getConfirmationToken().'</a>';
 
-                $mail->send();
-            } catch (Exception $e) {
-                echo $mail->ErrorInfo;
+                    $mail->send();
+                } catch (Exception $e) {
+                    echo $mail->ErrorInfo;
+                }
             }
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/user/add.php?errorDB=1');
+            exit();
         }
     }
 
@@ -155,17 +176,24 @@ class Users {
      * @param User $user
      * @return bool
      */
-    public function update(\User\User $user): bool{
-        $statement = $this->pdo->prepare('UPDATE `user` SET `company_name` = ?, `name` = ?, `firstname` = ?, `phone` = ?, `id_lang` = ?, `id_role` = ? WHERE `id` = ?');
-        return $statement->execute([
-            $user->getCompanyName(),
-            $user->getName(),
-            $user->getFirstname(),
-            $user->getPhone(),
-            $user->getIdLang(),
-            $user->getIdRole(),
-            $user->getId()
-        ]);
+    public function update(\User\User $user): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('UPDATE `user` SET `company_name` = ?, `name` = ?, `firstname` = ?, `phone` = ?, `id_lang` = ?, `id_role` = ? WHERE `id` = ?');
+            $statement->execute([
+                $user->getCompanyName(),
+                $user->getName(),
+                $user->getFirstname(),
+                $user->getPhone(),
+                $user->getIdLang(),
+                $user->getIdRole(),
+                $user->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/user/edit.php?id='.$user->getId().'&errorDB=1');
+            exit();
+        }
     }
 
     /**
@@ -173,13 +201,20 @@ class Users {
      * @param User $user
      * @return bool
      */
-    public function updateEmail(\User\User $user, array $datas): bool{
-        $user->setEmail($datas['email']);
-        $statement = $this->pdo->prepare('UPDATE `user` SET `email` = ? WHERE `id` = ?');
-        return $statement->execute([
-            $user->getEmail(),
-            $user->getId()
-        ]);
+    public function updateEmail(\User\User $user, array $datas): void{
+        try{
+            $this->pdo->beginTransaction();
+            $user->setEmail($datas['email']);
+            $statement = $this->pdo->prepare('UPDATE `user` SET `email` = ? WHERE `id` = ?');
+            $statement->execute([
+                $user->getEmail(),
+                $user->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException $e){
+            header('Location: /views/user/editPassword.php?id='.$user->getId().'&errorDB=1');
+            exit();
+        }
     }
 
     /**
@@ -187,15 +222,22 @@ class Users {
      * @param User $user
      * @return bool
      */
-    public function updatePassword(\User\User $user, array $datas): bool{
-        $user->setPassword(password_hash($datas['password'], PASSWORD_BCRYPT));
-        $statement = $this->pdo->prepare('UPDATE `user` SET `password` = ?, `reset_token` = ?, `reset_at` = ? WHERE `id` = ?');
-        return $statement->execute([
-            $user->getPassword(),
-            '',
-            NULL,
-            $user->getId()
-        ]);
+    public function updatePassword(\User\User $user, array $datas): void{
+        try{
+            $this->pdo->beginTransaction();
+            $user->setPassword(password_hash($datas['password'], PASSWORD_BCRYPT));
+            $statement = $this->pdo->prepare('UPDATE `user` SET `password` = ?, `reset_token` = ?, `reset_at` = ? WHERE `id` = ?');
+            $statement->execute([
+                $user->getPassword(),
+                '',
+                NULL,
+                $user->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException $e){
+            header('Location: /views/user/editEmail.php?id='.$user->getId().'&errorDB=1');
+            exit();
+        }
     }
 
     /**
@@ -203,11 +245,18 @@ class Users {
      * @param User $user
      * @return bool
      */
-    public function delete(\User\User $user): bool{
-        $statement = $this->pdo->prepare('DELETE from `user` WHERE `id` = ?');
-        return $statement->execute([
-            $user->getId()
-        ]);
+    public function delete(\User\User $user): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('DELETE from `user` WHERE `id` = ?');
+            $statement->execute([
+                $user->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException $e){
+            header('Location: /views/user/user.php?id='.$user->getId().'&errorDB=1');
+            exit();
+        }
     }
 
     /**
@@ -215,13 +264,20 @@ class Users {
      * @param User $user
      * @return bool
      */
-    public function confirmAccount(\User\User $user): bool{
-        $statement = $this->pdo->prepare('UPDATE `user` SET `confirmation_token` = ?, `confirmed_at` = ? WHERE `id` = ?');
-        return $statement->execute([
-            '',
-            date("Y-m-d H:i:s"),
-            $user->getId()
-        ]);
+    public function confirmAccount(\User\User $user): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('UPDATE `user` SET `confirmation_token` = ?, `confirmed_at` = ? WHERE `id` = ?');
+            $statement->execute([
+                '',
+                date("Y-m-d H:i:s"),
+                $user->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException $e){
+            header('Location: /login.php?errorDB=1');
+            exit();
+        }
     }
 
     /**
@@ -255,48 +311,41 @@ class Users {
     public function forgotPassword (array $datas): void {
         $user = $this->findByEmail($datas['email'], 'password');
         if ($user) {
-            $user->setResetToken(bin2hex(random_bytes(32)));
-            $statement = $this->pdo->prepare('UPDATE `user` SET `reset_token` = ?, `reset_at` = ? WHERE `id` = ?');
-            $statement->execute([
-                $user->getResetToken(),
-                date("Y-m-d H:i:s"),
-                $user->getId()
-            ]);
-            try { // Send user forgot password mail
-                //Server settings
-                $mail = new PHPMailer(true);
-                initSmtp($mail);
+            try{
+                $this->pdo->beginTransaction();
+                $user->setResetToken(bin2hex(random_bytes(32)));
+                $statement = $this->pdo->prepare('UPDATE `user` SET `reset_token` = ?, `reset_at` = ? WHERE `id` = ?');
+                $statement->execute([
+                    $user->getResetToken(),
+                    date("Y-m-d H:i:s"),
+                    $user->getId()
+                ]);
+                try { // Send user forgot password mail
+                    //Server settings
+                    $mail = new PHPMailer(true);
+                    initSmtp($mail);
 
-                //Recipients
-                $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
-                $mail->addAddress($user->getEmail());
+                    //Recipients
+                    $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+                    $mail->addAddress($user->getEmail());
 
-                //Content
-                $mail->isHTML(true);
-                $mail->Subject = Translation::of('resetPassword');
-                $mail->Body    = Translation::of('resetPasswordText').'</br> <a href="http://'.$_SERVER['HTTP_HOST'].'/views/user/reset.php?id='.$user->getId().'&token='.$user->getResetToken().'">http://'.$_SERVER['HTTP_HOST'].'/views/user/reset.php?id='.$user->getId().'&token='.$user->getResetToken().'</a></br>'.Translation::of('durationLink');
+                    //Content
+                    $mail->isHTML(true);
+                    $mail->Subject = Translation::of('resetPassword');
+                    $mail->Body    = Translation::of('resetPasswordText').'</br> <a href="http://'.$_SERVER['HTTP_HOST'].'/views/user/reset.php?id='.$user->getId().'&token='.$user->getResetToken().'">http://'.$_SERVER['HTTP_HOST'].'/views/user/reset.php?id='.$user->getId().'&token='.$user->getResetToken().'</a></br>'.Translation::of('durationLink');
 
-                $mail->send();
-            } catch (Exception $e) {
-                echo $mail->ErrorInfo;
+                    $mail->send();
+                } catch (Exception $e) {
+                    echo $mail->ErrorInfo;
+                }
+                $this->pdo->commit();
+            }catch(\PDOException $e){
+                header('Location: /login.php?errorDB=1');
+                exit();
             }
         }else{
             throw new \Exception(Translation::of('errorForgottenPassword'));
         }
     }
 
-    /**
-     * Return list of events of user
-     * @param int $id
-     * @return array
-     * @throws \Exception
-     */
-    public function findEvents (int $id): array {
-        $statement = $this->pdo->query("SELECT * FROM `event` LEFT JOIN (`user_event`, `user`) ON (`event`.`id` = `user_event`.`id_event` AND `user_event`.`id_user` = `user`.`id`) WHERE `user`.`id` = $id");
-        $result = $statement->fetchAll();
-        if ($result === false) {
-            throw new \Exception('Aucun résultat n\'a été trouvé');
-        }
-        return $result;
-    }
 }

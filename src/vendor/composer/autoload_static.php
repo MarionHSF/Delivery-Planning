@@ -41,6 +41,10 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         array (
             'Event\\' => 6,
         ),
+        'D' => 
+        array (
+            'Day\\' => 4,
+        ),
         'C' => 
         array (
             'Carrier\\' => 8,
@@ -91,6 +95,10 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         'Event\\' => 
         array (
             0 => __DIR__ . '/../..' . '/App/Event',
+        ),
+        'Day\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/Day',
         ),
         'Carrier\\' => 
         array (

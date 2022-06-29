@@ -45,7 +45,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
 require 'views/header.php';
 ?>
-
+<?php if(isset($_GET['errorDB'])): ?>
+    <div class="container">
+        <div class="alert alert-danger">
+            <?= Translation::of('errorDB') ?>
+        </div>
+    </div>
+<?php endif; ?>
 <?php if(isset($_GET['connexionOff'])): ?>
     <div class="container">
         <div class="alert alert-danger">

@@ -64,7 +64,7 @@ return [
     'deleteCustomer' => "Customer account was well deleted.",
     'modifyUserTitle' => "Modify account",
     'deleteUserTitle' => "Delete account",
-    'company_name' => "Company name",
+    'companyName' => "Company name",
     'name' => "Name",
     'firstname' => "Firstname",
     'email_verif' => "Enter your email address again",
@@ -136,6 +136,7 @@ return [
     'upcomingAppointement' => "Upcoming appointments",
     'pastAppointement' => "Past appointments",
     'appointementList' => "Appointements List",
+    'emptyAppointement' => "No appointment planned on this day.",
     'emptyUpcomingAppointement' => "No upcoming appointments",
     'emptyPastAppointement' => "No past appointments",
     'limitDate' => "Impossible to modify or delete the appointment because the minimum 24 hours notice is exceeded. Please contact us at the following number : XX XX XX XX XX.", //TODO
@@ -156,6 +157,15 @@ return [
     'emptyFile' => "No file selected",
     'week' => "Week",
     'dayOf' => "Day of",
+    'errorDB' => "An error has occurred, please contact technical support.",
+    'dayValidation' => "Day's validation",
+    'validationDay' => "The day was well validated and emails were sent to not honored appointments.",
+    'duplicateEntry' => "The day has already been validated.",
+    'dayValidationText' => "The day has been validated at",
+    'undelivery' => "Appointment not honored",
+    'undeliveryText' => "Hello,
+                         </br></br>
+                         The following appointment was not honored :",
 
     //Privacy Policys
     'privacyPolicy' => "Privacy policy",

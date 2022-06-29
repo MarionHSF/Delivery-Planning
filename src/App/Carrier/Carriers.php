@@ -52,12 +52,19 @@ class Carriers {
      * @param \Carrier $carrier
      * @return bool
      */
-    public function create(\Carrier\Carrier $carrier): bool{
-        $statement = $this->pdo->prepare('INSERT INTO `carrier` (`name`, `comment`) VALUES (?,?)');
-        return $statement->execute([
-            $carrier->getName(),
-            $carrier->getComment()
-        ]);
+    public function create(\Carrier\Carrier $carrier): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('INSERT INTO `carrier` (`name`, `comment`) VALUES (?,?)');
+            $statement->execute([
+                $carrier->getName(),
+                $carrier->getComment()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/carrier/add.php?errorDB=1');
+            exit();
+        }
     }
 
     /**
@@ -65,13 +72,20 @@ class Carriers {
      * @param Carrier $carrier
      * @return bool
      */
-    public function update(\Carrier\Carrier $carrier): bool{
-        $statement = $this->pdo->prepare('UPDATE `carrier` SET `name` = ?, `comment` = ? WHERE `id` = ?');
-        return $statement->execute([
-            $carrier->getName(),
-            $carrier->getComment(),
-            $carrier->getId()
-        ]);
+    public function update(\Carrier\Carrier $carrier): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('UPDATE `carrier` SET `name` = ?, `comment` = ? WHERE `id` = ?');
+            $statement->execute([
+                $carrier->getName(),
+                $carrier->getComment(),
+                $carrier->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/carrier/edit.php?id='.$carrier->getId().'&errorDB=1');
+            exit();
+        }
     }
 
     /**
@@ -79,10 +93,17 @@ class Carriers {
      * @param Carrier $carrier
      * @return bool
      */
-    public function delete(\Carrier\Carrier $carrier): bool{
-        $statement = $this->pdo->prepare('DELETE from `carrier` WHERE `id` = ?');
-        return $statement->execute([
-            $carrier->getId()
-        ]);
+    public function delete(\Carrier\Carrier $carrier): void{
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('DELETE from `carrier` WHERE `id` = ?');
+            $statement->execute([
+                $carrier->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/carrier/carrier.php?id='.$carrier->getId().'&errorDB=1');
+            exit();
+        }
     }
 }

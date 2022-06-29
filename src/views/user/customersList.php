@@ -10,7 +10,7 @@ onlySuperAdminRights();
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $customers = new User\Users($pdo);
-$customers = $customers->getCustomersUsers();
+$customers = $customers->findCustomersUsers();
 render('header', ['title' => Translation::of('customersList')]);
 ?>
 

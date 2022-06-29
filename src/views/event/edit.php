@@ -73,6 +73,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 render('header', ['title' => Translation::of('modifyAppointementTitle')]);
 ?>
 <div class="container">
+    <?php if(isset($_GET['errorDB'])): ?>
+        <div class="container">
+            <div class="alert alert-danger">
+                <?= Translation::of('errorDB') ?>
+            </div>
+        </div>
+    <?php endif; ?>
     <?php if(!empty($errors)) : ?>
         <div class="alert alert-danger">
             <?= Translation::of('errorsMessage') ?>

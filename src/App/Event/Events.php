@@ -152,85 +152,62 @@ class Events {
      * @return bool
      */
     public function create(\Event\Event $event): void{
-        //Add event in event table
-        $statement = $this->pdo->prepare('INSERT INTO `event` (`entry_date`, `id_carrier`, `order`, `phone`, `email`, `dangerous_substance`, `comment`, `start`, `end`, `reception_validation`, `storage_validation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $statement->execute([
-            $event->getEntryDate()->format('Y-m-d H:i:s'),
-            $event->getIdCarrier(),
-            $event->getOrder(),
-            $event->getPhone(),
-            $event->getEmail(),
-            $event->getDangerousSubstance(),
-            $event->getComment(),
-            $event->getStart()->format('Y-m-d H:i:s'),
-            $event->getEnd()->format('Y-m-d H:i:s'),
-            $event->getReceptionValidation(),
-            $event->getStorageValidation()
-        ]);
-        //Add event in event_supplier table
-        $id_event = $this->pdo->lastInsertId();
-        $statement2 = $this->pdo->prepare('INSERT INTO `event_supplier` (`id_event`, `id_supplier`) VALUES (?, ?)');
-        foreach ($event->getIdsSuppliers() as $id_supplier){
-            $statement2->execute([
-                $id_event,
-                $id_supplier
+        try{
+            $this->pdo->beginTransaction();
+            //Add event in event table
+            $statement = $this->pdo->prepare('INSERT INTO `event` (`entry_date`, `id_carrier`, `order`, `phone`, `email`, `dangerous_substance`, `comment`, `start`, `end`, `reception_validation`, `storage_validation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $statement->execute([
+                $event->getEntryDate()->format('Y-m-d H:i:s'),
+                $event->getIdCarrier(),
+                $event->getOrder(),
+                $event->getPhone(),
+                $event->getEmail(),
+                $event->getDangerousSubstance(),
+                $event->getComment(),
+                $event->getStart()->format('Y-m-d H:i:s'),
+                $event->getEnd()->format('Y-m-d H:i:s'),
+                $event->getReceptionValidation(),
+                $event->getStorageValidation()
             ]);
-        }
-        //Add event in user_event table
-        $statement3 = $this->pdo->prepare('INSERT INTO `user_event` (`id_user`, `id_event`) VALUES (?, ?)');
-        if($_SESSION['auth']->getIdRole() == 1){
-            $id_user = $_SESSION['auth']->getID();
-        }else{
-            $users = new \User\Users($this->pdo);
-            $user = $users->findByEmail($event->getEmail(),'event');
-            $id_user = $user->getId();
-        }
-        $statement3->execute([
-            $id_user,
-            $id_event
-        ]);
-        //Add upload files in file table
-        $files = new \File\Files($this->pdo);
-        $uploadFiles = $event->getUploadFiles();
-        if(isset($uploadFiles)){
-            foreach ($uploadFiles as $uploadFile){
-                $file = $files->hydrate(new \File\File(), $uploadFile);
-                $files->create($file);
-                //Add upload files in event_file table
-                $id_file = $this->pdo->lastInsertId();
-                $statement4 = $this->pdo->prepare('INSERT INTO `event_file` (`id_event`, `id_file`) VALUES (?, ?)');
-                $statement4->execute([
+            //Add event in event_supplier table
+            $id_event = $this->pdo->lastInsertId();
+            $statement2 = $this->pdo->prepare('INSERT INTO `event_supplier` (`id_event`, `id_supplier`) VALUES (?, ?)');
+            foreach ($event->getIdsSuppliers() as $id_supplier){
+                $statement2->execute([
                     $id_event,
-                    $id_file
+                    $id_supplier
                 ]);
             }
-        }
-        // Send user confirmation mail
-        try {
-            //Server settings
-            $mail = new PHPMailer(true);
-            initSmtp($mail);
-
-            //Recipients
-            $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
-            $mail->addAddress($event->getEmail(),);
-
-            //Content
-            $mail->isHTML(true);
-            $mail->Subject = Translation::of('mailAppointementSubjet');
-            if($_SESSION['lang'] == 'en_GB'){
-                $date = $event->getStart()->format('m/d/Y H:i');
+            //Add event in user_event table
+            $statement3 = $this->pdo->prepare('INSERT INTO `user_event` (`id_user`, `id_event`) VALUES (?, ?)');
+            if($_SESSION['auth']->getIdRole() == 1){
+                $id_user = $_SESSION['auth']->getID();
             }else{
-                $date = $event->getStart()->format('d/m/Y H:i');
+                $users = new \User\Users($this->pdo);
+                $user = $users->findByEmail($event->getEmail(),'event');
+                $id_user = $user->getId();
             }
-            $mail->Body    = Translation::of('mailCreateAppointementText').' '.$date.'.</br></br>'.Translation::of('warningModifyAppointement').'</br></br>'.Translation::of('mailAppointementFooter');
-
-            $mail->send();
-        } catch (Exception $e) {
-            echo $mail->ErrorInfo;
-        }
-        // Send admin warning dangerous substance mail
-        if($event->getDangerousSubstance() == "yes"){
+            $statement3->execute([
+                $id_user,
+                $id_event
+            ]);
+            //Add upload files in file table
+            $files = new \File\Files($this->pdo);
+            $uploadFiles = $event->getUploadFiles();
+            if(isset($uploadFiles)){
+                foreach ($uploadFiles as $uploadFile){
+                    $file = $files->hydrate(new \File\File(), $uploadFile);
+                    $files->create($file);
+                    //Add upload files in event_file table
+                    $id_file = $this->pdo->lastInsertId();
+                    $statement4 = $this->pdo->prepare('INSERT INTO `event_file` (`id_event`, `id_file`) VALUES (?, ?)');
+                    $statement4->execute([
+                        $id_event,
+                        $id_file
+                    ]);
+                }
+            }
+            // Send user confirmation mail
             try {
                 //Server settings
                 $mail = new PHPMailer(true);
@@ -238,22 +215,52 @@ class Events {
 
                 //Recipients
                 $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
-                $mail->addAddress('test@test.com'); // TODO modifier email admin
+                $mail->addAddress($event->getEmail(),);
 
                 //Content
                 $mail->isHTML(true);
-                $mail->Subject = Translation::of('dangerousSubstance');
+                $mail->Subject = Translation::of('mailAppointementSubjet');
                 if($_SESSION['lang'] == 'en_GB'){
                     $date = $event->getStart()->format('m/d/Y H:i');
                 }else{
                     $date = $event->getStart()->format('d/m/Y H:i');
                 }
-                $mail->Body    = Translation::of('dangerousSubstanceMail').' '.$date.'.';
+                $mail->Body    = Translation::of('mailCreateAppointementText').' '.$date.'.</br></br>'.Translation::of('warningModifyAppointement').'</br></br>'.Translation::of('mailAppointementFooter');
 
                 $mail->send();
             } catch (Exception $e) {
                 echo $mail->ErrorInfo;
             }
+            // Send admin warning dangerous substance mail
+            if($event->getDangerousSubstance() == "yes"){
+                try {
+                    //Server settings
+                    $mail = new PHPMailer(true);
+                    initSmtp($mail);
+
+                    //Recipients
+                    $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+                    $mail->addAddress('test@test.com'); // TODO modifier email admin
+
+                    //Content
+                    $mail->isHTML(true);
+                    $mail->Subject = Translation::of('dangerousSubstance');
+                    if($_SESSION['lang'] == 'en_GB'){
+                        $date = $event->getStart()->format('m/d/Y H:i');
+                    }else{
+                        $date = $event->getStart()->format('d/m/Y H:i');
+                    }
+                    $mail->Body    = Translation::of('dangerousSubstanceMail').' '.$date.'.';
+
+                    $mail->send();
+                } catch (Exception $e) {
+                    echo $mail->ErrorInfo;
+                }
+            }
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/event/add.php?errorDB=1');
+            exit();
         }
     }
 
@@ -263,87 +270,94 @@ class Events {
      * @return bool
      */
     public function update(\Event\Event $event): void{
-        //Update event in event table
-        $statement = $this->pdo->prepare('UPDATE `event` SET `id_carrier` = ?, `order` = ?, `phone` = ?, `email` = ?, `dangerous_substance` = ?, `comment` = ?, `start` = ?, `end` = ? WHERE `id` = ?');
-        $statement->execute([
-            $event->getIdCarrier(),
-            $event->getOrder(),
-            $event->getPhone(),
-            $event->getEmail(),
-            $event->getDangerousSubstance(),
-            $event->getComment(),
-            $event->getStart()->format('Y-m-d H:i:s'),
-            $event->getEnd()->format('Y-m-d H:i:s'),
-            $event->getId()
-        ]);
-        //Delete and re add event in event_supplier table
-        $statement2 = $this->pdo->prepare('DELETE from `event_supplier` WHERE `id_event` = ?');
-        $statement2->execute([
-            $event->getId()
-        ]);
-        $statement3 = $this->pdo->prepare('INSERT INTO `event_supplier` (`id_event`, `id_supplier`) VALUES (?, ?)');
-        foreach ($event->getIdsSuppliers() as $id_supplier){
-            $statement3->execute([
-                $event->getId(),
-                $id_supplier
+        try{
+            $this->pdo->beginTransaction();
+            //Update event in event table
+            $statement = $this->pdo->prepare('UPDATE `event` SET `id_carrier` = ?, `order` = ?, `phone` = ?, `email` = ?, `dangerous_substance` = ?, `comment` = ?, `start` = ?, `end` = ? WHERE `id` = ?');
+            $statement->execute([
+                $event->getIdCarrier(),
+                $event->getOrder(),
+                $event->getPhone(),
+                $event->getEmail(),
+                $event->getDangerousSubstance(),
+                $event->getComment(),
+                $event->getStart()->format('Y-m-d H:i:s'),
+                $event->getEnd()->format('Y-m-d H:i:s'),
+                $event->getId()
             ]);
-        }
-        //Delete and re add event in user_event table
-        $statement4 = $this->pdo->prepare('DELETE from `user_event` WHERE `id_event` = ?');
-        $statement4->execute([
-            $event->getId()
-        ]);
-        $statement5 = $this->pdo->prepare('INSERT INTO `user_event` (`id_user`, `id_event`) VALUES (?, ?)');
-        if($_SESSION['auth']->getIdRole() == 1){
-            $id_user = $_SESSION['auth']->getID();
-        }else{
-            $users = new \User\Users($this->pdo);
-            $user = $users->findByEmail($event->getEmail(),'event');
-            $id_user = $user->getId();
-        }
-        $statement5->execute([
-            $id_user,
-            $event->getId()
-        ]);
-        //Add upload files in file table
-        $files = new \File\Files($this->pdo);
-        $uploadFiles = $event->getUploadFiles();
-        if(isset($uploadFiles)){
-            foreach ($uploadFiles as $uploadFile){
-                $file = $files->hydrate(new \File\File(), $uploadFile);
-                $files->create($file);
-                //Add upload files in event_file table
-                $id_file = $this->pdo->lastInsertId();
-                $statement6 = $this->pdo->prepare('INSERT INTO `event_file` (`id_event`, `id_file`) VALUES (?, ?)');
-                $statement6->execute([
+            //Delete and re add event in event_supplier table
+            $statement2 = $this->pdo->prepare('DELETE from `event_supplier` WHERE `id_event` = ?');
+            $statement2->execute([
+                $event->getId()
+            ]);
+            $statement3 = $this->pdo->prepare('INSERT INTO `event_supplier` (`id_event`, `id_supplier`) VALUES (?, ?)');
+            foreach ($event->getIdsSuppliers() as $id_supplier){
+                $statement3->execute([
                     $event->getId(),
-                    $id_file
+                    $id_supplier
                 ]);
             }
-        }
-        // Send user confirmation mail
-        try {
-            //Server settings
-            $mail = new PHPMailer(true);
-            initSmtp($mail);
-
-            //Recipients
-            $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
-            $mail->addAddress($event->getEmail(),);
-
-            //Content
-            $mail->isHTML(true);
-            $mail->Subject = Translation::of('mailAppointementSubjet');
-            if($_SESSION['lang'] == 'en_GB'){
-                $date = $event->getStart()->format('m/d/Y H:i');
+            //Delete and re add event in user_event table
+            $statement4 = $this->pdo->prepare('DELETE from `user_event` WHERE `id_event` = ?');
+            $statement4->execute([
+                $event->getId()
+            ]);
+            $statement5 = $this->pdo->prepare('INSERT INTO `user_event` (`id_user`, `id_event`) VALUES (?, ?)');
+            if($_SESSION['auth']->getIdRole() == 1){
+                $id_user = $_SESSION['auth']->getID();
             }else{
-                $date = $event->getStart()->format('d/m/Y H:i');
+                $users = new \User\Users($this->pdo);
+                $user = $users->findByEmail($event->getEmail(),'event');
+                $id_user = $user->getId();
             }
-            $mail->Body    = Translation::of('mailModifyAppointementText').' '.$date.'.</br></br>'.Translation::of('mailAppointementFooter');
+            $statement5->execute([
+                $id_user,
+                $event->getId()
+            ]);
+            //Add upload files in file table
+            $files = new \File\Files($this->pdo);
+            $uploadFiles = $event->getUploadFiles();
+            if(isset($uploadFiles)){
+                foreach ($uploadFiles as $uploadFile){
+                    $file = $files->hydrate(new \File\File(), $uploadFile);
+                    $files->create($file);
+                    //Add upload files in event_file table
+                    $id_file = $this->pdo->lastInsertId();
+                    $statement6 = $this->pdo->prepare('INSERT INTO `event_file` (`id_event`, `id_file`) VALUES (?, ?)');
+                    $statement6->execute([
+                        $event->getId(),
+                        $id_file
+                    ]);
+                }
+            }
+            // Send user confirmation mail
+            try {
+                //Server settings
+                $mail = new PHPMailer(true);
+                initSmtp($mail);
 
-            $mail->send();
-        } catch (Exception $e) {
-            echo $mail->ErrorInfo;
+                //Recipients
+                $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+                $mail->addAddress($event->getEmail(),);
+
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = Translation::of('mailAppointementSubjet');
+                if($_SESSION['lang'] == 'en_GB'){
+                    $date = $event->getStart()->format('m/d/Y H:i');
+                }else{
+                    $date = $event->getStart()->format('d/m/Y H:i');
+                }
+                $mail->Body    = Translation::of('mailModifyAppointementText').' '.$date.'.</br></br>'.Translation::of('mailAppointementFooter');
+
+                $mail->send();
+            } catch (Exception $e) {
+                echo $mail->ErrorInfo;
+            }
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/event/edit.php?id='.$event->getId().'&errorDB=1');
+            exit();
         }
     }
 
@@ -353,50 +367,53 @@ class Events {
      * @return bool
      */
     public function delete(\Event\Event $event): void{
-                $statement = $this->pdo->prepare('DELETE from `event_supplier` WHERE `id_event` = ?');
-        $statement->execute([
-            $event->getId()
-        ]);
-        $statement2 = $this->pdo->prepare('DELETE from `user_event` WHERE `id_event` = ?');
-        $statement2->execute([
-            $event->getId()
-        ]);
-        $statement3 = $this->pdo->prepare('DELETE from `event_file` WHERE `id_event` = ?');
-        $statement3->execute([
-            $event->getId()
-        ]);
-        $files = $this->findUploadFiles($event->getId());
-        foreach ($files as $file){
-            $files = new \File\Files($this->pdo);
-            $file = $files->find($file['id']);
-            $files->delete($file);
-        }
-        $statement4 = $this->pdo->prepare('DELETE from `event` WHERE `id` = ?');
-        $statement4->execute([
-            $event->getId()
-        ]);
-        try { // Send user confirmation mail
-            //Server settings
-            $mail = new PHPMailer(true);
-            initSmtp($mail);
-
-            //Recipients
-            $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
-            $mail->addAddress($event->getEmail(),);
-
-            //Content
-            $mail->isHTML(true);
-            $mail->Subject = Translation::of('mailAppointementSubjet');
-            if($_SESSION['lang'] == 'en_GB'){
-                $date = $event->getStart()->format('m/d/Y H:i');
-            }else{
-                $date = $event->getStart()->format('d/m/Y H:i');
+        try{
+            $this->pdo->beginTransaction();
+            $statement = $this->pdo->prepare('DELETE from `event_supplier` WHERE `id_event` = ?');
+            $statement->execute([
+                $event->getId()
+            ]);
+            $statement2 = $this->pdo->prepare('DELETE from `user_event` WHERE `id_event` = ?');
+            $statement2->execute([
+                $event->getId()
+            ]);
+            $files = $this->findUploadFiles($event->getId());
+            foreach ($files as $file){
+                $files = new \File\Files($this->pdo);
+                $file = $files->find($file['id']);
+                $files->delete($file);
             }
-            $mail->Body    = Translation::of('mailDeleteAppointementText').' '.$date.'.</br></br>'.Translation::of('mailAppointementFooter');
+            $statement3 = $this->pdo->prepare('DELETE from `event` WHERE `id` = ?');
+            $statement3->execute([
+                $event->getId()
+            ]);
+            try { // Send user confirmation mail
+                //Server settings
+                $mail = new PHPMailer(true);
+                initSmtp($mail);
 
-            $mail->send();
-        } catch (Exception $e) {
-            echo $mail->ErrorInfo;
+                //Recipients
+                $mail->setFrom('test@test.com', 'Henry Schein'); // TODO modifier email admin
+                $mail->addAddress($event->getEmail(),);
+
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = Translation::of('mailAppointementSubjet');
+                if($_SESSION['lang'] == 'en_GB'){
+                    $date = $event->getStart()->format('m/d/Y H:i');
+                }else{
+                    $date = $event->getStart()->format('d/m/Y H:i');
+                }
+                $mail->Body    = Translation::of('mailDeleteAppointementText').' '.$date.'.</br></br>'.Translation::of('mailAppointementFooter');
+
+                $mail->send();
+            } catch (Exception $e) {
+                echo $mail->ErrorInfo;
+            }
+            $this->pdo->commit();
+        }catch(\PDOException $e){
+            header('Location: /views/event/event.php?id='.$event->getId().'&errorDB=1');
+            exit();
         }
     }
 
@@ -407,16 +424,23 @@ class Events {
      * @return void
      */
     public function validationReception(\Event\Event $event, array $datas): void{
-        $event->setReceptionValidation('yes');
-        $event->setReceptionDate(\DateTime::createFromFormat('Y-m-d H:i',$datas['date'] . ' ' . $datas['start'])->format('Y-m-d H:i:s'));
-        $event->setReceptionLine($datas['reception_line']);
-        $statement = $this->pdo->prepare('UPDATE `event` SET `reception_validation` = ?, `reception_date` = ?, `reception_line` = ? WHERE `id` = ?');
-        $statement->execute([
-            $event->getReceptionValidation(),
-            $event->getReceptionDate()->format('Y-m-d H:i:s'),
-            $event->getReceptionLine(),
-            $event->getId()
-        ]);
+        try{
+            $this->pdo->beginTransaction();
+            $event->setReceptionValidation('yes');
+            $event->setReceptionDate(\DateTime::createFromFormat('Y-m-d H:i',$datas['date'] . ' ' . $datas['start'])->format('Y-m-d H:i:s'));
+            $event->setReceptionLine($datas['reception_line']);
+            $statement = $this->pdo->prepare('UPDATE `event` SET `reception_validation` = ?, `reception_date` = ?, `reception_line` = ? WHERE `id` = ?');
+            $statement->execute([
+                $event->getReceptionValidation(),
+                $event->getReceptionDate()->format('Y-m-d H:i:s'),
+                $event->getReceptionLine(),
+                $event->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/event/event.php?id='.$event->getId().'&errorDB=1');
+            exit();
+        }
     }
 
     /**
@@ -426,11 +450,18 @@ class Events {
      * @return void
      */
     public function validationStorage(\Event\Event $event): void{
-        $event->setStorageValidation('yes');
-        $statement = $this->pdo->prepare('UPDATE `event` SET `storage_validation` = ? WHERE `id` = ?');
-        $statement->execute([
-            $event->getStorageValidation(),
-            $event->getId()
-        ]);
+        try{
+            $this->pdo->beginTransaction();
+            $event->setStorageValidation('yes');
+            $statement = $this->pdo->prepare('UPDATE `event` SET `storage_validation` = ? WHERE `id` = ?');
+            $statement->execute([
+                $event->getStorageValidation(),
+                $event->getId()
+            ]);
+            $this->pdo->commit();
+        }catch(\PDOException){
+            header('Location: /views/event/event.php?id='.$event->getId().'&errorDB=1');
+            exit();
+        }
     }
 }

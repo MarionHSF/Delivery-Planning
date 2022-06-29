@@ -64,6 +64,21 @@ function removeUploadFile(fileID){
     divUploadFile.removeChild(divUploadFileNumber);
     try{
         const httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+                if(httpRequest.responseText == "errorDB"){
+                    const errorDBFR = document.getElementById("errorDBFR");
+                    if(errorDBFR){
+                        errorDBFR.textContent = "Une erreur est survenue, veuillez contacter le service technique.";
+                    }
+
+                    const errorDBEN = document.getElementById("errorDBEN");
+                    if(errorDBEN){
+                        errorDBEN.textContent = "An error has occurred, please contact technical support.";
+                    }
+                }
+            }
+        };
         httpRequest.open('GET', 'http://localhost:8000/views/file/delete.php?fileId='+fileID, true);
         httpRequest.send();
     }catch (e){

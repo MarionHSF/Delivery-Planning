@@ -10,7 +10,7 @@ onlySuperAdminRights();
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 $admins = new User\Users($pdo);
-$admins = $admins->getAdminUsers();
+$admins = $admins->findAdminUsers();
 render('header', ['title' => Translation::of('adminsList')]);
 ?>
 

@@ -64,7 +64,7 @@ return [
     'deleteCustomer' => "Le client a bien été supprimé.",
     'modifyUserTitle' => "Modifier le compte",
     'deleteUserTitle' => "Supprimer le compte",
-    'company_name' => "Nom de la société",
+    'companyName' => "Nom de la société",
     'name' => "Nom",
     'firstname' => "Prénom",
     'email_verif' => "Entrez votre adresse email à nouveau",
@@ -136,6 +136,7 @@ return [
     'upcomingAppointement' => "Rendez-vous à venir",
     'pastAppointement' => "Rendez-vous passés",
     'appointementList' => "Liste des rendez-vous",
+    'emptyAppointement' => "Aucun rendez-vous planifié sur cette journée.",
     'emptyUpcomingAppointement' => "Aucun rendez-vous à venir",
     'emptyPastAppointement' => "Aucun rendez-vous passé",
     'limitDate' => "Impossible de modifier ou supprimer le rendez-vous car le délai minimum de 24h de prévenance est dépassé. Veuillez nous contacter au numéro suivant : XX XX XX XX XX.", //TODO
@@ -156,6 +157,15 @@ return [
     'emptyFile' => "Aucun fichier sélectionné",
     'week' => "Semaine",
     'dayOf' => "Journée du",
+    'errorDB' => "Une erreur est survenue, veuillez contacter le service technique.",
+    'dayValidation' => "Validation de la journée",
+    'validationDay' => "La journée a bien été validée et des emails ont été envoyé aux rendez-vous non honorés.",
+    'duplicateEntry' => "La journée a déja été validée.",
+    'dayValidationText' => "La journée a été validée le",
+    'undelivery' => "Rendez-vous non honoré",
+    'undeliveryText' => "Bonjour,
+                         </br></br>
+                         Le rendez-vous suivant n'a pas été honoré :",
 
     //Privacy Policy
     'privacyPolicy' => "Politique de confidentialité",

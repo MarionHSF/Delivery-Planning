@@ -38,6 +38,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 render('header', ['title' => Translation::of('modifyCarrierTitle')]);
 ?>
     <div class="container">
+        <?php if(isset($_GET['errorDB'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('errorDB') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <h1><?= Translation::of('modifyCarrierTitle'); ?></h1>
         <form action="" method="post" class="form">
             <?php render('carrier/form', ['datas' => $datas, 'errors' => $errors]); ?>

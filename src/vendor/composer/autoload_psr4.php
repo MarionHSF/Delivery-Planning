@@ -16,6 +16,7 @@ return array(
     'Lang\\' => array($baseDir . '/App/Lang'),
     'File\\' => array($baseDir . '/App/File'),
     'Event\\' => array($baseDir . '/App/Event'),
+    'Day\\' => array($baseDir . '/App/Day'),
     'Carrier\\' => array($baseDir . '/App/Carrier'),
     'App\\' => array($baseDir . '/App'),
 );

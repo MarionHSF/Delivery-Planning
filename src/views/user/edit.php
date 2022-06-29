@@ -45,6 +45,13 @@ render('header', ['title' => Translation::of('modifyUserTitle')]);
 
 ?>
     <div class="container">
+        <?php if(isset($_GET['errorDB'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('errorDB') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <h1><?= Translation::of('modifyUserTitle') ?></h1>
         <form action="" method="post" class="form">
             <?php render('user/form', ['datas' => $datas, 'errors' => $errors]); ?>

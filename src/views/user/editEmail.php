@@ -37,6 +37,13 @@ render('header', ['title' => Translation::of('modifyEmailTitle')]);
 
 ?>
     <div class="container">
+        <?php if(isset($_GET['errorDB'])): ?>
+            <div class="container">
+                <div class="alert alert-danger">
+                    <?= Translation::of('errorDB') ?>
+                </div>
+            </div>
+        <?php endif; ?>
         <h1><?= Translation::of('modifyEmailTitle') ?></h1>
         <form action="" method="post" class="form">
             <?php render('user/formEmail', ['datas' => $datas, 'errors' => $errors]); ?>
