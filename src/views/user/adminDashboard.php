@@ -66,8 +66,9 @@ require '../../views/header.php';
                     <?php foreach($month->getDays() as $k => $day):
                         $date = (clone $start)->modify("+" . ($k + $i * 7) . " days");
                         $isToday = date('Y-m-d') === $date->format('Y-m-d');
+                        $isWeekEnd = ($date->format('l') === "Saturday") || ($date->format('l') === "Sunday");
                         ?>
-                        <td class="text-center <?= $month->withInMonth($date) ? '' : 'calendar_overmonth'; ?> <?= $isToday ? 'is_today' : ''; ?>">
+                        <td class="text-center <?= $month->withInMonth($date) ? '' : 'calendar_overmonth'; ?> <?= $isToday ? 'is_today' : ''; ?> <?= $isWeekEnd ? 'is_weekend' : ''; ?>">
                             <?php if($i === 0){ ?>
                                 <div class="calendar_weekday"><?= $day; ?></div>
                             <?php } ?>
@@ -92,8 +93,9 @@ require '../../views/header.php';
                             $date = (clone $start)->modify("+" . ($k + $i * 7) . " days");
                             $eventsForDay = $events[$date->format('Y-m-d')] ?? [];
                             $isToday = date('Y-m-d') === $date->format('Y-m-d');
+                            $isWeekEnd = ($date->format('l') === "Saturday") || ($date->format('l') === "Sunday");
                             ?>
-                            <td class="<?= $month->withInMonth($date) ? '' : 'calendar_overmonth'; ?> <?= $isToday ? 'is_today' : ''; ?>">
+                            <td class="<?= $month->withInMonth($date) ? '' : 'calendar_overmonth'; ?> <?= $isToday ? 'is_today' : ''; ?> <?= $isWeekEnd ? 'is_weekend' : ''; ?>">
                                 <div class="calendar_weekday"><?= $day; ?></div>
                                 <a class="calendar_day" href="/views/event/day.php?date=<?= $date->format('Y-m-d'); ?>"><?= $date->format('d') ?></a>
                                 <?php foreach ($eventsForDay as $event): ?>

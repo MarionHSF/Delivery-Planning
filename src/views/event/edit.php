@@ -26,11 +26,42 @@ try{
     e404();
 }
 
+// Impossible to modify an appointement if there is not a 24h delay
 $date = new \DateTime(date('Y-m-d H:i:s'));
 $limitDate = $event->getStart()->modify('-24 hours');
 if($_SESSION['auth']->getIdRole() == 1 && $date > $limitDate){
     header('Location: /views/event/event.php?id='.$event->getId().'&limitDate=1');
     exit();
+}
+
+//Impossible to modify the appointment on D+1 if 2pm is passed on D day (only super admin), restriction applied on saturday and sunday
+$dateLimit = date('Y-m-d');
+$day = (new \DateTime(date('Y-m-d')))->format('l');
+if($day === "Saturday"){
+    $dateLimit = (new \DateTime(date('Y-m-d')))->modify('+2 days')->format('Y-m-d');
+}elseif ($day === "Sunday"){
+    $dateLimit = (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d');
+}
+if($_SESSION['auth']->getIdRole() != 4) {
+    $actualDateTime = date('Y-m-d H:i');
+    $limitDateTime = date('Y-m-d 14:00');
+    if ($actualDateTime < $limitDateTime) {
+        $dateLimit = (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d');
+        $day = (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('l');
+        if ($day === "Saturday") {
+            $dateLimit = (new \DateTime(date('Y-m-d')))->modify('+3 days')->format('Y-m-d');
+        } elseif ($day === "Sunday") {
+            $dateLimit = (new \DateTime(date('Y-m-d')))->modify('+2 days')->format('Y-m-d');
+        }
+    } else {
+        $dateLimit = (new \DateTime(date('Y-m-d')))->modify('+2 days')->format('Y-m-d');
+        $day = (new \DateTime(date('Y-m-d')))->modify('+2 days')->format('l');
+        if ($day === "Saturday") {
+            $dateLimit = (new \DateTime(date('Y-m-d')))->modify('+4 days')->format('Y-m-d');
+        } elseif ($day === "Sunday") {
+            $dateLimit = (new \DateTime(date('Y-m-d')))->modify('+3 days')->format('Y-m-d');
+        }
+    }
 }
 
 $datas = [
@@ -44,28 +75,33 @@ $datas = [
         'start' => $event->getStart()->format('H:i'),
         'end' => $event->getEnd()->format('H:i'),
         'comment' => $event->getComment(),
-        'uploadFiles' => $files
+        'uploadFiles' => $files,
+        'dateLimit' => $dateLimit
 ];
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
+    $datas['dateLimit'] = $dateLimit;
+    $datas['uploadFiles2'] = $files;
     $validator = new Event\EventValidator();
     $errors = $validator->validates($datas);
-    $uploadResult = uploadFiles($errors, $datas);
-    if(key_exists('errorUploadFiles', $uploadResult)){
-        $errors['errorUploadFiles'] = $uploadResult['errorUploadFiles'];
-    }elseif (key_exists('uploadFiles', $uploadResult)){
-        foreach ($uploadResult['uploadFiles'] as $uploadFile){
-            $datas['uploadFiles'][] = $uploadFile;
-        }
-    }
     if (empty($errors)){
-        $events->hydrate($event, $datas);
-        try{
-            $events->update($event);
-            header('Location: /views/event/event.php?id='. $event->getId() .'&modification=1');
-            exit();
-        }catch (\Exception $e){
-            $errors['errorFindByEmail'] = $e->getMessage();
+        $uploadResult = uploadFiles($errors, $datas);
+        if(key_exists('errorUploadFiles', $uploadResult)){
+            $errors['errorUploadFiles'] = $uploadResult['errorUploadFiles'];
+        }elseif (key_exists('uploadFiles', $uploadResult)){
+            foreach ($uploadResult['uploadFiles'] as $uploadFile){
+                $datas['uploadFiles'][] = $uploadFile;
+            }
+        }
+        if (empty($errors)){
+            $events->hydrate($event, $datas);
+            try{
+                $events->update($event);
+                header('Location: /views/event/event.php?id='. $event->getId() .'&modification=1');
+                exit();
+            }catch (\Exception $e){
+                $errors['errorFindByEmail'] = $e->getMessage();
+            }
         }
     }
 }

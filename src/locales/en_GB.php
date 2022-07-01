@@ -166,6 +166,9 @@ return [
     'undeliveryText' => "Hello,
                          </br></br>
                          The following appointment was not honored :",
+    'contactUs' => "Contact us",
+    'byEmail' => "By email",
+    'byPhone' => "By phone",
 
     //Privacy Policys
     'privacyPolicy' => "Privacy policy",

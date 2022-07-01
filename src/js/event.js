@@ -150,6 +150,23 @@ function undisplayTextAddButton(){
     textAddButton.style.display ='none';
 }
 
+const picker = document.getElementById('date');
+if(picker){
+    picker.addEventListener('input', function(e){
+        var day = new Date(this.value).getUTCDay();
+        if([6,0].includes(day)){
+            this.value = '';
+            const errorPickerFR = document.getElementById("errorPickerFR");
+            if(errorPickerFR){
+                errorPickerFR.textContent = "Les week-ends ne sont pas autorisés.";
+            }
+            const errorPickerEN = document.getElementById("errorPickerEN");
+            if(errorPickerEN){
+                errorPickerEN.textContent = "Weekends not allowed";
+            }
+        }
+    });
+}
 
 
 

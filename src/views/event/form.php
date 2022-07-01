@@ -108,8 +108,27 @@ $emailsList = $users->getUsersConfirmedEmail();
                     <?php }?>
                 </div>
             <?php }?>
+            <?php if(isset($datas['uploadFiles2'])){
+                $i = 0; ?>
+                <div id="uploadFile">
+                    <?php foreach ($datas['uploadFiles2'] as $uploadFile){?>
+                        <div id="uploadFile<?= $uploadFile['id'] ?>">
+                            <a href="/views/file/file.php?fileId=<?= $uploadFile['id'] ?>&eventId=<?= $_GET['id'] ?>" target="_blank"><?= $uploadFile['name'] ?></a>
+                            <a class="text-decoration-none" onclick=removeUploadFile(<?= $uploadFile['id'] ?>);>&#128465;</a>
+                        </div>
+                    <?php }?>
+                </div>
+            <?php }?>
             <input type="button" id="loadFileXml" value="<?= Translation::of('browse') ?>" onclick="document.getElementById('uploadFiles').click();" class="mt-2" />
-            <input style="display:none" type="file" id="uploadFiles" name="uploadFiles[]" multiple="multiple" accept="image/*,.pdf" class="mt-2" <?= !isset($datas['uploadFiles']) ? 'required' : ''?>/>
+            <input style="display:none" type="file" id="uploadFiles" name="uploadFiles[]" multiple="multiple" accept="image/*,.pdf" class="mt-2" <?php
+                                                                                                                                        if(!isset($datas['uploadFiles']) && !isset($datas['uploadFiles2']))  {
+                                                                                                                                            echo 'required';
+                                                                                                                                        }elseif ((isset($datas['uploadFiles']) && empty($datas['uploadFiles'])) || (isset($datas['uploadFiles2']) && empty($datas['uploadFiles2']))){
+                                                                                                                                            echo 'required';
+                                                                                                                                        }else{
+                                                                                                                                            echo '';
+                                                                                                                                        }
+                                                                                                                                        ?>/>
             <p id="loading"><?= Translation::of('emptyFile') ?></p>
             <?php if($_SESSION['lang'] == 'fr_FR'){ ?>
                 <p id="errorFileFR" class="text-danger"></p>
@@ -172,10 +191,20 @@ $emailsList = $users->getUsersConfirmedEmail();
     <div class="col-sm-6">
         <div class="form-group  mt-3">
             <label for="date"><?= Translation::of('date') ?></label>
-            <input id="date" type="date" required class="form-control" name="date" value="<?= isset($datas['date']) ? h($datas['date']) : ''; ?>">
+            <?php if(strpos($_SERVER['REQUEST_URI'], 'add')){ ?>
+                <input id="date" type="date" required class="form-control" name="date" min="<?= isset($datas['date']) ? $datas['date'] : (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d') ?>" value="<?= isset($datas['date']) ? h($datas['date']) : (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d'); ?>">
+            <?php }else{ //if edit ?>
+                <input id="date" type="date" required class="form-control" name="date" min="<?= isset($datas['dateLimit']) ? $datas['dateLimit'] : (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d') ?>" value="<?= isset($datas['date']) ? h($datas['date']) : (isset($datas['dateLimit']) ? h($datas['dateLimit']) : (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d')); ?>">
+            <?php }?>
             <?php if (isset($errors['date'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['date']; ?></small></p>
             <?php endif ?>
+            <?php if($_SESSION['lang'] == 'fr_FR'){ ?>
+                <p id="errorPickerFR" class="text-danger"></p>
+            <?php }?>
+            <?php if($_SESSION['lang'] == 'en_GB'){ ?>
+                <p id="errorPickerEN" class="text-danger"></p>
+            <?php }?>
         </div>
     </div>
 </div>

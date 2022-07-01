@@ -9,39 +9,71 @@ isNotConnected();
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
 
+//Impossible to add an appointment on D+1 if 2pm is passed on D day (only super admin), restriction applied on saturday and sunday
+$date = date('Y-m-d');
+$day = (new \DateTime(date('Y-m-d')))->format('l');
+if($day === "Saturday"){
+    $date = (new \DateTime(date('Y-m-d')))->modify('+2 days')->format('Y-m-d');
+}elseif ($day === "Sunday"){
+    $date = (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d');
+}
+if($_SESSION['auth']->getIdRole() != 4) {
+    $actualDateTime = date('Y-m-d H:i');
+    $limitDateTime = date('Y-m-d 14:00');
+    if($actualDateTime < $limitDateTime){
+        $date = (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d');
+        $day = (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('l');
+        if($day === "Saturday"){
+            $date = (new \DateTime(date('Y-m-d')))->modify('+3 days')->format('Y-m-d');
+        }elseif ($day === "Sunday"){
+            $date = (new \DateTime(date('Y-m-d')))->modify('+2 days')->format('Y-m-d');
+        }
+    }else{
+        $date = (new \DateTime(date('Y-m-d')))->modify('+2 days')->format('Y-m-d');
+        $day = (new \DateTime(date('Y-m-d')))->modify('+2 days')->format('l');
+        if($day === "Saturday"){
+            $date = (new \DateTime(date('Y-m-d')))->modify('+4 days')->format('Y-m-d');
+        }elseif ($day === "Sunday"){
+            $date = (new \DateTime(date('Y-m-d')))->modify('+3 days')->format('Y-m-d');
+        }
+    }
+}
+
 $datas = [
-        'date' => $_GET['date'] ?? date('Y-m-d'),
+        'date' => $date,
 ];
 $validator = new \App\Validator($datas);
 if(!$validator->validate('date', 'date')){
-   $datas['date'] =  date('Y-m-d');
+    $datas['date'] = (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d');
 };
 $errors = [];
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
     $validator = new Event\EventValidator();
     $errors = $validator->validates($datas);
-    $uploadResult = uploadFiles($errors, $datas);
-    if(key_exists('errorUploadFiles', $uploadResult)){
-        $errors['errorUploadFiles'] = $uploadResult['errorUploadFiles'];
-    }elseif (key_exists('uploadFiles', $uploadResult)){
-        foreach ($uploadResult['uploadFiles'] as $uploadFile){
-            $datas['uploadFiles'][] = $uploadFile;
-        }
-    }
     if (empty($errors)){
-        $events = new \Event\Events($pdo);
-        $event = $events->hydrate(new \Event\Event(), $datas);
-        try{
-            $events->create($event);
-            if($_SESSION['auth']->getIdRole() == 1){
-                header('Location: /views/user/userDashboard.php?id='.$_SESSION['auth']->getId().'&creation=1');
-            }else{
-                header('Location: /views/user/adminDashboard.php?creation=1');
+        $uploadResult = uploadFiles($errors, $datas);
+        if(key_exists('errorUploadFiles', $uploadResult)){
+            $errors['errorUploadFiles'] = $uploadResult['errorUploadFiles'];
+        }elseif (key_exists('uploadFiles', $uploadResult)){
+            foreach ($uploadResult['uploadFiles'] as $uploadFile){
+                $datas['uploadFiles'][] = $uploadFile;
             }
-            exit();
-        }catch (\Exception $e){
-            $errors['errorFindByEmail'] = $e->getMessage();
+        }
+        if (empty($errors)){
+            $events = new \Event\Events($pdo);
+            $event = $events->hydrate(new \Event\Event(), $datas);
+            try{
+                $events->create($event);
+                if($_SESSION['auth']->getIdRole() == 1){
+                    header('Location: /views/user/userDashboard.php?id='.$_SESSION['auth']->getId().'&creation=1');
+                }else{
+                    header('Location: /views/user/adminDashboard.php?creation=1');
+                }
+                exit();
+            }catch (\Exception $e){
+                $errors['errorFindByEmail'] = $e->getMessage();
+            }
         }
     }
 }

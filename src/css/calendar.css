@@ -34,6 +34,11 @@
     background-color: #f3f3f3;
 }
 
+.calendar_table_global td.is_weekend, .calendar_table td.is_weekend{
+    background-color: gray;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px);
+}
+
 .calendar_table_global td.is_today{
     font-weight: bold;
 }

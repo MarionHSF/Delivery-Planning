@@ -166,6 +166,9 @@ return [
     'undeliveryText' => "Bonjour,
                          </br></br>
                          Le rendez-vous suivant n'a pas été honoré :",
+    'contactUs' => "Nous contacter",
+    'byEmail' => "Par email",
+    'byPhone' => "Par téléphone",
 
     //Privacy Policy
     'privacyPolicy' => "Politique de confidentialité",

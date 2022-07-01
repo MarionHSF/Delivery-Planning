@@ -101,10 +101,12 @@ render('header', ['title' => Translation::of('appointementDetails')]);
             <?php } ?>
         </ul>
         <?php if($_SESSION['auth']->getIdRole() != 2){ ?>
-            <div>
-                <a class="btn btn-primary" href="/views/event/edit.php?id=<?= $event->getId();?>"><?= Translation::of('modifyAppointementTitle') ?></a>
-                <a class="btn btn-primary" href="/views/event/delete.php?id=<?= $event->getId();?>"><?= Translation::of('deleteAppointementTitle') ?></a>
-            </div>
+                <?php if(($_SESSION['auth']->getIdRole() == 1 && $event->getStart() > new DateTime(date('Y-m-d H:i:s'))) || $_SESSION['auth']->getIdRole() != 1){ ?>
+                    <div>
+                        <a class="btn btn-primary" href="/views/event/edit.php?id=<?= $event->getId();?>"><?= Translation::of('modifyAppointementTitle') ?></a>
+                        <a class="btn btn-primary" href="/views/event/delete.php?id=<?= $event->getId();?>"><?= Translation::of('deleteAppointementTitle') ?></a>
+                    </div>
+                <?php }?>
         <?php } ?>
         <?php if($_SESSION['auth']->getIdRole() == 2 || $_SESSION['auth']->getIdRole() == 4){ ?>
             <?php if($event->getReceptionValidation() == 'no'){ ?>

@@ -74,14 +74,12 @@ render('header', ['title' => Translation::of('dayOf').' '.$date2]);
                 <p><?= Translation::of('dayValidationText') ?> <?= $date ?>.</p>
             </div>
         <?php }?>
+    <?php }else{ ?>
+        <p class="mt-5"><b><?= Translation::of('emptyAppointement') ?></b></p>
+    <?php } ?>
         <div>
             <a class="btn btn-primary mt-3 d-print-none" href="/views/user/adminDashboard.php"><?= Translation::of('return') ?></a>
         </div>
     </div>
-    <?php }else{ ?>
-        <p class="mt-5"><b><?= Translation::of('emptyAppointement') ?></b></p>
-    </div>
-    <?php } ?>
-
 
 <?php require '../footer.php'; ?>
