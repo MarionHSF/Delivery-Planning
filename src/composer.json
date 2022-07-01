@@ -18,7 +18,8 @@
             "Role\\": "App/Role",
             "PDO\\": "App/PDO",
             "File\\": "App/File",
-            "Day\\": "App/Day"
+            "Day\\": "App/Day",
+            "FloorMeterMax\\": "App/FloorMeterMax"
         }
     },
     "require": {

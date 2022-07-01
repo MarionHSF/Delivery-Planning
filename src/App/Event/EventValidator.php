@@ -15,6 +15,12 @@ class EventValidator extends Validator{
         $this->validate('id_carrier', 'minLength', 1);
         $this->validate('ids_suppliers', 'minLength', 1);
         $this->validate('order', 'minLength', 1);
+        $this->validate('pallet_format', 'minLength', 1);
+        $this->validate('pallet_number', 'minLength', 1);
+        $this->validate('pallet_number', 'int');
+        if(isset($datas['floor_meter'])){
+            $this->validate('floor_meter', 'int');
+        }
         $this->validate('phone', 'phone', );
         $this->validate('email', 'email', );
         $this->validate('date', 'date', );

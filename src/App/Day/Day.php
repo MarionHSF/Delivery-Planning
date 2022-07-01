@@ -7,6 +7,7 @@ class Day
 
     private $id;
     private $day_date;
+    private $floor_meter;
     private $validation_date;
     private $validation;
 
@@ -19,6 +20,11 @@ class Day
     public function getDayDate(): \DateTime
     {
         return new \DateTime($this->day_date);
+    }
+
+    public function getFloorMeter(): float
+    {
+        return $this->floor_meter;
     }
 
     public function getValidationDate(): \DateTime
@@ -35,6 +41,11 @@ class Day
     public function setDayDate(string $day_date)
     {
         $this->day_date = $day_date;
+    }
+
+    public function setFloorMeter(float $floor_meter)
+    {
+        $this->floor_meter = $floor_meter;
     }
 
     public function setValidationDate(string $validation_date)

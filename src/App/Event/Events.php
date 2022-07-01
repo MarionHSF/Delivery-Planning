@@ -132,6 +132,14 @@ class Events {
         $event->setIdCarrier($datas['id_carrier']);
         $event->setIdsSuppliers($datas['ids_suppliers']);
         $event->setOrder(implode(', ',$datas['order']));
+        $event->setPalletFormat($datas['pallet_format']);
+        $event->setPalletNumber($datas['pallet_number']);
+        if(isset($datas['floor_meter'])){
+            $event->setFloorMeter($datas['floor_meter']);
+        }else{
+            $floor_meter = ((1.2 * 0.8)/2.4) * intval($datas['pallet_number']);
+            $event->setFloorMeter($floor_meter);
+        }
         $event->setPhone($datas['phone']);
         $event->setEmail($datas['email']);
         isset($datas['dangerous_substance']) ? $event->setDangerousSubstance('yes') : $event->setDangerousSubstance('no') ;
@@ -155,11 +163,14 @@ class Events {
         try{
             $this->pdo->beginTransaction();
             //Add event in event table
-            $statement = $this->pdo->prepare('INSERT INTO `event` (`entry_date`, `id_carrier`, `order`, `phone`, `email`, `dangerous_substance`, `comment`, `start`, `end`, `reception_validation`, `storage_validation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $statement = $this->pdo->prepare('INSERT INTO `event` (`entry_date`, `id_carrier`, `order`, `pallet_format`, `pallet_number`, `floor_meter`, `phone`, `email`, `dangerous_substance`, `comment`, `start`, `end`, `reception_validation`, `storage_validation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $statement->execute([
                 $event->getEntryDate()->format('Y-m-d H:i:s'),
                 $event->getIdCarrier(),
                 $event->getOrder(),
+                $event->getPalletformat(),
+                $event->getPalletNumber(),
+                $event->getFloorMeter(),
                 $event->getPhone(),
                 $event->getEmail(),
                 $event->getDangerousSubstance(),
@@ -273,10 +284,13 @@ class Events {
         try{
             $this->pdo->beginTransaction();
             //Update event in event table
-            $statement = $this->pdo->prepare('UPDATE `event` SET `id_carrier` = ?, `order` = ?, `phone` = ?, `email` = ?, `dangerous_substance` = ?, `comment` = ?, `start` = ?, `end` = ? WHERE `id` = ?');
+            $statement = $this->pdo->prepare('UPDATE `event` SET `id_carrier` = ?, `order` = ?, `pallet_format` = ?, `pallet_number` = ?, `floor_meter` = ?, `phone` = ?, `email` = ?, `dangerous_substance` = ?, `comment` = ?, `start` = ?, `end` = ? WHERE `id` = ?');
             $statement->execute([
                 $event->getIdCarrier(),
                 $event->getOrder(),
+                $event->getPalletFormat(),
+                $event->getPalletNumber(),
+                $event->getFloorMeter(),
                 $event->getPhone(),
                 $event->getEmail(),
                 $event->getDangerousSubstance(),

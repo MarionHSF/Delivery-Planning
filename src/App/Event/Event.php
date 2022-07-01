@@ -10,8 +10,11 @@ class Event
     private $id_carrier;
     private $ids_suppliers;
     private $order;
-    private $phone;
+    private $pallet_format;
+    private $pallet_number;
+    private $floor_meter;
     private $email;
+    private $phone;
     private $dangerous_substance;
     private $comment;
     private $start;
@@ -49,14 +52,29 @@ class Event
         return $this->order;
     }
 
-    public function getPhone(): string
+    public function getPalletFormat(): string
     {
-        return $this->phone;
+        return $this->pallet_format;
+    }
+
+    public function getPalletNumber(): int
+    {
+        return $this->pallet_number;
+    }
+
+    public function getFloorMeter(): float
+    {
+        return $this->floor_meter ?? '';
     }
 
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
     }
 
     public function getDangerousSubstance(): string
@@ -125,14 +143,29 @@ class Event
         $this->order = $order;
     }
 
-    public function setPhone(string $phone)
+    public function setPalletFormat(string $pallet_format)
     {
-        $this->phone = $phone;
+        $this->pallet_format = $pallet_format;
+    }
+
+    public function setPalletNumber(int $pallet_number)
+    {
+        $this->pallet_number = $pallet_number;
+    }
+
+    public function setFloorMeter(float $floor_meter)
+    {
+        $this->floor_meter = $floor_meter;
     }
 
     public function setEmail(string $email)
     {
         $this->email = $email;
+    }
+
+    public function setPhone(string $phone)
+    {
+        $this->phone = $phone;
     }
 
     public function setDangerousSubstance(string $dangerous_substance)

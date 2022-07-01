@@ -71,6 +71,15 @@ render('header', ['title' => Translation::of('appointementDetails')]);
                 echo implode(', ',$suppliersName); ?>
             </li>
             <li><?= Translation::of('orderNumber') ?> : <?= h($event->getOrder()); ?></li>
+            <li>
+                <?php if($event->getPalletFormat() == "standard_format"){ ?>
+                    <?=Translation::of('palletFormat') ?> : <?= Translation::of('standardFormat') ?>
+                <?php }else{ ?>
+                    <?=Translation::of('palletFormat') ?> : <?= Translation::of('otherFormat') ?>
+                <?php } ?>
+            </li>
+            <li><?= Translation::of('palletNumber') ?> : <?= h($event->getPalletNumber()); ?></li>
+            <li><?= Translation::of('floorMeter') ?> : <?= h($event->getFloorMeter()); ?></li>
             <li><?= Translation::of('attachments') ?> : </br><?php
                 foreach ($files as $file) { ?>
                     <a href="/views/file/file.php?fileId=<?= $file['id'] ?>&eventId=<?= $event->getId() ?>" target="_blank"><?= $file['name'] ?></a>

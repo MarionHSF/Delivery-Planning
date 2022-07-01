@@ -14,6 +14,7 @@ return array(
     'PDO\\' => array($baseDir . '/App/PDO'),
     'Localization\\' => array($baseDir . '/App/Carrier'),
     'Lang\\' => array($baseDir . '/App/Lang'),
+    'FloorMeterMax\\' => array($baseDir . '/App/FloorMeterMax'),
     'File\\' => array($baseDir . '/App/File'),
     'Event\\' => array($baseDir . '/App/Event'),
     'Day\\' => array($baseDir . '/App/Day'),

@@ -1,3 +1,4 @@
+//toogle header my account customer
 const toggler = document.getElementById('toggler');
 const togglerContent = document.getElementById('toggler-content');
 
@@ -11,3 +12,5 @@ if(toggler){
         }
     })
 }
+
+//

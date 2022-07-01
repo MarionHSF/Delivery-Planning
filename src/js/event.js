@@ -1,3 +1,4 @@
+// add and remove order input
 function addOrderInput(){
     const divOrder = document.getElementById("divOrder");
     let i = 0;
@@ -39,6 +40,7 @@ function removeOrderInput(i){
     divOrder.removeChild(divOrderNumber);
 }
 
+// automatic filling of the phone when the email is selected
 var email = document.getElementById("email2");
 if(email){
     email.addEventListener("change",function(e){
@@ -58,6 +60,7 @@ if(email){
     })
 }
 
+// deletes the attachments in edit.event and puts a required on the input if all attachments are deleted
 function removeUploadFile(fileID){
     const divUploadFile = document.getElementById("uploadFile");
     const divUploadFileNumber = document.getElementById("uploadFile" + fileID);
@@ -90,6 +93,7 @@ function removeUploadFile(fileID){
     }
 }
 
+// generate or not errors when submitting attachments
 const buttonUploadFiles = document.getElementById("uploadFiles");
 if(buttonUploadFiles){
     buttonUploadFiles.addEventListener("change",function(e){
@@ -128,6 +132,7 @@ if(submitForm){
     })
 }
 
+// display the requested week and hide the others
 function displayWeek(weekNumber){
     const tooglerWeek = document.getElementById('week'+weekNumber);
     tooglerWeek.style.display ='';
@@ -140,6 +145,7 @@ function displayWeek(weekNumber){
     }
 }
 
+// displays or non the text of the add appointment button on mouseover and mouseout
 function displayTextAddButton(){
     const textAddButton = document.getElementById('textAddButton');
     textAddButton.style.display ='';
@@ -150,6 +156,7 @@ function undisplayTextAddButton(){
     textAddButton.style.display ='none';
 }
 
+// prevents the selection of weekends in the date picker
 const picker = document.getElementById('date');
 if(picker){
     picker.addEventListener('input', function(e){
@@ -168,10 +175,51 @@ if(picker){
     });
 }
 
+// display or not the inputs according to the selection of standard pallets or other format
+const standardFormat = document.getElementById('standardFormat');
+const otherFormat = document.getElementById('otherFormat');
 
+const standardFormatDiv = document.getElementById('standardFormatDiv');
+const otherFormatDiv = document.getElementById('otherFormatDiv');
 
+const palletNumberStandardFormat = document.getElementById('palletNumberStandardFormat');
+const palletNumberOtherFormat = document.getElementById('palletNumberOtherFormat');
+const floorNumber = document.getElementById('floor_meter');
 
+function otherFormatFunction(){
+    standardFormatDiv.style.display ='none';
+    otherFormatDiv.style.display ='';
+    palletNumberStandardFormat.disabled = true;
+    palletNumberOtherFormat.disabled = false;
+    floorNumber.disabled = false;
+}
 
+function standartFormatFunction(){
+    standardFormatDiv.style.display ='';
+    otherFormatDiv.style.display ='none';
+    palletNumberStandardFormat.disabled = false;
+    palletNumberOtherFormat.disabled = true;
+    floorNumber.disabled = true;
+}
+
+if(standardFormat && otherFormat && standardFormatDiv && otherFormatDiv && palletNumberStandardFormat && palletNumberOtherFormat && floorNumber){
+    standardFormat.addEventListener('change', function(){
+        if(this.checked){
+            standartFormatFunction();
+        }else{
+            otherFormatFunction();
+        }
+    })
+    otherFormat.addEventListener('change', function(){
+        if(this.checked){
+            otherFormatFunction();
+        }else{
+            standartFormatFunction();
+        }
+    })
+}
+
+//
 
 
 

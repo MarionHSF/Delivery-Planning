@@ -92,9 +92,9 @@ $emailsList = $users->getUsersConfirmedEmail();
         <a id="buttonOrder" class="btn btn-primary form" onclick=addOrderInput();>+</a>
     </div>
 </div>
-<div class="row">
+<div class="row mt-4">
     <div class="col-sm-8">
-        <div class="form-group mt-3">
+        <div class="form-group">
             <label for="uploadFiles[]" class="mb-2"><?= Translation::of('attachments') ?> <?= Translation::of('attachmentsText') ?></label>
             </br>
             <?php if(isset($datas['uploadFiles'])){
@@ -144,33 +144,82 @@ $emailsList = $users->getUsersConfirmedEmail();
         </div>
     </div>
 </div>
-<div class="form-group mt-3"> <?php // TODO ?>
-    <label class="text-danger">Palettes / mètres linéaires (à faire en attente infos)</label>
+<div class="row mt-3">
+    <div class="form-group">
+        <div>
+            <p><?= Translation::of('palletFormat') ?> : </p>
+            <input id="standardFormat" type="radio" name="pallet_format" value="standard_format" <?= !isset($datas['pallet_format']) ? "checked" : ($datas['pallet_format'] == "standard_format" ? "checked" : "") ?>>
+            <label for="standardFormat"><?= Translation::of('standardFormat') ?></label>
+            &emsp;&emsp;
+            <input id="otherFormat" type="radio" name="pallet_format" value="other_format" <?= !isset($datas['pallet_format']) ? "" : ($datas['pallet_format'] == "other_format" ? "checked" : "") ?>>
+            <label for="otherFormat"><?= Translation::of('otherFormat') ?></label>
+        </div>
+        <?php if (isset($errors['pallet_format'])) : ?>
+            <p><small class="form-text text-danger"><?= $errors['pallet_format']; ?></small></p>
+        <?php endif ?>
+    </div>
+    <div id="standardFormatDiv" class="mt-3" <?= !isset($datas['pallet_format']) ? "" : ($datas['pallet_format'] == "standard_format" ? "" : "style='display:none'") ?>>
+        <div class="form-group">
+            <label for="palletNumberStandardFormat"><?= Translation::of('palletNumber') ?></label>
+            <input id="palletNumberStandardFormat" type="number" name="pallet_number" min="1" placeholder="ex : 1" required <?= !isset($datas['pallet_format']) ? "" : ($datas['pallet_format'] == "standard_format" ? "" : "disabled=''") ?> value="<?= !isset($datas['pallet_format']) ? "" : ($datas['pallet_format'] == "standard_format" ? $datas['pallet_number'] : "") ?>">
+        </div>
+        <?php if (isset($errors['pallet_number'])) : ?>
+            <p><small class="form-text text-danger"><?= $errors['pallet_number']; ?></small></p>
+        <?php endif ?>
+    </div>
+    <div id="otherFormatDiv" class="mt-3" <?= !isset($datas['pallet_format']) ? "style='display:none'" : ($datas['pallet_format'] == "other_format" ? "" : "style='display:none'") ?>>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <div class="form-group">
+                        <label for="palletNumberOtherFormat"><?= Translation::of('palletNumber') ?></label>
+                        <input id="palletNumberOtherFormat" type="number" name="pallet_number" min="1" placeholder="ex : 10" required <?= !isset($datas['pallet_format']) ? "disabled=''" : ($datas['pallet_format'] == "other_format" ? "" : "disabled=''") ?> value="<?= !isset($datas['pallet_format']) ? "" : ($datas['pallet_format'] == "other_format" ? $datas['pallet_number'] : "") ?>">
+                    </div>
+                </div>
+                <?php if (isset($errors['pallet_number'])) : ?>
+                    <p><small class="form-text text-danger"><?= $errors['pallet_number']; ?></small></p>
+                <?php endif ?>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <div class="form-group">
+                        <label for="floor_meter"><?= Translation::of('floorMeter') ?></label>
+                        <input id="floor_meter" type="number" name="floor_meter" min="0.01" step="0.01" placeholder="ex 0.01 ou 0.1 ou 1" required <?= !isset($datas['pallet_format']) ? "disabled=''" : ($datas['pallet_format'] == "other_format" ? "" : "disabled=''") ?> value="<?= !isset($datas['pallet_format']) ? "" : ($datas['pallet_format'] == "other_format" ? $datas['floor_meter'] : "") ?>">
+                    </div>
+                </div>
+                <?php if (isset($errors['floor_meter'])) : ?>
+                    <p><small class="form-text text-danger"><?= $errors['floor_meter']; ?></small></p>
+                <?php endif ?>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="row">
+<div class="row mt-4">
     <div class="col-sm-6">
-        <div class="form-group  mt-3">
+        <div class="form-group">
             <label for="email"><?= Translation::of('email') ?></label>
-            <?php if($_SESSION['auth']->getIdRole() == 1){ ?>
-                <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : $_SESSION['auth']->getEmail(); ?>">
-            <?php } else { ?>
-                <select name="email" id="email2" class="mx-3" required">
-                    <option value="<?= !empty($datas['email']) ? h($datas['email']) : ''; ?>"><?= !empty($datas['email']) ? h($datas['email']) : '--'.Translation::of('selectEmail').'--'; ?></option>
-                    <?php foreach ($emailsList as $email): ?>
-                        <option value="<?= $email['email']; ?>"><?= $email['email']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            <?php }?>
-            <?php if (isset($errors['email'])) : ?>
-                <p><small class="form-text text-danger"><?= $errors['email']; ?></small></p>
-            <?php endif ?>
-            <?php if (isset($errors['errorFindByEmail'])) : ?>
-                <p><small class="form-text text-danger"><?= $errors['errorFindByEmail']; ?></small></p>
-            <?php endif ?>
+            <div>
+                <?php if($_SESSION['auth']->getIdRole() == 1){ ?>
+                    <input id="email" type="email" required class="form-control" name="email" value="<?= isset($datas['email']) ? h($datas['email']) : $_SESSION['auth']->getEmail(); ?>">
+                <?php } else { ?>
+                    <select name="email" id="email2" class="mx-3" required>
+                        <option value="<?= !empty($datas['email']) ? h($datas['email']) : ''; ?>"><?= !empty($datas['email']) ? h($datas['email']) : '--'.Translation::of('selectEmail').'--'; ?></option>
+                        <?php foreach ($emailsList as $email): ?>
+                            <option value="<?= $email['email']; ?>"><?= $email['email']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php }?>
+                <?php if (isset($errors['email'])) : ?>
+                    <p><small class="form-text text-danger"><?= $errors['email']; ?></small></p>
+                <?php endif ?>
+                <?php if (isset($errors['errorFindByEmail'])) : ?>
+                    <p><small class="form-text text-danger"><?= $errors['errorFindByEmail']; ?></small></p>
+                <?php endif ?>
+            </div>
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="form-group  mt-3">
+        <div class="form-group">
             <label for="phone"><?= Translation::of('phoneNumber') ?></label>
             <?php if($_SESSION['auth']->getIdRole() == 1){ ?>
                 <input id="phone" type="tel" required class="form-control" name="phone" pattern="[0-9]{10}" value="<?= isset($datas['phone']) ? h($datas['phone']) : $_SESSION['auth']->getPhone(); ?>">
@@ -187,9 +236,9 @@ $emailsList = $users->getUsersConfirmedEmail();
     <label for="dangerous_substance"><?= Translation::of('dangerousSubstance') ?> <?= Translation::of('dangerousSubstanceSmall') ?></label>
     <input id="dangerous_substance" type="checkbox" <?= isset($datas['dangerous_substance']) && ($datas['dangerous_substance'] == 'yes') ? 'checked' : ''; ?> name="dangerous_substance">
 </div>
-<div class="row">
+<div class="row mt-3">
     <div class="col-sm-6">
-        <div class="form-group  mt-3">
+        <div class="form-group ">
             <label for="date"><?= Translation::of('date') ?></label>
             <?php if(strpos($_SERVER['REQUEST_URI'], 'add')){ ?>
                 <input id="date" type="date" required class="form-control" name="date" min="<?= isset($datas['date']) ? $datas['date'] : (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d') ?>" value="<?= isset($datas['date']) ? h($datas['date']) : (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d'); ?>">
@@ -208,9 +257,9 @@ $emailsList = $users->getUsersConfirmedEmail();
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row mt-3">
     <div class="col-sm-6">
-        <div class="form-group mt-3">
+        <div class="form-group">
             <label for="start">Heure de début</label>
             <input id="start" type="time" required class="form-control" name="start" value="<?= isset($datas['start']) ? h($datas['start']) : ''; ?>">
             <?php if (isset($errors['start'])) : ?>
@@ -219,7 +268,7 @@ $emailsList = $users->getUsersConfirmedEmail();
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="form-group mt-3">
+        <div class="form-group">
             <label for="end">Heure de fin</label>
             <input id="end" type="time" required class="form-control" name="end" value="<?= isset($datas['end']) ? h($datas['end']) : ''; ?>">
             <?php if (isset($errors['end'])) : ?>
@@ -228,7 +277,7 @@ $emailsList = $users->getUsersConfirmedEmail();
         </div>
     </div>
 </div>
-<div class="form-group mt-3">
+<div class="form-group mt-4">
     <label for="comment"><?= Translation::of('comment') ?> (<?= Translation::of('optional') ?>)</label>
     <textarea name="comment" id="comment" class="form-control"><?= isset($datas['comment']) ? h($datas['comment']) : ''; ?></textarea>
 </div>

@@ -209,5 +209,21 @@ class Validator {
         $this->errors[$field] = Translation::of('passwordSmall');
         return false;
     }
+
+    //TODO
+    public function int(string $field): bool{
+        $number = str_replace(".","",$this->datas[$field]);
+        if(!preg_match ("/[^0-9]/", $number)){
+            return true;
+        }else{
+            if($field == "pallet_number" || $field == "floor_meter_max"){
+                $this->errors[$field] = Translation::of('errorInt');
+            }
+           elseif($field == "floor_meter"){
+               $this->errors[$field] = Translation::of('errorFloat');
+           }
+            return false;
+        }
+    }
 }
 

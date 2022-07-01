@@ -153,7 +153,7 @@ $roles = $roles->getRoles();
                         echo 'checked';
                     }elseif (!isset($datas['id_role']) && $role['id'] == "2"){
                         echo 'checked';
-                    } ?>
+                    } ?>>
                     <label for="id_role_<?= $role['id'] ?>"> <?= Translation::of($role['name']) ?></label>
                 </div>
             <?php endforeach; ?>

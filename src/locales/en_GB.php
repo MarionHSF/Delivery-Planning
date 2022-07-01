@@ -169,6 +169,18 @@ return [
     'contactUs' => "Contact us",
     'byEmail' => "By email",
     'byPhone' => "By phone",
+    'palletFormat' => "Pallet size",
+    'standardFormat' => "Standard format 120 x 80",
+    'otherFormat' => "Other format",
+    'palletNumber' => "Pallet number",
+    'floorMeter' => "Number of floor meters",
+    'errorInt' => "Please select a number greater than 1",
+    'errorFloat' => "Please select a number greater than 0,1",
+    'floorMeterMax' => "Maximum number of floor meters",
+    'modifyFloorMeterMaxTitle' => "Modify the maximum number of floor meters",
+    'modifyFloorMeterMax' => "Maximum number of floor meters was well modified.",
+    'errorFloorMeterMax' => "Please select a positive integer",
+    'numberMax' => 'Maximum number',
 
     //Privacy Policys
     'privacyPolicy' => "Privacy policy",

@@ -169,6 +169,18 @@ return [
     'contactUs' => "Nous contacter",
     'byEmail' => "Par email",
     'byPhone' => "Par téléphone",
+    'palletFormat' => "Format de palettes",
+    'standardFormat' => "Format standard 120 x 80",
+    'otherFormat' => "Autre format",
+    'palletNumber' => "Nombre de palettes",
+    'floorMeter' => "Nombre de mètres plancher",
+    'errorInt' => "Veuillez sélectionner un nombre supérieur à 1",
+    'errorFloat' => "Veuillez sélectionner un nombre supérieur à 0,1",
+    'floorMeterMax' => "Nombre de mètres plancher maximum",
+    'modifyFloorMeterMaxTitle' => "Modifier le nombre de mètres plancher maximum",
+    'modifyFloorMeterMax' => "Le nombre de mètres plancher maximum a bien été modifié.",
+    'errorFloorMeterMax' => "Veuillez sélectionner un entier positif",
+    'numberMax' => 'Nombre maximum',
 
     //Privacy Policy
     'privacyPolicy' => "Politique de confidentialité",

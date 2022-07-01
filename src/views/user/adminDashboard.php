@@ -47,6 +47,9 @@ require '../../views/header.php';
                 <a class="text-decoration-none calendar_link text-dark" href="/views/user/adminsList.php"><?=Translation::of('adminsList') ?>&emsp;/&emsp;</a>
                 <a class="text-decoration-none calendar_link text-dark" href="/views/user/customersList.php"><?=Translation::of('customersList') ?></a>
             </div>
+            <div>
+                <a class="text-decoration-none calendar_link text-dark" href="/views/floorMeter/floorMeter.php"><?=Translation::of('floorMeterMax') ?></a>
+            </div>
         </div>
     <?php } ?>
     <div class="calendar mx-3">

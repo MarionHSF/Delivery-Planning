@@ -1,3 +1,4 @@
+// toogle dashboard appointements
 const upcomingAppointementToogler = document.getElementById('upcoming-appointement-toogler');
 const upcomingAppointementTooglerContent = document.getElementById('upcoming-appointement-toogler-content');
 if(upcomingAppointementToogler){
@@ -21,3 +22,5 @@ if(pastAppointementToogler){
         }
     })
 }
+
+//

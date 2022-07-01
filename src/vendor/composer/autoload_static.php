@@ -35,6 +35,7 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         ),
         'F' => 
         array (
+            'FloorMeterMax\\' => 14,
             'File\\' => 5,
         ),
         'E' => 
@@ -87,6 +88,10 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         'Lang\\' => 
         array (
             0 => __DIR__ . '/../..' . '/App/Lang',
+        ),
+        'FloorMeterMax\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/FloorMeterMax',
         ),
         'File\\' => 
         array (
