@@ -261,8 +261,8 @@ $emailsList = $users->getUsersConfirmedEmail();
     <div class="col-sm-6">
         <div class="form-group">
             <label for="start">Heure de début</label>
-            <p id="startAlert" class="text-danger" <?= $limitFloorMeterReached == "yes" ? "" : "style='display:none'" ?>><?= Translation::of('errorStartLimitFloorMeter') ?></p>
-            <input id="start" type="time" required class="form-control" name="start" value="<?= isset($datas['start']) ? h($datas['start']) : ''; ?>" <?= $limitFloorMeterReached == "yes" ? "style='display:none'" : "" ?>>
+            <p id="startAlert" class="text-danger" <?= !isset($datas['start']) && $limitFloorMeterReached == "yes" ? "" : "style='display:none'" ?>><?= Translation::of('errorStartLimitFloorMeter') ?></p>
+            <input id="start" type="time" required class="form-control" name="start" value="<?= isset($datas['start']) ? h($datas['start']) : ''; ?>" <?= !isset($datas['start']) && $limitFloorMeterReached == "yes" ? "style='display:none'" : "" ?>>
             <?php if (isset($errors['start'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['start']; ?></small></p>
             <?php endif ?>

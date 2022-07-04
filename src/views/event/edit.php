@@ -81,6 +81,22 @@ $datas = [
         'uploadFiles' => $files,
         'dateLimit' => $dateLimit
 ];
+
+$floorsMeterMax = new \FloorMeterMax\FloorsMeterMax($pdo);
+$floorMeterMax = $floorsMeterMax->find()->getFloorMeter();
+$days = new \Day\Days($pdo);
+try{
+    $day = $days->find(new \DateTime($dateLimit));
+    $dayFloorMeter = $day->getFloorMeter();
+    if($dayFloorMeter >= $floorMeterMax){
+        $limitFloorMeterReached = 'yes';
+    }else{
+        $limitFloorMeterReached = 'no';
+    }
+}catch (\Exception){
+    $limitFloorMeterReached = 'no';
+}
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $datas = $_POST;
     $datas['dateLimit'] = $dateLimit;
@@ -126,7 +142,7 @@ render('header', ['title' => Translation::of('modifyAppointementTitle')]);
     <?php endif; ?>
     <h1><?= Translation::of('modifyAppointementTitle') ?></h1>
     <form action="" method="post" class="form" enctype="multipart/form-data">
-        <?php render('event/form', ['datas' => $datas, 'errors' => $errors]); ?>
+        <?php render('event/form', ['datas' => $datas, 'errors' => $errors, 'limitFloorMeterReached' => $limitFloorMeterReached]); ?>
         <div class="form-group mt-3">
             <button id="submitForm" class="btn btn-primary"><?= Translation::of('modifyAppointementTitle') ?></button>
         </div>
