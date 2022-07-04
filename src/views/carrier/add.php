@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $errors = $validator->validates($datas);
     if (empty($errors)){
         $carriers = new \Carrier\Carriers($pdo);
-        $carrier = $carriers->hydrate(new \Carrier\Carrier(), $datas);
+        $carrier = $carriers->hydrate(new \Carrier\Carrier, $datas);
         $carriers->create($carrier);
         header('Location: /views/carrier/list.php?creation=1');
         exit();

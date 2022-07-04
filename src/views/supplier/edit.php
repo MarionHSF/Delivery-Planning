@@ -20,6 +20,7 @@ try{
 }
 $datas = [
     'name' => $supplier->getName(),
+    'reserved_14h' => $supplier->getReserver14h(),
     'comment' => $supplier->getComment()
 ];
 

@@ -183,6 +183,9 @@ return [
     'limitFloorMeter' => "La limite de mètres plancher par jour n'a pas été atteinte.",
     'limitFloorMeterReached' => "! La limite de mètres plancher par jour a été atteinte.",
     'errorStartLimitFloorMeter' => "Aucun créneau disponible sur cette date.",
+    'reserved' => "Créneau réservé",
+    'reserved14hText' => "Créneau réservé de 14h à 15h",
+    'reserved14hSmall' => "<small>(Cochez la case si le fournisseur à un créneau réservé de 14h à 15h (CPCE, Essity, IGEPA, VPK)</small>",
 
     //Privacy Policy
     'privacyPolicy' => "Politique de confidentialité",

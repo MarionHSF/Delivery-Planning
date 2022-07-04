@@ -43,6 +43,7 @@ class Suppliers {
      */
     public function hydrate(Supplier $supplier, array $datas){
         $supplier->setName($datas['name']);
+        isset($datas['reserved_14h']) ? $supplier->setReserved14h('yes') : $supplier->setReserved14h('no') ;
         $supplier->setComment($datas['comment']);
         return $supplier;
     }
@@ -55,13 +56,16 @@ class Suppliers {
     public function create(\Supplier\Supplier $supplier): void{
         try{
             $this->pdo->beginTransaction();
-            $statement = $this->pdo->prepare('INSERT INTO `supplier` (`name`, `comment`) VALUES (?,?)');
+            $statement = $this->pdo->prepare('INSERT INTO `supplier` (`name`, `reserved_14h`, `comment`) VALUES (?,?,?)');
             $statement->execute([
                 $supplier->getName(),
+                $supplier->getReserver14h(),
                 $supplier->getComment()
             ]);
             $this->pdo->commit();
-        }catch(\PDOException){
+        }catch(\PDOException $e){
+            dd($e);
+            die();
             header('Location: /views/supplier/add.php?errorDB=1');
             exit();
         }
@@ -75,9 +79,10 @@ class Suppliers {
     public function update(\Supplier\Supplier $supplier): void{
         try{
             $this->pdo->beginTransaction();
-            $statement = $this->pdo->prepare('UPDATE `supplier` SET `name` = ?, `comment` = ? WHERE `id` = ?');
+            $statement = $this->pdo->prepare('UPDATE `supplier` SET `name` = ?, `reserved_14h` = ?, `comment` = ? WHERE `id` = ?');
             $statement->execute([
                 $supplier->getName(),
+                $supplier->getReserver14h(),
                 $supplier->getComment(),
                 $supplier->getId()
             ]);

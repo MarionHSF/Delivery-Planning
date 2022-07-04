@@ -183,6 +183,9 @@ return [
     'limitFloorMeter' => "The limit of floor meters per day has not been reached.",
     'limitFloorMeterReached' => "! The limit of floor meters per day has been reached.",
     'errorStartLimitFloorMeter' => "No schedule available on this date.",
+    'reserved' => "Reserved schedule",
+    'reserved14hText' => "Reserved schedule from 2pm to 3pm",
+    'reserved14hSmall' => "<small>(Check box, if the supplier has a reserved schedule from 2pm to 3pm (CPCE, Essity, IGEPA, VPK)</small>",
 
     //Privacy Policys
     'privacyPolicy' => "Privacy policy",

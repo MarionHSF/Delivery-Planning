@@ -44,6 +44,7 @@ render('header', ['title' => $supplier->getName()]);
             </div>
         <?php endif; ?>
         <h1><?= h($supplier->getName()); ?></h1>
+        <p><?= Translation::of('reserved14hText') ?> : <?= h(Translation::of($supplier->getReserver14h())); ?></p>
         <p><?= Translation::of('comment') ?> : <?= h($supplier->getComment()); ?></p>
         <div>
             <a class="btn btn-primary mt-3" href="/views/supplier/edit.php?id=<?= $supplier->getId();?>"><?= Translation::of('modifySupplierTitle') ?></a>

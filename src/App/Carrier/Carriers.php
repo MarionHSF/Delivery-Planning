@@ -37,11 +37,11 @@ class Carriers {
 
     /**
      * Modify datas before insertion in database (creation or update)
-     * @param Carrier $carrier
+     * @param Shedule $carrier
      * @param array $datas
-     * @return Carrier
+     * @return Shedule
      */
-    public function hydrate(Carrier $carrier, array $datas){
+    public function hydrate(Shedule $carrier, array $datas){
         $carrier->setName($datas['name']);
         $carrier->setComment($datas['comment']);
         return $carrier;
@@ -69,7 +69,7 @@ class Carriers {
 
     /**
      * Update carrier in database
-     * @param Carrier $carrier
+     * @param Shedule $carrier
      * @return bool
      */
     public function update(\Carrier\Carrier $carrier): void{
@@ -90,7 +90,7 @@ class Carriers {
 
     /**
      *  Delete carrier in database
-     * @param Carrier $carrier
+     * @param Shedule $carrier
      * @return bool
      */
     public function delete(\Carrier\Carrier $carrier): void{

@@ -19,7 +19,9 @@
             "PDO\\": "App/PDO",
             "File\\": "App/File",
             "Day\\": "App/Day",
-            "FloorMeterMax\\": "App/FloorMeterMax"
+            "FloorMeterMax\\": "App/FloorMeterMax",
+            "Schedule\\": "App/Schedule",
+            "ScheduleType\\": "App/ScheduleType"
         }
     },
     "require": {

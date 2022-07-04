@@ -9,6 +9,8 @@ return array(
     'User\\' => array($baseDir . '/App/User'),
     'Translation\\' => array($baseDir . '/App/Translation'),
     'Supplier\\' => array($baseDir . '/App/Supplier'),
+    'Schedule\\' => array($baseDir . '/App/Schedule'),
+    'ScheduleType\\' => array($baseDir . '/App/ScheduleType'),
     'Role\\' => array($baseDir . '/App/Role'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'PDO\\' => array($baseDir . '/App/PDO'),

@@ -14,6 +14,12 @@ use Translation\Translation;
     </div>
 </div>
 <div class="row">
+    <div class="form-group mt-3">
+        <label for="reserved_14h"><?= Translation::of('reserved') ?> <?= Translation::of('reserved14hSmall') ?></label>
+        <input id="reserved_14h" type="checkbox" <?= isset($datas['reserved_14h']) && ($datas['reserved_14h'] == 'yes') ? 'checked' : ''; ?> name="reserved_14h">
+    </div>
+</div>
+<div class="row">
     <div class="col-sm-6">
         <div class="form-group mt-3">
             <label for="comment"><?= Translation::of('comment') ?></label>

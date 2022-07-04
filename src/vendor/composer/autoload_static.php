@@ -18,6 +18,8 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         'S' => 
         array (
             'Supplier\\' => 9,
+            'Schedule\\' => 9,
+            'ScheduleType\\' => 13,
         ),
         'R' => 
         array (
@@ -68,6 +70,14 @@ class ComposerStaticInit8abd30285943c46b680ee7aac61a23f2
         'Supplier\\' => 
         array (
             0 => __DIR__ . '/../..' . '/App/Supplier',
+        ),
+        'Schedule\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/Schedule',
+        ),
+        'ScheduleType\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/App/ScheduleType',
         ),
         'Role\\' => 
         array (
