@@ -24,7 +24,7 @@ class Day
 
     public function getFloorMeter(): float
     {
-        return $this->floor_meter;
+        return $this->floor_meter ?? 0.00;
     }
 
     public function getValidationDate(): \DateTime

@@ -13,6 +13,7 @@ class Event
     private $pallet_format;
     private $pallet_number;
     private $floor_meter;
+    private $floor_meterOld;
     private $email;
     private $phone;
     private $dangerous_substance;
@@ -64,7 +65,12 @@ class Event
 
     public function getFloorMeter(): float
     {
-        return $this->floor_meter ?? '';
+        return $this->floor_meter ?? 0.00;
+    }
+
+    public function getFloorMeterOld(): float
+    {
+        return $this->floor_meterOld ?? 0.00;
     }
 
     public function getEmail(): string
@@ -156,6 +162,11 @@ class Event
     public function setFloorMeter(float $floor_meter)
     {
         $this->floor_meter = $floor_meter;
+    }
+
+    public function setFloorMeterOld(float $floor_meterOld)
+    {
+        $this->floor_meterOld = $floor_meterOld;
     }
 
     public function setEmail(string $email)

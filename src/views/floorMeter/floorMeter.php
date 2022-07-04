@@ -22,21 +22,7 @@ render('header', ['title' => Translation::of('floorMeterMax')]);
         <?php if(isset($_GET['modification'])): ?>
             <div class="container">
                 <div class="alert alert-success">
-                    <?= Translation::of('modifyFloorMeterMaxText') ?>
-                </div>
-            </div>
-        <?php endif; ?>
-        <?php if(isset($_GET['errorDB'])): ?>
-            <div class="container">
-                <div class="alert alert-danger">
-                    <?= Translation::of('errorDB') ?>
-                </div>
-            </div>
-        <?php endif; ?>
-        <?php if(isset($_GET['error'])): ?>
-            <div class="container">
-                <div class="alert alert-danger">
-                    <?= Translation::of('errorFloorMeterMax') ?>
+                    <?= Translation::of('modifyFloorMeterMax') ?>
                 </div>
             </div>
         <?php endif; ?>

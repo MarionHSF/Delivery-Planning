@@ -42,6 +42,22 @@ if($_SESSION['auth']->getIdRole() != 4) {
 $datas = [
         'date' => $date,
 ];
+
+$floorsMeterMax = new \FloorMeterMax\FloorsMeterMax($pdo);
+$floorMeterMax = $floorsMeterMax->find()->getFloorMeter();
+$days = new \Day\Days($pdo);
+try{
+    $day = $days->find(new \DateTime($date));
+    $dayFloorMeter = $day->getFloorMeter();
+    if($dayFloorMeter >= $floorMeterMax){
+        $limitFloorMeterReached = 'yes';
+    }else{
+        $limitFloorMeterReached = 'no';
+    }
+}catch (\Exception){
+    $limitFloorMeterReached = 'no';
+}
+
 $validator = new \App\Validator($datas);
 if(!$validator->validate('date', 'date')){
     $datas['date'] = (new \DateTime(date('Y-m-d')))->modify('+1 days')->format('Y-m-d');
@@ -111,7 +127,7 @@ render('header', ['title' => Translation::of('createAppointementTitle')]);
     <?php endif; ?>
     <h1><?= Translation::of('createAppointementTitle') ?></h1>
     <form action="" method="post" class="form" enctype="multipart/form-data">
-        <?php render('event/form', ['datas' => $datas, 'errors' => $errors]); ?>
+        <?php render('event/form', ['datas' => $datas, 'errors' => $errors, 'limitFloorMeterReached' => $limitFloorMeterReached]); ?>
         <div class="form-group mt-3">
             <button id="submitForm" class="btn btn-primary"><?= Translation::of('createAppointementTitle') ?></button>
         </div>

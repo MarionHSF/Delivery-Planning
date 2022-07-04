@@ -257,17 +257,24 @@ $emailsList = $users->getUsersConfirmedEmail();
         </div>
     </div>
 </div>
-<div class="row mt-3">
+<div class="row mt-3"> <?php //TODO ?>
     <div class="col-sm-6">
         <div class="form-group">
             <label for="start">Heure de début</label>
-            <input id="start" type="time" required class="form-control" name="start" value="<?= isset($datas['start']) ? h($datas['start']) : ''; ?>">
+            <p id="startAlert" class="text-danger" <?= $limitFloorMeterReached == "yes" ? "" : "style='display:none'" ?>><?= Translation::of('errorStartLimitFloorMeter') ?></p>
+            <input id="start" type="time" required class="form-control" name="start" value="<?= isset($datas['start']) ? h($datas['start']) : ''; ?>" <?= $limitFloorMeterReached == "yes" ? "style='display:none'" : "" ?>>
             <?php if (isset($errors['start'])) : ?>
                 <p><small class="form-text text-danger"><?= $errors['start']; ?></small></p>
             <?php endif ?>
+            <?php if($_SESSION['lang'] == 'fr_FR'){ ?>
+                <p id="scheduleFR" class="text-danger"></p>
+            <?php }?>
+            <?php if($_SESSION['lang'] == 'en_GB'){ ?>
+                <p id="scheduleEN" class="text-danger"></p>
+            <?php }?>
         </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6"> <?php //TODO ?>
         <div class="form-group">
             <label for="end">Heure de fin</label>
             <input id="end" type="time" required class="form-control" name="end" value="<?= isset($datas['end']) ? h($datas['end']) : ''; ?>">

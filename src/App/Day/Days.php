@@ -17,7 +17,7 @@ class Days {
     }
 
     /**
-     * Return validated day
+     * Return day
      * @param DateTime $date
      * @return array
      */
@@ -38,25 +38,67 @@ class Days {
      * @return Day
      */
     public function hydrate(Day $day, array $datas){
-        $day->setDayDate($datas['date']);
-        $day->setValidationDate(date('Y-m-d H:i:s'));
-        $day->setValidation('yes');
+        if(isset($datas['day_date'])){
+            $day->setDayDate($datas['day_date']->format('Y-m-d'));
+        }
+        if(isset($datas['floor_meter'])) {
+            if ($day->getFloorMeter()) {
+                if (isset($datas['floor_meter_old'])) {
+                    $day->setFloorMeter($day->getFloorMeter() + $datas['floor_meter'] - $datas['floor_meter_old']);
+                } else {
+                    $day->setFloorMeter($day->getFloorMeter() + $datas['floor_meter']);
+                }
+            } else {
+                $day->setFloorMeter($datas['floor_meter']);
+            }
+        }
+        if(isset($datas['validation_date'])){
+            $day->setValidationDate(date('Y-m-d H:i:s'));
+        }
+        $day->setValidation($datas['validation']);
         return $day;
     }
 
     /**
-     * Insert new validated day in database
+     * Insert new day in database
      * @param \Day $day
      * @return bool
      */
     public function create(\Day\Day $day): void{
+        $statement = $this->pdo->prepare('INSERT INTO `day` (`day_date`, `floor_meter`, `validation`) VALUES (?,?,?)');
+        $statement->execute([
+            $day->getDayDate()->format('Y-m-d'),
+            $day->getFloorMeter(),
+            $day->getValidation()
+        ]);
+    }
+
+    /**
+     * Modify day in database
+     * @param \Day $day
+     * @return bool
+     */
+    public function update(\Day\Day $day): void{
+        $statement = $this->pdo->prepare('UPDATE `day` SET `floor_meter` = ? WHERE `day_date` = ?');
+        $statement->execute([
+            $day->getFloorMeter(),
+            $day->getDayDate()->format('Y-m-d'),
+        ]);
+    }
+
+    /**
+     * Validate day in database
+     * @param \Day $day
+     * @return bool
+     */
+    public function validate(\Day\Day $day): void{
         try{
             $this->pdo->beginTransaction();
-            $statement = $this->pdo->prepare('INSERT INTO `day` (`day_date`, `validation_date`, `validation`) VALUES (?,?,?)');
+            $statement = $this->pdo->prepare('UPDATE `day` SET `validation_date` = ?, `validation` = ? WHERE `day_date` = ?');
             $statement->execute([
-                $day->getDayDate()->format('Y-m-d'),
                 $day->getValidationDate()->format('Y-m-d H:i:s'),
-                $day->getValidation()
+                $day->getValidation(),
+                $day->getDayDate()->format('Y-m-d'),
             ]);
             // Send user delivery not honored mail
             $events = new \Event\Events($this->pdo);
@@ -81,7 +123,7 @@ class Days {
                         }else{
                             $date = $event->getStart()->format('d/m/Y H:i');
                         }
-                        $mail->Body    = Translation::of('undeliveryText').' '.$date.'.</br></br>'.Translation::of('mailAppointementFooter'); //TODO
+                        $mail->Body    = Translation::of('undeliveryText').' '.$date.'.</br></br>'.Translation::of('mailAppointementFooter');
 
                         $mail->send();
                     } catch (Exception $e) {
@@ -91,13 +133,7 @@ class Days {
             }
             $this->pdo->commit();
         }catch(\PDOException $e){
-            if(strpos($e->getMessage(), 'Duplicate entry')){
-                header('Location: /views/event/day.php?date='.$day->getDayDate()->format('Y-m-d').'&duplicateEntry=1');
-                exit;
-            }else{
-                header('Location: /views/event/day.php?date='.$day->getDayDate()->format('Y-m-d').'&errorDB=1');
-                exit();
-            }
+            header('Location: /views/day/day.php?date='.$day->getDayDate()->format('Y-m-d').'&errorDB=1');
         }
     }
 }

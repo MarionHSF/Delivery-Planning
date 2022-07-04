@@ -100,7 +100,7 @@ require '../../views/header.php';
                             ?>
                             <td class="<?= $month->withInMonth($date) ? '' : 'calendar_overmonth'; ?> <?= $isToday ? 'is_today' : ''; ?> <?= $isWeekEnd ? 'is_weekend' : ''; ?>">
                                 <div class="calendar_weekday"><?= $day; ?></div>
-                                <a class="calendar_day" href="/views/event/day.php?date=<?= $date->format('Y-m-d'); ?>"><?= $date->format('d') ?></a>
+                                <a class="calendar_day" href="/views/day/day.php?date=<?= $date->format('Y-m-d'); ?>"><?= $date->format('d') ?></a>
                                 <?php foreach ($eventsForDay as $event): ?>
                                     <div class="calendar_event">
                                         <?php $carrier = $carriers->find($event['id_carrier'])->getName(); ?>

@@ -52,7 +52,7 @@ class FloorsMeterMax {
             ]);
             $this->pdo->commit();
         }catch(\PDOException){
-            header('Location: /views/floor_meter/edit.php?id=1&errorDB=1');
+            header('Location: /views/floorMeter/edit.php?id=1&errorDB=1');
             exit();
         }
     }

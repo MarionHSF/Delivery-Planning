@@ -160,7 +160,6 @@ return [
     'errorDB' => "An error has occurred, please contact technical support.",
     'dayValidation' => "Day's validation",
     'validationDay' => "The day was well validated and emails were sent to not honored appointments.",
-    'duplicateEntry' => "The day has already been validated.",
     'dayValidationText' => "The day has been validated at",
     'undelivery' => "Appointment not honored",
     'undeliveryText' => "Hello,
@@ -181,6 +180,9 @@ return [
     'modifyFloorMeterMax' => "Maximum number of floor meters was well modified.",
     'errorFloorMeterMax' => "Please select a positive integer",
     'numberMax' => 'Maximum number',
+    'limitFloorMeter' => "The limit of floor meters per day has not been reached.",
+    'limitFloorMeterReached' => "! The limit of floor meters per day has been reached.",
+    'errorStartLimitFloorMeter' => "No schedule available on this date.",
 
     //Privacy Policys
     'privacyPolicy' => "Privacy policy",

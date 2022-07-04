@@ -157,6 +157,7 @@ function undisplayTextAddButton(){
 }
 
 // prevents the selection of weekends in the date picker
+// Checks if the limit of floor meters has been reached on the day
 const picker = document.getElementById('date');
 if(picker){
     picker.addEventListener('input', function(e){
@@ -172,6 +173,65 @@ if(picker){
                 errorPickerEN.textContent = "Weekends not allowed";
             }
         }
+
+        try{
+            const httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = function() {
+                if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+                    if(httpRequest.responseText == "limitReached"){
+                        const startAlert = document.getElementById("startAlert");
+                        startAlert.style.display ='none';
+
+                        const start = document.getElementById("start");
+                        start.style.display ='none';
+
+                        const scheduleFR = document.getElementById("scheduleFR");
+                        if(scheduleFR){
+                            scheduleFR.textContent = "Aucun créneau disponible sur cette date.";
+                        }
+
+                        const scheduleEN = document.getElementById("scheduleEN");
+                        if(scheduleEN){
+                            scheduleEN.textContent = "No schedule available on this date.";
+                        }
+                        console.log(startAlert);
+                        console.log(start);
+                        console.log(scheduleFR);
+                        console.log(scheduleEN);
+
+                    }else{
+                        const startAlert = document.getElementById("startAlert");
+                        startAlert.style.display ='none';
+
+                        const start = document.getElementById("start");
+                        start.style.display ='';
+
+                        const scheduleFR = document.getElementById("scheduleFR");
+                        if(scheduleFR){
+                            scheduleFR.textContent = "";
+                        }
+
+                        const scheduleEN = document.getElementById("scheduleEN");
+                        if(scheduleEN){
+                            scheduleEN.textContent = "";
+                        }
+                        console.log(startAlert);
+                        console.log(start);
+                        console.log(scheduleFR);
+                        console.log(scheduleEN);
+                    }
+                }
+            };
+            httpRequest.open('GET', 'http://localhost:8000/views/day/dayFloorMeterLimit.php?date='+this.value, true);
+            httpRequest.send();
+        }catch (e){
+            console.log(e.description);
+        }
+
+
+
+
+
     });
 }
 

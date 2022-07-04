@@ -134,12 +134,16 @@ class Events {
         $event->setOrder(implode(', ',$datas['order']));
         $event->setPalletFormat($datas['pallet_format']);
         $event->setPalletNumber($datas['pallet_number']);
+        if($event->getFloorMeter()){
+            $event->setFloorMeterOld($event->getFloorMeter());
+        }
         if(isset($datas['floor_meter'])){
             $event->setFloorMeter($datas['floor_meter']);
         }else{
             $floor_meter = ((1.2 * 0.8)/2.4) * intval($datas['pallet_number']);
             $event->setFloorMeter($floor_meter);
         }
+
         $event->setPhone($datas['phone']);
         $event->setEmail($datas['email']);
         isset($datas['dangerous_substance']) ? $event->setDangerousSubstance('yes') : $event->setDangerousSubstance('no') ;
@@ -217,6 +221,25 @@ class Events {
                         $id_file
                     ]);
                 }
+            }
+            //Add day
+            $days = new \Day\Days($this->pdo);
+            try{
+                $day = $days->find($event->getStart());
+                $datas = [
+                    'floor_meter' => $event->getFloorMeter(),
+                    'validation' => 'no'
+                ];
+                $days->hydrate($day, $datas);
+                $days->update($day);
+            }catch(\Exception $e){
+                $datas = [
+                    'day_date' => $event->getStart(),
+                    'floor_meter' => $event->getFloorMeter(),
+                    'validation' => 'no'
+                ];
+                $day = $days->hydrate(new \Day\Day(), $datas);
+                $days->create($day);
             }
             // Send user confirmation mail
             try {
@@ -344,6 +367,16 @@ class Events {
                     ]);
                 }
             }
+            //Modify floor meter day
+            $days = new \Day\Days($this->pdo);
+            $day = $days->find($event->getStart());
+            $datas = [
+                'floor_meter' => $event->getFloorMeter(),
+                'floor_meter_old' => $event->getFloorMeterOld(),
+                'validation' => 'no'
+            ];
+            $days->hydrate($day, $datas);
+            $days->update($day);
             // Send user confirmation mail
             try {
                 //Server settings
@@ -369,7 +402,7 @@ class Events {
                 echo $mail->ErrorInfo;
             }
             $this->pdo->commit();
-        }catch(\PDOException){
+        }catch(\PDOException $e){
             header('Location: /views/event/edit.php?id='.$event->getId().'&errorDB=1');
             exit();
         }
@@ -401,6 +434,16 @@ class Events {
             $statement3->execute([
                 $event->getId()
             ]);
+            //Modify floor meter day
+            $days = new \Day\Days($this->pdo);
+            $day = $days->find($event->getStart());
+            $datas = [
+                'floor_meter' => 0,
+                'floor_meter_old' => $event->getFloorMeter(),
+                'validation' => 'no'
+            ];
+            $days->hydrate($day, $datas);
+            $days->update($day);
             try { // Send user confirmation mail
                 //Server settings
                 $mail = new PHPMailer(true);

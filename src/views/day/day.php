@@ -15,8 +15,11 @@ $events = new Event\Events($pdo);
 $events = $events->getEventsBetweenByDay($date, $date);
 $carriers =  new \Carrier\Carriers($pdo);
 $days = new \Day\Days($pdo);
+$floorsMeterMax = new \FloorMeterMax\FloorsMeterMax($pdo);
+$floorMeterMax = $floorsMeterMax->find()->getFloorMeter();
 try{
     $day = $days->find($date);
+    $validation = $day->getValidation();
 }catch (\Exception){
 
 }
@@ -26,7 +29,7 @@ if($_SESSION['lang'] == 'fr_FR'){
     $date2 =  $date->format('m-d-Y');
 }
 
-render('header', ['title' => Translation::of('dayOf').' '.$date2]);
+render('header', ['title' => Translation::of('dayOf') . ' ' .$date2]);
 
 ?>
     <div class="container">
@@ -44,13 +47,6 @@ render('header', ['title' => Translation::of('dayOf').' '.$date2]);
                 </div>
             </div>
         <?php endif; ?>
-        <?php if(isset($_GET['duplicateEntry'])): ?>
-            <div class="container">
-                <div class="alert alert-danger">
-                    <?= Translation::of('duplicateEntry') ?>
-                </div>
-            </div>
-        <?php endif; ?>
         <h1 class="my-3"><?= Translation::of('dayOf') ?> <?= $date2 ?></h1>
     <?php if(!empty($events)){ ?>
         <a class="text-decoration-none d-print-none printButton" href="javascript:window.print()">&#x1F5A8;</a>
@@ -60,7 +56,15 @@ render('header', ['title' => Translation::of('dayOf').' '.$date2]);
                 <?= (new DateTime($event['start']))->format('H:i') ?> - <?= (new DateTime($event['end']))->format('H:i') ?> - <a href="/views/event/event.php?id=<?= $event['id'];?>"><?= $carrier ?></a>
             </div>
         <?php endforeach ?>
-        <?php if(!isset($day)){ ?>
+            <div class="mt-5 border p-2">
+                <p><?= Translation::of('floorMeter') ?> : <?= $day->getFloorMeter() ?></p>
+            <?php if($day->getFloorMeter() < $floorMeterMax){ ?>
+                <p><?= Translation::of('limitFloorMeter') ?></p>
+            <?php }else{ ?>
+                <p class="text-danger"><?= Translation::of('limitFloorMeterReached') ?></p>
+            <?php } ?>
+            </div>
+        <?php if($validation == "no"){ ?>
             <div>
                 <a class="btn btn-primary mt-5 d-print-none" href="/views/day/dayValidation.php?date=<?= $_GET['date'] ?>"><?= Translation::of('dayValidation') ?></a>
             </div>
@@ -70,7 +74,7 @@ render('header', ['title' => Translation::of('dayOf').' '.$date2]);
             }else{
                 $date = $day->getValidationDate()->format('m-d-Y H:i');
             }?>
-            <div class="mt-5">
+            <div class="mt-5 border p-2">
                 <p><?= Translation::of('dayValidationText') ?> <?= $date ?>.</p>
             </div>
         <?php }?>

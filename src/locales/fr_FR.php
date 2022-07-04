@@ -160,7 +160,6 @@ return [
     'errorDB' => "Une erreur est survenue, veuillez contacter le service technique.",
     'dayValidation' => "Validation de la journée",
     'validationDay' => "La journée a bien été validée et des emails ont été envoyé aux rendez-vous non honorés.",
-    'duplicateEntry' => "La journée a déja été validée.",
     'dayValidationText' => "La journée a été validée le",
     'undelivery' => "Rendez-vous non honoré",
     'undeliveryText' => "Bonjour,
@@ -181,6 +180,9 @@ return [
     'modifyFloorMeterMax' => "Le nombre de mètres plancher maximum a bien été modifié.",
     'errorFloorMeterMax' => "Veuillez sélectionner un entier positif",
     'numberMax' => 'Nombre maximum',
+    'limitFloorMeter' => "La limite de mètres plancher par jour n'a pas été atteinte.",
+    'limitFloorMeterReached' => "! La limite de mètres plancher par jour a été atteinte.",
+    'errorStartLimitFloorMeter' => "Aucun créneau disponible sur cette date.",
 
     //Privacy Policy
     'privacyPolicy' => "Politique de confidentialité",

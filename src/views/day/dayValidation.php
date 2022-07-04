@@ -10,16 +10,18 @@ onlySuperAdminRights();
 
 $pdo = new PDO\PDO();
 $pdo = $pdo->get_pdo();
-
-$datas = [
-    'date' => $_GET['date'],
-];
-
+$date = new DateTime($_GET['date']);
 $days = new \Day\Days($pdo);
 
+$datas = [
+   'validation_date' => date('Y-m-d H:i'),
+    'validation' => 'yes'
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $day = $days->hydrate(new \Day\Day(), $datas);
-    $days->create($day);
-    header('Location: /views/event/day.php?date='.$_GET['date'].'&validationDay=1');
+    $day = $days->find($date);
+    $days->hydrate($day, $datas);
+    $days->validate($day);
+    header('Location: /views/day/day.php?date='.$_GET['date'].'&validationDay=1');
     exit();
 }
